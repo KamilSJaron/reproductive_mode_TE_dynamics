@@ -1,7 +1,7 @@
 // *********************************************************************
-// 
+//
 // transposon.h
-// 
+//
 // Created by: Elie Dolgin, University of Edinburgh
 //
 // First started: March 11, 2005
