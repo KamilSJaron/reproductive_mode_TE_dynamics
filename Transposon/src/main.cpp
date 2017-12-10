@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <stdlib.h>
 
 #include "random.h"
 #include "time.h"
@@ -11,24 +12,30 @@ using namespace std;
 int main ()
 {
   cerr << endl;
-  for (int run=1; run<=10; run++) {
-    cerr << "Run : " << run << endl;
-    std::ifstream fin("input.txt");
-    if (! fin.is_open())
-      { cout << "Error opening file"; exit (1); }
+  const char *input_file = "input.txt";
+  const char *detailed_out = "detailed.txt";
+  const char *summary_out = "summary.txt";
 
-    // Initialize population size & whether to generate new population or load from file
-    int N;
-    bool fromFile = true;
-    char tempChar[100];
-    fin.getline(tempChar,100);
-    if (tempChar[0]=='Y') fromFile = true;
-    else if (tempChar[0]=='N') fromFile = false;
-    fin.getline(tempChar,100);
-    N=strtol(tempChar,0,10);
+  for (int run=1; run<=10; run++)
+  {
+
+
+    cerr << "Run : " << run << endl;
+    std::ifstream fin(input_file);
+        if (! fin.is_open())
+          { cerr << "Error opening file"; exit (1); }
+
+        // Initialize population size & whether to generate new population or load from file
+        int N;
+
+        /// fromFile=true is caling a code that reads stuff from a file that is missing
+        /// code was commented and warning message was added
+        bool fromFile = false;
+        char tempChar[100];
+        fin.getline(tempChar,100);
+        N=strtol(tempChar,0,10);
     fin.close();
 
-    cerr << "Initializing population : " << N << endl;
     Population * pop = new Population(N);
     Population * temp;
 
@@ -36,27 +43,26 @@ int main ()
     bool clonal = Genome::clonal;
 
     pop->Initialize(clonal, fromFile);
+    pop->PrintParameters(detailed_out);
 
-    pop->PrintParameters("detailed.txt");
-    if (run==1) pop->PrintParameters("summary.txt");
-    pop->SummaryStatistics("detailed.txt", 0);
-    int gen = 1;
+    if (run==1) pop->PrintParameters(summary_out);
+    pop->SummaryStatistics(detailed_out, 0);
 
-    for (gen; gen <= 100000; gen++)
+    for (int gen = 1; gen <= 1000; gen++)
     {
         if (pop->GetPopulationTECount() == 0)
         {
-          cout << "No TEs at generation [" << gen << "]." << endl << endl;
-          pop->SummaryStatistics("summary.txt", gen);
-          pop->SummaryStatistics("detailed.txt", gen);
+          cerr << "No TEs at generation [" << gen << "]." << endl << endl;
+          pop->SummaryStatistics(summary_out, gen);
+          pop->SummaryStatistics(detailed_out, gen);
           break;
         }
 
         if (((double)pop->GetPopulationTECount()/(double)size) > 150.0)
         {
-          cout << "Population extinction at generation [" << gen << "]." << endl << endl;
-          pop->SummaryStatistics("summary.txt", gen);
-          pop->SummaryStatistics("detailed.txt", gen);
+          cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
+          pop->SummaryStatistics(summary_out, gen);
+          pop->SummaryStatistics(detailed_out, gen);
           break;
         }
 
@@ -68,16 +74,13 @@ int main ()
         // TRANSPOSITION & LOSS
         pop->TranspositionAndLoss();
 
-        cout << ".";
-        if (gen%100==0)
+        /// printing results
+        cerr << ".";
+        if (gen % 90 == 0)
         {
-          cout << endl;
-          pop->SummaryStatistics("detailed.txt", gen);
+          cerr << endl;
+          pop->SummaryStatistics(detailed_out, gen);
         }
-//        if (gen%1000==0)
-//        {
-//          pop->RecordPopulation("population.txt", gen);
-//        }
     }
 
     delete pop;

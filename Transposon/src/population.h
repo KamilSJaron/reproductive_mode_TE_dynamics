@@ -38,9 +38,9 @@ public:
   void TranspositionAndLoss();
 
   void ListPopulationSites() const;
-  void PrintParameters(char[]);
-  void SummaryStatistics(char[], int);
-  void RecordPopulation(char[], int);
+  void PrintParameters(const char *);
+  void SummaryStatistics(const char *, int);
+  void RecordPopulation(const char *, int);
 
   void SummaryStatistics(int);
   void SummaryStatistics(int, int);

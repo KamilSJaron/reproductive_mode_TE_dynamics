@@ -1,0 +1,43 @@
+
+Sun Dec 10 14:04:54 2017
+
+N = 100000
+u = 1e-05, v = 1e-05
+initialTE = 10
+propAffectW = 10
+a = 6.03598e-06, b = 1
+chrom# = 2, ploidy# = 2
+
+GEN	n	Vn	x	Vx	empty	fixed	min#	minFreq
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+1	0	0	0	0	1	0	0	1
+
+Sun Dec 10 14:28:40 2017
+
+N = 100000
+u = 1e-05, v = 1e-05
+initialTE = 10
+propAffectW = 10
+a = 6.03598e-06, b = 1
+chrom# = 2, ploidy# = 2
+
+GEN	n	Vn	x	Vx	empty	fixed	min#	minFreq
+
+Sun Dec 10 14:50:24 2017
+
+N = 100000
+u = 1e-05, v = 1e-05
+initialTE = 10
+propAffectW = 10
+a = 6.03598e-06, b = 1
+chrom# = 2, ploidy# = 2
+
+GEN	n	Vn	x	Vx	empty	fixed	min#	minFreq
