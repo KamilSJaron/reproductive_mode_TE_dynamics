@@ -1,7 +1,7 @@
 // *********************************************************************
-// 
+//
 // locus.h
-// 
+//
 // Created by: Elie Dolgin, University of Edinburgh
 //
 // First started: March 11, 2005
@@ -27,7 +27,7 @@ class Locus
 	Transposon GetTransposon() const;
 	Locus * GetNext() const;
 	void SetNext(Locus * loc);
-  
+
   private:
 	Transposon transElem;
 	Locus * next;

@@ -1,7 +1,7 @@
 // *********************************************************************
-// 
+//
 // locus.cpp
-// 
+//
 // Created by: Elie Dolgin, University of Edinburgh
 //
 // First started: March 11, 2005
@@ -21,12 +21,12 @@ Locus::Locus(Transposon te):
   transElem(te),
   next(0)
   {}
-  
+
 Locus::Locus(Transposon te, Locus * n):
   transElem(te),
   next(n)
   {}
-  
+
 Locus::Locus(const Locus & rhs)
   {
 	transElem = rhs.GetTransposon();

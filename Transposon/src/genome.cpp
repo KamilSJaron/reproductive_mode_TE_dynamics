@@ -1,7 +1,7 @@
 // *********************************************************************
-// 
+//
 // genome.cpp
-// 
+//
 // Created by: Elie Dolgin, University of Edinburgh
 //
 // First started: March 11, 2005
@@ -46,7 +46,7 @@ void Genome::SetParameters()
 	std::ifstream fin("input.txt");
 	if (! fin.is_open())
 	  {std::cout << "Error opening file"; exit (1); }
-	  
+
 	char tempChar[100];
 	while(!fin.getline(tempChar, 100).eof())
 	{
@@ -71,11 +71,11 @@ void Genome::SetParameters()
 }
 
 Genome::Genome()
-{		
+{
 	chromoVector.resize((numberOfChromosomes*ploidy));
 	if (!parametersSet)
 	  SetParameters();
-	
+
 	for (int i=1; i <= numberOfChromosomes; i++)
 	{
 	  if (ploidy == 1)
@@ -97,14 +97,14 @@ Genome::Genome(int num, int pl)
 {
 	numberOfChromosomes = num;
 	ploidy = pl;
-	
+
 	chromoVector.resize((numberOfChromosomes*ploidy));
 	if (!parametersSet)
 	  SetParameters();
-	
+
 	for (int i=1; i <= numberOfChromosomes; i++)
 	{
-	  if (ploidy == 1)	
+	  if (ploidy == 1)
 	  {
 		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
@@ -120,16 +120,16 @@ Genome::Genome(int num, int pl)
 }
 
 Genome::Genome(const Genome & rhs)
-{		
+{
 	chromoVector.resize((numberOfChromosomes*ploidy));
 	if (!parametersSet)
 	  SetParameters();
-	
+
 	Locus * current;
-	
+
 	for (int i=1; i <= numberOfChromosomes; i++)
 	{
-	  if (ploidy == 1)	
+	  if (ploidy == 1)
 	  {
 		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
@@ -224,9 +224,9 @@ Chromosome & Genome::GetChromosome(int num, int copy)
 double Genome::GetGenomeFitness() const
 {
 	unsigned int genomeTEcount = GetGenomeTECountAffectingFitness();
-	
+
 	//return (1 - 0.001*pow(genomeTEcount, 1.5));
-	
+
 	// assume synergistic epistatic selection
 	return exp ( -(sa * genomeTEcount) - (0.5 * sb * pow(genomeTEcount,2) ) );
 }
@@ -235,7 +235,7 @@ double Genome::GetGenomeFitness() const
 double Genome::GetGenomeFitness(int meanCount) const
 {
 	//return (1 - 0.001*pow(meanCount, 1.5));
-	
+
 	// assume synergistic epistatic selection
 	return exp ( -(sa * meanCount) - (0.5 * sb * pow(meanCount,2) ) );
 }
@@ -244,7 +244,7 @@ void Genome::SetChromosome(Chromosome & c)
 {
 	int num = c.GetChromNumber();
 	int copy = c.GetChromCopy();
-	
+
 	if (ploidy == 1)
 	  chromoVector.at(num+copy-2) = c;
 	if (ploidy == 2)
@@ -255,13 +255,13 @@ void Genome::SetChromosome(Chromosome & c)
 //{
 //	numberOfChromosomes = num;
 //	ploidy = pl;
-//	
+//
 //	chromoVector.resize((numberOfChromosomes*ploidy));
-//	
+//
 //	for (int i=1; i <= numberOfChromosomes; i++)
 //	{
 //	  if (ploidy == 1)
-//	  {	
+//	  {
 //		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
 //		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 //	  }
@@ -281,15 +281,15 @@ void Genome::Transpose()
 	bool affectW = false;
 	unsigned int teCount = GetGenomeTECount();
 	unsigned int transposeCount = (int)rand.Poisson(ut*teCount);
-	
+
 	for (int i=1; i <= numberOfChromosomes; i++)
 	  totalLength += GetChromosome(i, 1).GetLength();
-	
+
 	if (transposeCount > teCount)
-	  transposeCount = teCount;  
+	  transposeCount = teCount;
 	if (transposeCount > (2*totalLength - teCount))
 	  transposeCount = (2*totalLength - teCount);
-	  
+
 	// for number of transpositions, randomly insert into the genome
 	for (int j=0; j < transposeCount; j++)
 	{
@@ -309,12 +309,12 @@ void Genome::Transpose()
 		}
 		copy = (int)((rand.Uniform())*(ploidy) + 1);
 	  } while (!GetChromosome(num, copy).TestEmpty(pos));
-		
+
 		if (faf > rand.Uniform())
 		  affectW = true;
 		else
 		  affectW = false;
-		
+
 		GetChromosome(num, copy).Insert(Transposon(pos, affectW));
 	}
 }
@@ -325,15 +325,15 @@ void Genome::Transpose(double rate, double meanCopyNumber)
 	int num=0, copy=0, pos=0, currentLength=0, totalLength=0;
 	bool affectW = false;
 	unsigned int transposeCount = (int)rand.Poisson(rate*meanCopyNumber);
-	
+
 	for (int i=1; i <= numberOfChromosomes; i++)
 	  totalLength += GetChromosome(i, 1).GetLength();
-	
+
 	if (transposeCount > meanCopyNumber)
-	  transposeCount = (int)meanCopyNumber;  
+	  transposeCount = (int)meanCopyNumber;
 	if (totalLength < (transposeCount + meanCopyNumber))
 	  transposeCount = (totalLength - (int)meanCopyNumber);
-	
+
 	// for number of transpositions, randomly insert into the genome
 	for (int j=0; j < transposeCount; j++)
 	{
@@ -353,12 +353,12 @@ void Genome::Transpose(double rate, double meanCopyNumber)
 		}
 		copy = (int)((rand.Uniform())*(ploidy) + 1);
 	  } while (!GetChromosome(num, copy).TestEmpty(pos));
-		
+
 		if (faf > rand.Uniform())
 		  affectW = true;
 		else
 		  affectW = false;
-		
+
 		GetChromosome(num, copy).Insert(Transposon(pos, affectW));
 	}
 }
@@ -367,9 +367,9 @@ void Genome::ElementLoss()
 {
 	if (vt == 0)
 	  return;
-	
+
 	unsigned int lossCount=0, chromTEcount=0, nthTE=0;
-	
+
 	for (int i=1; i <= numberOfChromosomes; i++)
 	{
 		if (ploidy == 1)
@@ -378,7 +378,7 @@ void Genome::ElementLoss()
 			lossCount = (int)rand.Poisson(vt*chromTEcount);
 			if (lossCount > chromTEcount)
 			  lossCount = chromTEcount;
-		
+
 			for (int k=0; k < lossCount; k++)
 			{
 			  nthTE = (int)(rand.Uniform()*chromTEcount + 1);
@@ -410,37 +410,37 @@ void Genome::Recombination()
 {
 	if (ploidy != 2)
 	  return;
-	
+
 	Locus * current1 = 0;
 	Locus * current2 = 0;
 	Locus * next1 = 0;
 	Locus * next2 = 0;
 	double site = 0.0, r = 0.0;
 	int events = 0, length = 0;
-	
+
 	std::vector<int> sitesVector;
-	
+
 	  for (int i=1; i <= numberOfChromosomes; i++)
 	  {
 	    // if no TE's, then recombination does nothing.
 		if ((GetChromosome(i, 1).GetChromTECount() + GetChromosome(i, 2).GetChromTECount()) == 0)
 		  return;
-		
+
 		// number of recombination events taken from a poisson distribution
 		r = GetChromosome(i, 1).GetRecRate();
 		length = (GetChromosome(i, 1).GetLength() - 1);
 		events = (int)rand.Poisson(r*length);
-		
+
 		sitesVector.resize(events);
-		
+
 		for (int j=0; j < events; j++)
 		{
 			int pos = (int)((rand.Uniform())*(length) + 1);
 			sitesVector.at(j) = pos;
 		}
-		
-		std::sort(sitesVector.begin(), sitesVector.end());		
-		
+
+		std::sort(sitesVector.begin(), sitesVector.end());
+
 		current1 = GetChromosome(i, 1).GetHeadLocus();
 		current2 = GetChromosome(i, 2).GetHeadLocus();
 
@@ -448,10 +448,10 @@ void Genome::Recombination()
 		{
 			site = sitesVector.at(a) + 0.5;
 			//std::cout << site << std::endl;
-			
+
 			if ((current1 == 0) && (current2 == 0))
 			  break;
-			
+
 			if (current1 != 0)
 			  if (current1->GetTransposon().GetLocation() < site)
 			  {
@@ -464,7 +464,7 @@ void Genome::Recombination()
 				  next1 = current1->GetNext();
 				}
 			  }
-			
+
 			if (current2 != 0)
 			  if (current2->GetTransposon().GetLocation() < site)
 			  {
@@ -482,7 +482,7 @@ void Genome::Recombination()
 			{
 			  if ((current1 == 0) && (current2->GetTransposon().GetLocation() > site))
 				continue;
-			
+
 			  if ((current1 == 0) && (current2->GetTransposon().GetLocation() < site))
 			  {
 				current2->SetNext(current1);
@@ -490,10 +490,10 @@ void Genome::Recombination()
 				GetChromosome(i, 1).SetHeadLocus(next2);
 				continue;
 			  }
-			
+
 			  if ((current2 == 0) && (current1->GetTransposon().GetLocation() > site))
 				continue;
-			
+
 			  if ((current2 == 0) && (current1->GetTransposon().GetLocation() < site))
 			  {
 				current1->SetNext(current2);
@@ -502,10 +502,10 @@ void Genome::Recombination()
 				continue;
 			  }
 			}
-			
+
 			if ((current1->GetTransposon().GetLocation() > site) && (current2->GetTransposon().GetLocation() > site))
 			  continue;
-			
+
 			if ((current1->GetTransposon().GetLocation() > site) && (current2->GetTransposon().GetLocation() < site))
 			{
 			  current2->SetNext(current1);
@@ -513,7 +513,7 @@ void Genome::Recombination()
 			  GetChromosome(i, 1).SetHeadLocus(next2);
 			  continue;
 			}
-			
+
 			if ((current1->GetTransposon().GetLocation() < site) && (current2->GetTransposon().GetLocation() > site))
 			{
 			  current1->SetNext(current2);
@@ -521,9 +521,9 @@ void Genome::Recombination()
 			  GetChromosome(i, 2).SetHeadLocus(next1);
 			  continue;
 			}
-			
+
 			// both current1 & current2 < site
-			
+
 			if (next1 == 0 && next2 == 0)
 			  break;
 			else
@@ -533,7 +533,7 @@ void Genome::Recombination()
 			}
 		}
 		//std::cout << "Recombination for chromo: " << i << std::endl;
-		
+
 		current1 = 0;
 		current2 = 0;
 		next1 = 0;
@@ -543,7 +543,7 @@ void Genome::Recombination()
 		length = 0;
 		r = 0;
 		sitesVector.clear();
-		
+
 	  } // for: numberOfChromosome
 
 } // Recombination method
@@ -551,21 +551,21 @@ void Genome::Recombination()
 
 //Genome Genome::MakeGamete()
 //{
-//	
+//
 //	// for ploidy == 2
-//	
+//
 //	Recombination();
 //	Genome gamete(numberOfChromosomes, 1);
-//	
+//
 //	int c = 0;
-//	
+//
 //	for (int i=1; i <= numberOfChromosomes; i++)
 //	{
 //		if (rand.Uniform() < 0.5)
 //		  c = 1;
 //		else
 //		  c = 2;
-//		  
+//
 //		Locus * current = GetChromosome(i,c).GetHeadLocus();
 //		while (current != 0)
 //		{
@@ -573,7 +573,7 @@ void Genome::Recombination()
 //			current = current->GetNext();
 //		}
 //	}
-//	
+//
 //	return gamete;
 //}
 

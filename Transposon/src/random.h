@@ -1,7 +1,7 @@
 // *********************************************************************
-// 
+//
 // random.h
-// 
+//
 // Created by: Elie Dolgin, University of Edinburgh
 //
 // First started: April 6, 2005
@@ -21,7 +21,7 @@ class Random {
 public:
   Random();
   ~Random();
-  
+
   double Uniform();
   double Poisson(double);
 
@@ -30,7 +30,7 @@ private:
   unsigned int seed;
   MTRand rng;
   MTRand_open rng_open;
-  
+
   //static const double PI = 3.1415926535897932;
 };
 
