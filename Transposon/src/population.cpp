@@ -78,31 +78,32 @@ void Population::Initialize(bool clonal, bool fromFile)
 
 	if (fromFile)
 	{
-	  std::ifstream fin("population.txt");
-	  if (! fin.is_open())
-	  { std::cout << "Error opening file of population details"; exit (1); }
-
-	  char tempChar[5];
-	  // NEED TO FIRST HAVE GENERATION
-	  for (int a=0; a < popSize; a++)
-	  {
-	    while(!fin.getline(tempChar, 5).eof())
-	    {
-		  fin.getline(tempChar,5);
-		  while (tempChar != ".")
-		  {
-			num=strtol(tempChar,0,5);
-			fin.getline(tempChar,5);
-			copy=strtol(tempChar,0,5);
-			fin.getline(tempChar,5);
-			pos=strtol(tempChar,0,5);
-
-			GetIndividual(a).GetChromosome(num,copy).Insert(Transposon(pos, true));
-
-			fin.getline(tempChar,5);
-		  }
-		}
-	  }
+		std::cerr << "This doesn't work (do something else, fromFile is True).\n";
+	  // std::ifstream fin("population.txt");
+	  // if (! fin.is_open())
+	  // { std::cout << "Error opening file of population details"; exit (1); }
+      //
+	  // char tempChar[5];
+	  // // NEED TO FIRST HAVE GENERATION
+	  // for (int a=0; a < popSize; a++)
+	  // {
+	  //   while(!fin.getline(tempChar, 5).eof())
+	  //   {
+		//   fin.getline(tempChar,5);
+		//   while (tempChar != ".")
+		//   {
+		// 	num=strtol(tempChar,0,5);
+		// 	fin.getline(tempChar,5);
+		// 	copy=strtol(tempChar,0,5);
+		// 	fin.getline(tempChar,5);
+		// 	pos=strtol(tempChar,0,5);
+      //
+		// 	GetIndividual(a).GetChromosome(num,copy).Insert(Transposon(pos, true));
+      //
+		// 	fin.getline(tempChar,5);
+		//   }
+		// }
+	  // }
 
 	  return;
 	}
@@ -504,7 +505,7 @@ void Population::ListPopulationSites() const
 	}
 }
 
-void Population::PrintParameters(char fileName[])
+void Population::PrintParameters(const char * fileName)
 {
 	std::ofstream fout(fileName,std::ios::app);
 
@@ -541,7 +542,7 @@ void Population::PrintParameters(char fileName[])
 }
 
 // Statisitics for entire genome
-void Population::SummaryStatistics(char fileName[], int generation)
+void Population::SummaryStatistics(const char * fileName, int generation)
 {
 	std::ofstream fout(fileName,std::ios::app);
 
@@ -660,7 +661,7 @@ void Population::SummaryStatistics(char fileName[], int generation)
 	fout.close();
 }
 
-void Population::RecordPopulation(char fileName[], int generation)
+void Population::RecordPopulation(const char * fileName, int generation)
 {
 	std::ofstream fout(fileName, std::ios::trunc);
 
