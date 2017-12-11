@@ -6,9 +6,9 @@ get_fitness <- function(n, a, b){
 # number of transposons
 n = 1:200
 # a parameters to explore
-as = c(0.00001, 0.0001, 0.001, 0.01, 0.1)
+as = c(0.000006,0.00001, 0.0001, 0.001, 0.01, 0.1)
 # b parameters to explore
-bs = c(0.00001, 0.0001, 0.001, 0.01, 0.1)
+bs = c(0.00001, 0.0001, 0.001, 0.01, 0.1, 1)
 
 fitnesses = list(list())
 
@@ -31,5 +31,20 @@ for (i in 1:length(as)) {
 
 legend(175, 1.05, legend = bs, title = 'b', pch = 20, col = 1:length(bs), bty = 'n')
 legend(140, 1.05, legend = as, title = 'a', pch = 20, lty = 1:length(as), bty = 'n')
+
+dev.off()
+
+
+png('figures/default_fitness_function.png')
+
+a = 0.000006
+b = 1
+fitness_vector <- get_fitness(n, a, b)
+fitnesses[[y + ((i - 1) * length(bs))]] <- fitness_vector
+
+plot(fitness_vector, type = 'l',
+    xlim = c(1, max(n)), ylim = c(0,1),
+    xlab = 'number of TEs', ylab = 'fitness',
+    main = 'Default fitness function')
 
 dev.off()
