@@ -1,3 +1,4 @@
 *.o
 Transposon/Transposon
 Transposon/summary.txt
+Transposon/detailed.txt
