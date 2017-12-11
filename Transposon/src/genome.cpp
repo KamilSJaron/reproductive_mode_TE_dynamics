@@ -76,20 +76,17 @@ Genome::Genome()
 	if (!parametersSet)
 	  SetParameters();
 
-	for (int i=1; i <= numberOfChromosomes; i++)
-	{
-	  if (ploidy == 1)
-	  {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
-		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-	  }
-	  if (ploidy == 2)
-	  {
-	    chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
-		chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-		chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
-		chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-	  }
+	for (int i=1; i <= numberOfChromosomes; i++) {
+		if (ploidy == 1) {
+			chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+			chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+		}
+		if (ploidy == 2) {
+			chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
+			chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+			chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
+			chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+		}
     }
 }
 
@@ -187,7 +184,7 @@ unsigned int Genome::GetGenomeTECount() const
 	{
 	  genomeTEcount += GetChromosome(i, 1).GetChromTECount();
 	  if (ploidy==2)
-	    genomeTEcount += GetChromosome(i, 2).GetChromTECount();
+		genomeTEcount += GetChromosome(i, 2).GetChromTECount();
 	}
 	return genomeTEcount;
 }
