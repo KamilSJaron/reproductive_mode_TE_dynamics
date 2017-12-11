@@ -323,23 +323,30 @@ Population * Population::AsexualReproduction()
 	int chr = Genome::GetNumberOfChromosomes();
 	int pl = Genome::GetPloidy();
 
-	for (int a=0; a < popSize; a++)
-	{
-	  viable = false;
-	  do
-	  {
-		ind = (int)((rand.Uniform())*(popSize));
-		fitness = GetIndividual(ind).GetGenomeFitness();
+	for (int a=0; a < popSize; a++) {
+		// std::cerr << "Dealing with ind " << a << " from pop of " << popSize << " individuals." << std::endl;
+		viable = false;
+		/// Monte Carlo approach for selection of parents
+		/// take a random individual, select if it has fitness greater than a random number
+		/// requires fitness to be in interval (0,1>
+		while (!viable) {
+			ind = (int)((rand.Uniform())*(popSize));
+			fitness = GetIndividual(ind).GetGenomeFitness();
 
-		if (rand.Uniform() < fitness)
-		  viable = true;
-		else
-		  viable = false;
+			if (rand.Uniform() < fitness){
+				// std::cerr << "accepting : " << ind << " with fitness" << fitness << std::endl;
+				viable = true;
+			} else {
+				// std::cerr << "rejecting : " << ind << " with fitness" << fitness << std::endl;
+				viable = false;
+			}
 
-	  }while (!viable);
+		}
 
+		/// taking selected individual : ind
 		Genome parent(GetIndividual(ind));
 
+		/// not entiraly sure what this bit does
 		for (int i=1; i <= chr; i++)
 		{
 		  for (int j=1; j<= pl; j++)

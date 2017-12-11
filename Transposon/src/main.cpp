@@ -50,9 +50,11 @@ int main ()
 
     for (int gen = 1; gen <= 1000; gen++)
     {
+        // cerr << "Running generation " << gen << "." << endl;
+
         if (pop->GetPopulationTECount() == 0)
         {
-          cerr << "No TEs at generation [" << gen << "]." << endl << endl;
+          // cerr << "No TEs at generation [" << gen << "]." << endl << endl;
           pop->SummaryStatistics(summary_out, gen);
           pop->SummaryStatistics(detailed_out, gen);
           break;
@@ -60,17 +62,19 @@ int main ()
 
         if (((double)pop->GetPopulationTECount()/(double)size) > 150.0)
         {
-          cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
+          // cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
           pop->SummaryStatistics(summary_out, gen);
           pop->SummaryStatistics(detailed_out, gen);
           break;
         }
 
+        // cerr << "Reproducing " << endl;
         // REPRODUCTION
         temp = pop->AsexualReproduction();
         delete pop;
         pop = temp;
 
+        // cerr << "Transposing " << endl;
         // TRANSPOSITION & LOSS
         pop->TranspositionAndLoss();
 
