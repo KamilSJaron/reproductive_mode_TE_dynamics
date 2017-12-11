@@ -82,7 +82,7 @@ void Population::Initialize(bool clonal, bool fromFile)
 	  // std::ifstream fin("population.txt");
 	  // if (! fin.is_open())
 	  // { std::cout << "Error opening file of population details"; exit (1); }
-      //
+	  //
 	  // char tempChar[5];
 	  // // NEED TO FIRST HAVE GENERATION
 	  // for (int a=0; a < popSize; a++)
@@ -97,9 +97,9 @@ void Population::Initialize(bool clonal, bool fromFile)
 		// 	copy=strtol(tempChar,0,5);
 		// 	fin.getline(tempChar,5);
 		// 	pos=strtol(tempChar,0,5);
-      //
+	  //
 		// 	GetIndividual(a).GetChromosome(num,copy).Insert(Transposon(pos, true));
-      //
+	  //
 		// 	fin.getline(tempChar,5);
 		//   }
 		// }
@@ -347,18 +347,14 @@ Population * Population::AsexualReproduction()
 		Genome parent(GetIndividual(ind));
 
 		/// not entiraly sure what this bit does
-		for (int i=1; i <= chr; i++)
-		{
-		  for (int j=1; j<= pl; j++)
-		  {
-			Locus * current = parent.GetChromosome(i,j).GetHeadLocus();
-
-			while (current != 0)
-			{
-			  newPopulation->GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
-			  current = current->GetNext();
+		for (int i=1; i <= chr; i++) {
+			for (int j=1; j<= pl; j++) {
+				Locus * current = parent.GetChromosome(i,j).GetHeadLocus();
+				while (current != 0) {
+					newPopulation->GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
+					current = current->GetNext();
+				}
 			}
-		  }
 		}
 	} // for
 
@@ -378,10 +374,8 @@ Population * Population::Bottleneck(int bottleneckSize, bool fitnessBased, bool 
 
   for (int i=0; i < bottleneckSize; i++)
   {
-	if (fitnessBased)
-	{
-	  do
-	  {
+	if (fitnessBased) {
+	  do {
 		ind = (int)((rand.Uniform())*(popSize));
 		fitness = GetIndividual(ind).GetGenomeFitness();
 
@@ -390,64 +384,54 @@ Population * Population::Bottleneck(int bottleneckSize, bool fitnessBased, bool 
 		else
 		  viable = false;
 
-	  }while (!viable);
-	}
-	else
-	{
+	  } while (!viable);
+	} else {
 	  ind = (int)((rand.Uniform())*(popSize));
-    }
+	}
 
-    bottleneckVector.at(i) = ind;
+	bottleneckVector.at(i) = ind;
   }
 
-  if (sexual)
-  {
+  if (sexual) {
 	int c=0, p=0;
-	for (int a=0; a < popSize; a++)
-	{
-	  viable = false;
-	  while (!viable)
-	  {
-		p=1;
+	for (int a=0; a < popSize; a++) {
+		viable = false;
+		while (!viable) {
+			p=1;
 
-		while (p <= 2)
-		{
-		  vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
-		  ind = bottleneckVector.at(vectorPosition);
-		  Genome parent(GetIndividual(ind));
+			while (p <= 2) {
+				vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
+				ind = bottleneckVector.at(vectorPosition);
+				Genome parent(GetIndividual(ind));
 
-		  parent.Recombination();
+				parent.Recombination();
 
-		  for (int i=1; i <= chr; i++)
-		  {
-			if (rand.Uniform() < 0.5)
-			  c = 1;
-			else
-			  c = 2;
+				for (int i=1; i <= chr; i++) {
+					if (rand.Uniform() < 0.5)
+						c = 1;
+					else
+						c = 2;
 
-			Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
+					Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
 
-			while (current != 0)
-			{
-			  newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
-			  current = current->GetNext();
+					while (current != 0) {
+						newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
+						current = current->GetNext();
+					}
+				} // for
+
+				p++;
+			} // while (p <= 2)
+
+			fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
+
+			if (rand.Uniform() < fitness)
+			  viable = true;
+			else {
+			  newPopulation->DeleteIndividual(a);
+			  viable = false;
 			}
-		  } // for
-
-		  p++;
-		} // while (p <= 2)
-
-		fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
-
-		if (rand.Uniform() < fitness)
-		  viable = true;
-		else
-		{
-		  newPopulation->DeleteIndividual(a);
-		  viable = false;
-		}
-
-	  } // while (!viable)
+		} // while (!viable)
 	} // for
   } // if
 
@@ -699,9 +683,9 @@ void Population::RecordPopulation(const char * fileName, int generation)
 					loc = loc->GetNext();
 				  }
 				  if (j==chromNumber && k==ploidy)
-				    fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n.\n";
+					fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n.\n";
 				  else
-				    fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n";
+					fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n";
 				}
 			} //for k
 		} //for j
