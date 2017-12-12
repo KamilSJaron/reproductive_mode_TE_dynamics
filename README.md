@@ -40,9 +40,12 @@ I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fi
 
 - (done) ~first draft asexual simulation~
 - (running) 16 chromosome simulaiton (expected to be same for asex)
-- sexual simulation (need some code modification to have 89 asex, 1 sex generations), adjust parameters so the number of TEs will remain same over 1000 generations
-- potentially chose parameters that could be used for ABC to make model fit better (no change of sex)
-- use the same parameter sex in purely asexual simulation as in the first bullet point
+
+- turn model into haploid!
+- allow sexual simulation (need some code modification to have 89 asex, 1 sex  generations)
+
+- adjust parameters so the number of TEs will remain same over 1000 generations
+- use the same parameters in purely asexual simulation as in the first bullet point
 
 ## Notes :
 
