@@ -48,20 +48,12 @@ int main ()
     if (run==1) pop->PrintParameters(summary_out);
     pop->SummaryStatistics(detailed_out, 0);
 
-    for (int gen = 1; gen <= 1000; gen++)
-    {
+    for (int gen = 1; gen <= 990; gen++) {
         // cerr << "Running generation " << gen << "." << endl;
 
-        if (pop->GetPopulationTECount() == 0)
+        if (pop->GetPopulationTECount() == 0 or ((double)pop->GetPopulationTECount()/(double)size) > 150.0)
         {
           // cerr << "No TEs at generation [" << gen << "]." << endl << endl;
-          pop->SummaryStatistics(summary_out, gen);
-          pop->SummaryStatistics(detailed_out, gen);
-          break;
-        }
-
-        if (((double)pop->GetPopulationTECount()/(double)size) > 150.0)
-        {
           // cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
           pop->SummaryStatistics(summary_out, gen);
           pop->SummaryStatistics(detailed_out, gen);
@@ -78,10 +70,9 @@ int main ()
         // TRANSPOSITION & LOSS
         pop->TranspositionAndLoss();
 
-        /// printing results
+        /// printing results after transposition
         cerr << ".";
-        if (gen % 90 == 0)
-        {
+        if (gen % 90 == 0) {
           cerr << endl;
           pop->SummaryStatistics(detailed_out, gen);
         }
