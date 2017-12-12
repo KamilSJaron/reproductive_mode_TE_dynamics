@@ -1,7 +1,4 @@
-get_fitness <- function(n, a, b){
-    exp(- (a * n) - ((b * n^2) / 2))
-}
-
+source('scripts/get_fitness.R')
 
 # number of transposons
 n = 1:200
