@@ -18,6 +18,24 @@ Yeasts have only LTR transposable elements. Known parameters collected by Jens I
 
 In the empirical data, the asexuals reduce TEs by ca 17.5 (for all) - 23.5% (ca 9 copies lost for full-length TEs (active)) depending on what we look at.
 
+### Simulations
+
+The first draft simulation took naively all the parameters as mentioned above. Selection model is slightly less trivial than the other parameters, therefore it's described in section bellow.
+
+The only obvious discrepancy to real asexual yeast genome is number of chromosomes, I used 2 instead of 16. I left 200 Te slots per chromosome and modeled diploid genome, therefore there is very big margin in terms of genome space.
+
+The modeled decrease is ~6 copies, which is slightly less that what was expected from real data, but it's a great success given how crude the biological estimates of all the parameters might be.
+
+Here is number of TE copies of 10 replicates over 990 simulated generations
+
+![sim_1](figures/sim_2ch_literature_pars.png)
+
+#### Selection model
+
+I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fitness.R](scripts/get_fitness.R), the function uses two parameters that correspond to decrease of fitness due to individual TE insertions and multiplicative effect given number of TEs present already in genome (epistasis). These parameters were selected so they show ~2% fitness decrease between 50 and 51 TE copies, a standard yeast TE copy number that was used in the experiment for estimation of fitness effects in yeast. Evaluation is in script [calculate_sa_and_sb.R](scripts/calculate_sa_and_sb.R) and the resulting fitness function is shown in following figure, where expected simlation space is marked with vertical lines.
+
+![fitness_function][figures/default_fitness_function.png]
+
 ## Notes :
 
 Jens have sent me more models that might be considered.
