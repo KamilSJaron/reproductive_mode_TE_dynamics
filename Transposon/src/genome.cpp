@@ -30,10 +30,10 @@ int Genome::initialTE = 0;
 //int Genome::initialTE = 50;
 //int Genome::N = 0;
 
-int Genome::numberOfChromosomes = 2;
-int Genome::ploidy = 2;
-int Genome::chromLengths[2] = {200,200};
-double Genome::chromRecRates[2] = {0.030,0.030};
+int Genome::numberOfChromosomes = 16;
+int Genome::ploidy = 1;
+int Genome::chromLengths[16] = {200,200,200,200,200,200,200,200};
+double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
 //double Genome::rGenome = 0.01;
 
 bool Genome::clonal = true;
@@ -50,9 +50,8 @@ void Genome::SetParameters()
 	char tempChar[100];
 	while(!fin.getline(tempChar, 100).eof())
 	{
-//	fin.getline(tempChar,100);
+	// fin.getline(tempChar,100); /// its read somewhere else
 //	N=strtol(tempChar,0,10);
-	fin.getline(tempChar,100);
 	fin.getline(tempChar,100);
 	ut=strtod(tempChar,0);
 	fin.getline(tempChar,100);
