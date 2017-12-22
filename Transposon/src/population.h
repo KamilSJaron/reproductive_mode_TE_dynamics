@@ -29,7 +29,7 @@ public:
   unsigned int GetPopulationTECountAffectingFitness() const;
   double GetPopulationMeanFitness() const;
 
-  void Initialize(bool, bool);
+  void Initialize(bool);
   Genome MakeIndividual();
   void DeleteIndividual(int);
   Population * SexualReproduction();
