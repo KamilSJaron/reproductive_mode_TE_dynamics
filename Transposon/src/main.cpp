@@ -12,38 +12,40 @@ using namespace std;
 
 int main(int argc, char **argv){
 
-    string input_file = "input.txt";
-
-    if(argc > 1){
-        if(strcmp( argv[1], "--help") == 0 or strcmp( argv[1], "-h") == 0){
-            cout << "most of parameters are read form an input file (specified by argument or file input.txt by default)" << endl;
-            cout << "details are in readme file" << endl;
-            cout << "\t Transposon [--version] [--help] [input_file.txt]" << endl;
-
-            return 0;
-        }
-        if(strcmp( argv[1], "--version") == 0 or strcmp( argv[1], "-v") == 0){
-            cout << "Transposon v1.? fork" << endl;
-            cout << "\thttps://github.com/KamilSJaron/yeast_TE_load_prediction/tree/master/Transposon" << endl;
-            /* start of dev vesion */
-            cout << "\tcommit: " << GITVERSION << endl;
-            /* end */
-            return 0;
-        }
-
-        input_file = argv[1];
-
-    }
+    /* constants - input and output files */
+    const char *detailed_out = "detailed.txt";
+    const char *summary_out = "summary.txt";
+    const char *input_file = "input.txt";
+    bool sex = false;
+    string runnig_sex = "False";
 
     cerr << "Running Transposon" << endl;
     /* start of dev vesion */
     cerr << "Commit: " << GITVERSION << endl;
     /* end */
-    cerr << "Loading ... " << input_file << endl;
+    cerr << "Input : " << input_file << endl;
 
-    /* constant arrays */
-    const char *detailed_out = "detailed.txt";
-    const char *summary_out = "summary.txt";
+    if(argc > 1){
+        if (strcmp( argv[1], "--help") == 0 or strcmp( argv[1], "-h") == 0) {
+            cout << "most of parameters are read form an input file input.txt" << endl;
+            cout << "details are in readme file" << endl;
+            cout << "\t Transposon [--version] [--help] [--sex]" << endl;
+
+            return 0;
+        }
+        if (strcmp( argv[1], "--version") == 0 or strcmp( argv[1], "-v") == 0) {
+            cout << "Transposon v1.? fork" << endl;
+            cout << "\thttps://github.com/KamilSJaron/yeast_TE_load_prediction/tree/master/Transposon" << endl;
+            cout << "\tcommit: " << GITVERSION << endl;
+            return 0;
+        }
+        if (strcmp( argv[1], "--sex") == 0){
+            sex = true;
+            runnig_sex = "True";
+        }
+    }
+
+    cerr << "Sex every 90 generations : " << runnig_sex << endl;
 
     for (int run=1; run<=10; run++) {
         cerr << "Run : " << run << endl;
