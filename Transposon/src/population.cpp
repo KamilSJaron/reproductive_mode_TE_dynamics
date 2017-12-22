@@ -66,8 +66,7 @@ double Population::GetPopulationMeanFitness() const
 	return populationFitness;
 }
 
-void Population::Initialize(bool clonal, bool fromFile)
-{
+void Population::Initialize(bool fromFile) {
 	int individualNumberOfTEs=0, num=0, copy=0, pos=0, totalLength=0, currentLength=0;
 	int numberOfChromosomes = Genome::GetNumberOfChromosomes();
 	int genomePloidy = Genome::GetPloidy();
@@ -77,86 +76,84 @@ void Population::Initialize(bool clonal, bool fromFile)
 		totalLength += GetIndividual(0).GetChromosome(i, 1).GetLength();
 	}
 
-	if (clonal) {
-		individualNumberOfTEs = n;
-		if (individualNumberOfTEs > 2*totalLength) {
-			individualNumberOfTEs = 2*totalLength;
-		}
-
-		for (int j=0; j < individualNumberOfTEs; j++) {
-
-			do {
-				pos = (int)((rand.Uniform()*totalLength) + 1);
-				num = 1;
-				for (int k=1; k <= numberOfChromosomes; k++) {
-					currentLength = GetIndividual(0).GetChromosome(k, 1).GetLength();
-					if (pos > currentLength)
-					{
-					num++;
-					pos -= currentLength;
-					}
-					else
-					break;
-				}
-				copy = (int)((rand.Uniform())*(genomePloidy) + 1);
-			} while (!GetIndividual(0).GetChromosome(num, copy).TestEmpty(pos));
-
-			GetIndividual(0).GetChromosome(num,copy).Insert(Transposon(pos, true));
-		}
-
-		for (int a=1; a < popSize; a++) {
-			for (int i=1; i <= numberOfChromosomes; i++) {
-				for (int j=1; j<= genomePloidy; j++) {
-					Locus * current = GetIndividual(0).GetChromosome(i,j).GetHeadLocus();
-
-					while (current != 0) {
-						GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
-						current = current->GetNext();
-					}
-				}
-			}
-		}
+	individualNumberOfTEs = n;
+	if (individualNumberOfTEs > totalLength) {
+		std::cerr << "Error : more initial transposons is set than slots in the simulated genome. " << std::endl;
+		std::cerr << "\tinitial transposons : " << individualNumberOfTEs << std::endl;
+		std::cerr << "\tslots in the simulated genome : " << totalLength << std::endl;
+		exit(EXIT_FAILURE);
 	}
 
-	// not clonal
-	else {
-		double fractionAffectingW = Genome::GetFAF();
-		bool affectW = false;
+	for (int j=0; j < individualNumberOfTEs; j++) {
 
-		for (int i=0; i < popSize; i++) {
-			individualNumberOfTEs = (int)rand.Poisson(n);
-
-			if (individualNumberOfTEs > 2*totalLength)
-				individualNumberOfTEs = 2*totalLength;
-
-			for (int j=0; j < individualNumberOfTEs; j++) {
-				do {
-					pos = (int)((rand.Uniform()*totalLength) + 1);
-					num = 1;
-					for (int k=1; k <= numberOfChromosomes; k++)
-					{
-					currentLength = GetIndividual(i).GetChromosome(k, 1).GetLength();
-					if (pos > currentLength)
-					{
-						num++;
-						pos -= currentLength;
-					}
-					else
-						break;
-					}
-					copy = (int)((rand.Uniform())*(genomePloidy) + 1);
-				} while (!GetIndividual(i).GetChromosome(num, copy).TestEmpty(pos));
-
-
-				if (fractionAffectingW > rand.Uniform())
-					affectW = true;
+		do {
+			pos = (int)((rand.Uniform()*totalLength) + 1);
+			num = 1;
+			for (int k=1; k <= numberOfChromosomes; k++) {
+				currentLength = GetIndividual(0).GetChromosome(k, 1).GetLength();
+				if (pos > currentLength)
+				{
+				num++;
+				pos -= currentLength;
+				}
 				else
-					affectW = false;
+				break;
+			}
+			copy = (int)((rand.Uniform())*(genomePloidy) + 1);
+		} while (!GetIndividual(0).GetChromosome(num, copy).TestEmpty(pos));
 
-				GetIndividual(i).GetChromosome(num,copy).Insert(Transposon(pos, affectW));
+		GetIndividual(0).GetChromosome(num,copy).Insert(Transposon(pos, true));
+	}
+
+	/// individual generation generate individuals from the
+	for (int a=1; a < popSize; a++) {
+		for (int i=1; i <= numberOfChromosomes; i++) {
+			for (int j=1; j<= genomePloidy; j++) {
+				Locus * current = GetIndividual(0).GetChromosome(i,j).GetHeadLocus();
+
+				while (current != 0) {
+					GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
+					current = current->GetNext();
+				}
 			}
 		}
 	}
+
+	// // not clonal
+	// else {
+	// 	double fractionAffectingW = Genome::GetFAF();
+	// 	bool affectW = false;
+    //
+	// 	for (int i=0; i < popSize; i++) {
+    //
+	// 		for (int j=0; j < individualNumberOfTEs; j++) {
+	// 			do {
+	// 				pos = (int)((rand.Uniform()*totalLength) + 1);
+	// 				num = 1;
+	// 				for (int k=1; k <= numberOfChromosomes; k++)
+	// 				{
+	// 				currentLength = GetIndividual(i).GetChromosome(k, 1).GetLength();
+	// 				if (pos > currentLength)
+	// 				{
+	// 					num++;
+	// 					pos -= currentLength;
+	// 				}
+	// 				else
+	// 					break;
+	// 				}
+	// 				copy = (int)((rand.Uniform())*(genomePloidy) + 1);
+	// 			} while (!GetIndividual(i).GetChromosome(num, copy).TestEmpty(pos));
+    //
+    //
+	// 			if (fractionAffectingW > rand.Uniform())
+	// 				affectW = true;
+	// 			else
+	// 				affectW = false;
+    //
+	// 			GetIndividual(i).GetChromosome(num,copy).Insert(Transposon(pos, affectW));
+	// 		}
+	// 	}
+	// }
 }
 
 Genome Population::MakeIndividual()

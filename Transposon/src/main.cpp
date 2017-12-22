@@ -71,7 +71,7 @@ int main(int argc, char **argv){
 
         int size = pop->GetPopSize();
 
-        pop->Initialize(true, fromFile);
+        pop->Initialize(fromFile);
         pop->PrintParameters(detailed_out);
 
         if (run==1) pop->PrintParameters(summary_out);
