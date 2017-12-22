@@ -63,7 +63,6 @@ public:
   static int ploidy;
   static int chromLengths[];
   static double chromRecRates[];
-  static bool clonal;
   static bool parametersSet;
 
 private:

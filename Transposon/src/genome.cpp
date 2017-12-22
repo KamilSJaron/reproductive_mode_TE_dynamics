@@ -36,7 +36,6 @@ int Genome::chromLengths[16] = {200,200,200,200,200,200,200,200};
 double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
 //double Genome::rGenome = 0.01;
 
-bool Genome::clonal = true;
 bool Genome::parametersSet = false;
 
 Random Genome::rand;

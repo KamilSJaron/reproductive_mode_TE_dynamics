@@ -8,6 +8,8 @@
 #include "time.h"
 #include "gitversion.h"
 
+#define REPLICATES 1
+
 using namespace std;
 
 int main(int argc, char **argv){
@@ -47,7 +49,7 @@ int main(int argc, char **argv){
 
     cerr << "Sex every 90 generations : " << runnig_sex << endl;
 
-    for (int run=1; run<=10; run++) {
+    for (int run=1; run <= REPLICATES; run++) {
         cerr << "Run : " << run << endl;
         std::ifstream fin(input_file);
             if (! fin.is_open())
@@ -68,9 +70,8 @@ int main(int argc, char **argv){
         Population * temp;
 
         int size = pop->GetPopSize();
-        bool clonal = Genome::clonal;
 
-        pop->Initialize(clonal, fromFile);
+        pop->Initialize(true, fromFile);
         pop->PrintParameters(detailed_out);
 
         if (run==1) pop->PrintParameters(summary_out);

@@ -45,7 +45,7 @@ unsigned int Population::GetPopulationTECount() const
 {
 	unsigned int populationTEcount = 0;
 	for (int i=0; i < popSize; i++)
-	  populationTEcount += GetIndividual(i).GetGenomeTECount();
+		populationTEcount += GetIndividual(i).GetGenomeTECount();
 	return populationTEcount;
 }
 
@@ -53,7 +53,7 @@ unsigned int Population::GetPopulationTECountAffectingFitness() const
 {
 	unsigned int populationTEcount = 0;
 	for (int i=0; i < popSize; i++)
-	  populationTEcount += GetIndividual(i).GetGenomeTECountAffectingFitness();
+		populationTEcount += GetIndividual(i).GetGenomeTECountAffectingFitness();
 	return populationTEcount;
 }
 
@@ -61,7 +61,7 @@ double Population::GetPopulationMeanFitness() const
 {
 	double populationFitness = 0.0;
 	for (int i=0; i < popSize; i++)
-	  populationFitness += GetIndividual(i).GetGenomeFitness();
+		populationFitness += GetIndividual(i).GetGenomeFitness();
 	populationFitness /= (double)popSize;
 	return populationFitness;
 }
@@ -73,127 +73,89 @@ void Population::Initialize(bool clonal, bool fromFile)
 	int genomePloidy = Genome::GetPloidy();
 	int n = Genome::initialTE;
 
-	for (int i=1; i <= numberOfChromosomes; i++)
-	  totalLength += GetIndividual(0).GetChromosome(i, 1).GetLength();
-
-	if (fromFile)
-	{
-		std::cerr << "This doesn't work (do something else, fromFile is True).\n";
-	  // std::ifstream fin("population.txt");
-	  // if (! fin.is_open())
-	  // { std::cout << "Error opening file of population details"; exit (1); }
-	  //
-	  // char tempChar[5];
-	  // // NEED TO FIRST HAVE GENERATION
-	  // for (int a=0; a < popSize; a++)
-	  // {
-	  //   while(!fin.getline(tempChar, 5).eof())
-	  //   {
-		//   fin.getline(tempChar,5);
-		//   while (tempChar != ".")
-		//   {
-		// 	num=strtol(tempChar,0,5);
-		// 	fin.getline(tempChar,5);
-		// 	copy=strtol(tempChar,0,5);
-		// 	fin.getline(tempChar,5);
-		// 	pos=strtol(tempChar,0,5);
-	  //
-		// 	GetIndividual(a).GetChromosome(num,copy).Insert(Transposon(pos, true));
-	  //
-		// 	fin.getline(tempChar,5);
-		//   }
-		// }
-	  // }
-
-	  return;
+	for (int i=1; i <= numberOfChromosomes; i++){
+		totalLength += GetIndividual(0).GetChromosome(i, 1).GetLength();
 	}
 
-	if (clonal)
-	{
-	  individualNumberOfTEs = n;
-	  if (individualNumberOfTEs > 2*totalLength)
-		individualNumberOfTEs = 2*totalLength;
-
-	  for (int j=0; j < individualNumberOfTEs; j++)
-	  {
-		do {
-			pos = (int)((rand.Uniform()*totalLength) + 1);
-			num = 1;
-			for (int k=1; k <= numberOfChromosomes; k++)
-			{
-			  currentLength = GetIndividual(0).GetChromosome(k, 1).GetLength();
-			  if (pos > currentLength)
-			  {
-				num++;
-				pos -= currentLength;
-			  }
-			  else
-				break;
-			}
-			copy = (int)((rand.Uniform())*(genomePloidy) + 1);
-		} while (!GetIndividual(0).GetChromosome(num, copy).TestEmpty(pos));
-
-		GetIndividual(0).GetChromosome(num,copy).Insert(Transposon(pos, true));
-	  }
-
-	  for (int a=1; a < popSize; a++)
-	  {
-		for (int i=1; i <= numberOfChromosomes; i++)
-		{
-		  for (int j=1; j<= genomePloidy; j++)
-		  {
-			Locus * current = GetIndividual(0).GetChromosome(i,j).GetHeadLocus();
-
-			while (current != 0)
-			{
-			  GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
-			  current = current->GetNext();
-			}
-		  }
+	if (clonal) {
+		individualNumberOfTEs = n;
+		if (individualNumberOfTEs > 2*totalLength) {
+			individualNumberOfTEs = 2*totalLength;
 		}
-	  }
-	}
 
-	else // not clonal
-	{
-	  double fractionAffectingW = Genome::GetFAF();
-	  bool affectW = false;
+		for (int j=0; j < individualNumberOfTEs; j++) {
 
-	  for (int i=0; i < popSize; i++)
-	  {
-		individualNumberOfTEs = (int)rand.Poisson(n);
-
-		if (individualNumberOfTEs > 2*totalLength)
-		  individualNumberOfTEs = 2*totalLength;
-
-		for (int j=0; j < individualNumberOfTEs; j++)
-		{
 			do {
-			  pos = (int)((rand.Uniform()*totalLength) + 1);
-			  num = 1;
-			  for (int k=1; k <= numberOfChromosomes; k++)
-			  {
-				currentLength = GetIndividual(i).GetChromosome(k, 1).GetLength();
-				if (pos > currentLength)
-				{
-				  num++;
-				  pos -= currentLength;
+				pos = (int)((rand.Uniform()*totalLength) + 1);
+				num = 1;
+				for (int k=1; k <= numberOfChromosomes; k++) {
+					currentLength = GetIndividual(0).GetChromosome(k, 1).GetLength();
+					if (pos > currentLength)
+					{
+					num++;
+					pos -= currentLength;
+					}
+					else
+					break;
 				}
-				else
-				  break;
-			  }
-			  copy = (int)((rand.Uniform())*(genomePloidy) + 1);
-			} while (!GetIndividual(i).GetChromosome(num, copy).TestEmpty(pos));
+				copy = (int)((rand.Uniform())*(genomePloidy) + 1);
+			} while (!GetIndividual(0).GetChromosome(num, copy).TestEmpty(pos));
 
-
-			if (fractionAffectingW > rand.Uniform())
-			  affectW = true;
-			else
-			  affectW = false;
-
-			GetIndividual(i).GetChromosome(num,copy).Insert(Transposon(pos, affectW));
+			GetIndividual(0).GetChromosome(num,copy).Insert(Transposon(pos, true));
 		}
-	  }
+
+		for (int a=1; a < popSize; a++) {
+			for (int i=1; i <= numberOfChromosomes; i++) {
+				for (int j=1; j<= genomePloidy; j++) {
+					Locus * current = GetIndividual(0).GetChromosome(i,j).GetHeadLocus();
+
+					while (current != 0) {
+						GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
+						current = current->GetNext();
+					}
+				}
+			}
+		}
+	}
+
+	// not clonal
+	else {
+		double fractionAffectingW = Genome::GetFAF();
+		bool affectW = false;
+
+		for (int i=0; i < popSize; i++) {
+			individualNumberOfTEs = (int)rand.Poisson(n);
+
+			if (individualNumberOfTEs > 2*totalLength)
+				individualNumberOfTEs = 2*totalLength;
+
+			for (int j=0; j < individualNumberOfTEs; j++) {
+				do {
+					pos = (int)((rand.Uniform()*totalLength) + 1);
+					num = 1;
+					for (int k=1; k <= numberOfChromosomes; k++)
+					{
+					currentLength = GetIndividual(i).GetChromosome(k, 1).GetLength();
+					if (pos > currentLength)
+					{
+						num++;
+						pos -= currentLength;
+					}
+					else
+						break;
+					}
+					copy = (int)((rand.Uniform())*(genomePloidy) + 1);
+				} while (!GetIndividual(i).GetChromosome(num, copy).TestEmpty(pos));
+
+
+				if (fractionAffectingW > rand.Uniform())
+					affectW = true;
+				else
+					affectW = false;
+
+				GetIndividual(i).GetChromosome(num,copy).Insert(Transposon(pos, affectW));
+			}
+		}
 	}
 }
 
@@ -211,20 +173,20 @@ Genome Population::MakeIndividual()
 
 	while (p <= 2)
 	{
-	  ind = (int)((rand.Uniform())*(popSize));
-	  Genome parent(GetIndividual(ind));
-	  fitness = parent.GetGenomeFitness();
+		ind = (int)((rand.Uniform())*(popSize));
+		Genome parent(GetIndividual(ind));
+		fitness = parent.GetGenomeFitness();
 
-	  if (rand.Uniform() < fitness)
+		if (rand.Uniform() < fitness)
 		{
-		  parent.Recombination();
+			parent.Recombination();
 
-		  for (int i=1; i <= chr; i++)
-		  {
+			for (int i=1; i <= chr; i++)
+			{
 			if (rand.Uniform() < 0.5)
-			  c = 1;
+				c = 1;
 			else
-			  c = 2;
+				c = 2;
 
 			//std::cout << "Strand #" << c << " inherited." << std::endl;
 
@@ -235,8 +197,8 @@ Genome Population::MakeIndividual()
 				newIndividual.GetChromosome(i,p).Insert(current->GetTransposon());
 				current = current->GetNext();
 			}
-		  }
-		  p++;
+			}
+			p++;
 		}
 	}
 	return newIndividual;
@@ -248,11 +210,11 @@ void Population::DeleteIndividual(int x)
 	int ploidy = Genome::GetPloidy();
 
 	for (int i=1; i <= chromNumber; i++)
-	  for (int j=1; j <= ploidy; j++)
-	  {
+		for (int j=1; j <= ploidy; j++)
+		{
 		delete genoVector.at(x).GetChromosome(i,j).GetHeadLocus();
 		genoVector.at(x).GetChromosome(i,j).SetHeadLocus(0);
-	  }
+		}
 }
 
 Population * Population::SexualReproduction()
@@ -266,48 +228,48 @@ Population * Population::SexualReproduction()
 
 	for (int a=0; a < popSize; a++)
 	{
-	  viable = false;
-	  while (!viable)
-	  {
+		viable = false;
+		while (!viable)
+		{
 		p=1;
 
 		while (p <= 2)
 		{
-		  ind = (int)((rand.Uniform())*(popSize));
-		  Genome parent(GetIndividual(ind));
+			ind = (int)((rand.Uniform())*(popSize));
+			Genome parent(GetIndividual(ind));
 
-		  parent.Recombination();
+			parent.Recombination();
 
-		  for (int i=1; i <= chr; i++)
-		  {
+			for (int i=1; i <= chr; i++)
+			{
 			if (rand.Uniform() < 0.5)
-			  c = 1;
+				c = 1;
 			else
-			  c = 2;
+				c = 2;
 
 			Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
 
 			while (current != 0)
 			{
-			  newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
-			  current = current->GetNext();
+				newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
+				current = current->GetNext();
 			}
-		  } // for
+			} // for
 
-		  p++;
+			p++;
 		} // while (p <= 2)
 
 		fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
 
 		if (rand.Uniform() < fitness)
-		  viable = true;
+			viable = true;
 		else
 		{
-		  newPopulation->DeleteIndividual(a);
-		  viable = false;
+			newPopulation->DeleteIndividual(a);
+			viable = false;
 		}
 
-	  } // while (!viable)
+		} // while (!viable)
 	} // for
 
 	return newPopulation;
@@ -364,140 +326,127 @@ Population * Population::AsexualReproduction()
 // fitnessBased: true if bottleneck based on fitness of surviving individuals, false if random
 Population * Population::Bottleneck(int bottleneckSize, bool fitnessBased, bool sexual)
 {
-  Population * newPopulation = new Population(popSize);
+	Population * newPopulation = new Population(popSize);
 
-  int ind = 0, vectorPosition = 0;
-  bool viable = false;
-  double fitness = 0.0;
-  int chr = Genome::GetNumberOfChromosomes();
-  std::vector<int>bottleneckVector(bottleneckSize,0);
+	int ind = 0, vectorPosition = 0;
+	bool viable = false;
+	double fitness = 0.0;
+	int chr = Genome::GetNumberOfChromosomes();
+	std::vector<int>bottleneckVector(bottleneckSize,0);
 
-  for (int i=0; i < bottleneckSize; i++)
-  {
-	if (fitnessBased) {
-	  do {
+	for (int i=0; i < bottleneckSize; i++) {
+		if (fitnessBased) {
+			do {
+				ind = (int)((rand.Uniform())*(popSize));
+				fitness = GetIndividual(ind).GetGenomeFitness();
+
+				if (rand.Uniform() < fitness)
+					viable = true;
+				else
+					viable = false;
+			} while (!viable);
+		} else {
 		ind = (int)((rand.Uniform())*(popSize));
-		fitness = GetIndividual(ind).GetGenomeFitness();
-
-		if (rand.Uniform() < fitness)
-		  viable = true;
-		else
-		  viable = false;
-
-	  } while (!viable);
-	} else {
-	  ind = (int)((rand.Uniform())*(popSize));
+		}
+		bottleneckVector.at(i) = ind;
 	}
 
-	bottleneckVector.at(i) = ind;
-  }
+	if (sexual) {
+		int c=0, p=0;
+		for (int a=0; a < popSize; a++) {
+			viable = false;
+			while (!viable) {
+				p=1;
 
-  if (sexual) {
-	int c=0, p=0;
-	for (int a=0; a < popSize; a++) {
-		viable = false;
-		while (!viable) {
-			p=1;
+				while (p <= 2) {
+					vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
+					ind = bottleneckVector.at(vectorPosition);
+					Genome parent(GetIndividual(ind));
 
-			while (p <= 2) {
-				vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
-				ind = bottleneckVector.at(vectorPosition);
-				Genome parent(GetIndividual(ind));
+					parent.Recombination();
 
-				parent.Recombination();
+					for (int i=1; i <= chr; i++) {
+						if (rand.Uniform() < 0.5)
+							c = 1;
+						else
+							c = 2;
 
-				for (int i=1; i <= chr; i++) {
-					if (rand.Uniform() < 0.5)
-						c = 1;
-					else
-						c = 2;
+						Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
 
-					Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
+						while (current != 0) {
+							newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
+							current = current->GetNext();
+						}
+					} // for
 
-					while (current != 0) {
-						newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
-						current = current->GetNext();
-					}
-				} // for
+					p++;
+				} // while (p <= 2)
 
-				p++;
-			} // while (p <= 2)
+				fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
 
-			fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
+				if (rand.Uniform() < fitness)
+					viable = true;
+				else {
+					newPopulation->DeleteIndividual(a);
+					viable = false;
+				}
+			} // while (!viable)
+		} // for
+	} // if
+
+	else {
+		int pl = Genome::GetPloidy();
+
+		for (int a=0; a < popSize; a++) {
+			viable = false;
+			do {
+			vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
+			ind = bottleneckVector.at(vectorPosition);
+			fitness = GetIndividual(ind).GetGenomeFitness();
 
 			if (rand.Uniform() < fitness)
-			  viable = true;
-			else {
-			  newPopulation->DeleteIndividual(a);
-			  viable = false;
+				viable = true;
+			else
+				viable = false;
+
+			} while (!viable);
+
+			Genome parent(GetIndividual(ind));
+
+			for (int i=1; i <= chr; i++) {
+				for (int j=1; j<= pl; j++) {
+					Locus * current = parent.GetChromosome(i,j).GetHeadLocus();
+
+					while (current != 0) {
+						newPopulation->GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
+						current = current->GetNext();
+					}
+				}
 			}
-		} // while (!viable)
-	} // for
-  } // if
+		} // for
+	} // else
 
-  else
-  {
-	int pl = Genome::GetPloidy();
-
-	for (int a=0; a < popSize; a++)
-	{
-	  viable = false;
-	  do
-	  {
-		vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
-		ind = bottleneckVector.at(vectorPosition);
-		fitness = GetIndividual(ind).GetGenomeFitness();
-
-		if (rand.Uniform() < fitness)
-		  viable = true;
-		else
-		  viable = false;
-
-	  }while (!viable);
-
-		Genome parent(GetIndividual(ind));
-
-		for (int i=1; i <= chr; i++)
-		{
-		  for (int j=1; j<= pl; j++)
-		  {
-			Locus * current = parent.GetChromosome(i,j).GetHeadLocus();
-
-			while (current != 0)
-			{
-			  newPopulation->GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
-			  current = current->GetNext();
-			}
-		  }
-		}
-	} // for
-  } // else
-
-  std::cout << std::endl << "Population bottleneck of size[" << bottleneckSize << "]" << std::endl;
-  return newPopulation;
+	std::cout << std::endl << "Population bottleneck of size[" << bottleneckSize << "]" << std::endl;
+	return newPopulation;
 }
 
 
 void Population::TranspositionAndLoss()
 {
-	for (int i=0; i < popSize; i++)
-	{
+	for (int i=0; i < popSize; i++) {
 		genoVector.at(i).Transpose();
 		genoVector.at(i).ElementLoss();
 	}
 }
 
-void Population::ListPopulationSites() const
-{
-	for (int i=0; i < popSize; i++)
-	{
-	  std::cout << "INDIVIDUAL [" << i << "]" << std::endl;
-	  genoVector.at(i).ListGenomeSites();
+void Population::ListPopulationSites() const {
+	for (int i=0; i < popSize; i++) {
+		std::cout << "INDIVIDUAL [" << i << "]" << std::endl;
+		genoVector.at(i).ListGenomeSites();
 	}
 }
 
-void Population::PrintParameters(const char * fileName)
-{
+void Population::PrintParameters(const char * fileName) {
 	std::ofstream fout(fileName,std::ios::app);
 
 	time_t rawtime;
@@ -554,11 +503,10 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 
 	meanCopyNumber = ((double)GetPopulationTECount()) / ((double)size);
 	if (meanCopyNumber != 0)
-	  proportionAffectingW = ((double)GetPopulationTECountAffectingFitness()) / ((double)GetPopulationTECount());
+		proportionAffectingW = ((double)GetPopulationTECountAffectingFitness()) / ((double)GetPopulationTECount());
 	minCopyNum = (int)meanCopyNumber + 1;
 
-	for (int i=0; i < size; i++)
-	{
+	for (int i=0; i < size; i++) {
 		y = GetIndividual(i).GetGenomeTECount();
 		x = y - meanCopyNumber;
 		varCopyNumber += x*x;
@@ -580,8 +528,7 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 	bool empty1, empty2, emptyTest = true, fixedTest = true;
 	double meanFreq = 0.0, varFreq = 0.0, fractionEmpty=0.0, fractionFixed=0.0;
 
-	for (int j=1; j <= chromNumber; j++)
-	{
+	for (int j=1; j <= chromNumber; j++) {
 		chromLength = GetIndividual(0).GetChromosome(j,1).GetLength();
 		for (int k=1; k <= chromLength; k++)
 		{
@@ -591,25 +538,22 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 				empty2 = GetIndividual(m).GetChromosome(j,2).TestEmpty(k);
 
 				if (!empty1 || !empty2)
-				  emptyTest = false;
+					emptyTest = false;
 				if (empty1 && empty2)
-				  fixedTest = false;
-
-				if (!empty1)
-				{
-				  locationVector.at(a)++;
-				  meanFreq++;
+					fixedTest = false;
+				if (!empty1) {
+					locationVector.at(a)++;
+					meanFreq++;
 				}
-				if (!empty2)
-				{
-				  locationVector.at(a)++;
-				  meanFreq++;
+				if (!empty2) {
+					locationVector.at(a)++;
+					meanFreq++;
 				}
 			}
 			if (emptyTest)
-			  emptySites++;
+				emptySites++;
 			if (fixedTest)
-			  fixedSites++;
+				fixedSites++;
 			emptyTest = true;
 			fixedTest = true;
 			a++;
@@ -617,8 +561,7 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 	}
 	meanFreq /= (2*a*size);
 
-	for (int i=0; i < vectorLength; i++)
-	{
+	for (int i=0; i < vectorLength; i++) {
 		x = (double)locationVector.at(i) / (2*size) - meanFreq;
 		varFreq += x*x;
 	}
@@ -632,9 +575,9 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 	std::cout << "Mean copy number per individual: " << meanCopyNumber << std::endl;
 	std::cout << "Variance in copy number between individuals: " << varCopyNumber << std::endl;
 	std::cout << "Proportion affecting fitness: ";
-	  if (meanCopyNumber == 0)
+	if (meanCopyNumber == 0)
 		std::cout << "n/a" << std::endl;
-	  else
+	else
 		std::cout << proportionAffectingW << std::endl;
 	std::cout << "Mean element frequency: " << meanFreq << std::endl;
 	std::cout << "Variance in element frequency: " << varFreq << std::endl;
@@ -663,33 +606,28 @@ void Population::RecordPopulation(const char * fileName, int generation)
 	int ploidy = Genome::GetPloidy();
 	Locus * loc = GetIndividual(0).GetChromosome(1,1).GetHeadLocus();
 
-	for (int i=0; i < size; i++)
-	{
-	  if (GetIndividual(i).GetGenomeTECount()==0)
-		fout << ".\n";
-	  else
-	  {
-		for (int j=1; j <= chromNumber; j++)
-		{
-			for (int k=1; k <= ploidy; k++)
-			{
-				loc = GetIndividual(i).GetChromosome(j,k).GetHeadLocus();
+	for (int i=0; i < size; i++) {
+		if (GetIndividual(i).GetGenomeTECount()==0)
+			fout << ".\n";
+		else {
+			for (int j=1; j <= chromNumber; j++) {
+				for (int k=1; k <= ploidy; k++) {
+					loc = GetIndividual(i).GetChromosome(j,k).GetHeadLocus();
 
-				if (loc != 0)
-				{
-				  while (loc->GetNext() != 0)
-				  {
-					fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n";
-					loc = loc->GetNext();
-				  }
-				  if (j==chromNumber && k==ploidy)
-					fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n.\n";
-				  else
-					fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n";
-				}
-			} //for k
-		} //for j
-	  } // else
+					if (loc != 0) {
+						while (loc->GetNext() != 0)
+						{
+						fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n";
+						loc = loc->GetNext();
+						}
+						if (j==chromNumber && k==ploidy)
+						fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n.\n";
+						else
+						fout << j << "\n" << k << "\n" << loc->GetTransposon().GetLocation() << "\n";
+					}
+				} //for k
+			} //for j
+		} // else
 	} //for i
 }
 
@@ -749,9 +687,9 @@ void Population::SummaryStatistics(int num)
 			}
 		}
 		if (emptyTest)
-		  emptySites++;
+			emptySites++;
 		if (fixedTest)
-		  fixedSites++;
+			fixedSites++;
 		emptyTest = true;
 		fixedTest = true;
 	}
@@ -796,29 +734,29 @@ void Population::SummaryStatistics(int numFirst, int numLast)
 
 	for (int j=0; j < numberOfChromosomesAnalyzed; j++)
 	{
-	  for (int i=0; i < size; i++)
-	  {
+		for (int i=0; i < size; i++)
+		{
 		countVector.at(i) = GetIndividual(i).GetChromosome(j+numFirst,1).GetChromTECount()
 							+ GetIndividual(i).GetChromosome(j+numFirst,2).GetChromTECount();
 		meanVector.at(j) += countVector.at(i);
-	  }
+		}
 
-	  meanVector.at(j) /= (2*size);
+		meanVector.at(j) /= (2*size);
 
-	  for (int i=0; i < size; i++)
-	  {
+		for (int i=0; i < size; i++)
+		{
 		x = countVector.at(i) - meanVector.at(j);
 		varVector.at(j) += x*x;
-	  }
-	  varVector.at(j) /= (size - 1);
+		}
+		varVector.at(j) /= (size - 1);
 	}
 
 	for (int j=0; j < numberOfChromosomesAnalyzed; j++)
 	{
-	  meanCopyNumber += meanVector.at(j);
-	  varCopyNumber += varVector.at(j);
-	  meanVector.at(j) = 0;
-	  varVector.at(j) = 0;
+		meanCopyNumber += meanVector.at(j);
+		varCopyNumber += varVector.at(j);
+		meanVector.at(j) = 0;
+		varVector.at(j) = 0;
 	}
 	meanCopyNumber /= numberOfChromosomesAnalyzed;
 	varCopyNumber /= numberOfChromosomesAnalyzed;
@@ -832,11 +770,11 @@ void Population::SummaryStatistics(int numFirst, int numLast)
 
 	for (int j=0; j < numberOfChromosomesAnalyzed; j++)
 	{
-	  chromLength = GetIndividual(0).GetChromosome(j+numFirst,1).GetLength();
-	  std::vector<int> locationVector(chromLength, 0);
+		chromLength = GetIndividual(0).GetChromosome(j+numFirst,1).GetLength();
+		std::vector<int> locationVector(chromLength, 0);
 
-	  for (int k=1; k <= chromLength; k++)
-	  {
+		for (int k=1; k <= chromLength; k++)
+		{
 		for (int m=0; m < size; m++)
 		{
 			empty1 = GetIndividual(m).GetChromosome(j+numFirst,1).TestEmpty(k);
@@ -859,32 +797,32 @@ void Population::SummaryStatistics(int numFirst, int numLast)
 			}
 		}
 		if (emptyTest)
-		  emptySites++;
+			emptySites++;
 		if (fixedTest)
-		  fixedSites++;
+			fixedSites++;
 		emptyTest = true;
 		fixedTest = true;
-	  }
-	  meanVector.at(j) /= (2*chromLength*size);
+		}
+		meanVector.at(j) /= (2*chromLength*size);
 
-	  for (int i=0; i < chromLength; i++)
-	  {
-		x = (double)locationVector.at(i) / (2*size) -  meanVector.at(j);
+		for (int i=0; i < chromLength; i++)
+		{
+		x = (double)locationVector.at(i) / (2*size) -	meanVector.at(j);
 		varVector.at(j) += x*x;
-	  }
-	  varVector.at(j) /= (chromLength - 1);
+		}
+		varVector.at(j) /= (chromLength - 1);
 
-	  fractionEmptyVector.at(j) = (double)emptySites / (double)chromLength;
-	  emptySites = 0;
-	  fractionFixedVector.at(j) = (double)fixedSites / (double)chromLength;
-	  fixedSites = 0;
+		fractionEmptyVector.at(j) = (double)emptySites / (double)chromLength;
+		emptySites = 0;
+		fractionFixedVector.at(j) = (double)fixedSites / (double)chromLength;
+		fixedSites = 0;
 	}
 	for (int j=0; j < numberOfChromosomesAnalyzed; j++)
 	{
-	  meanFreq += meanVector.at(j);
-	  varFreq += varVector.at(j);
-	  fractionEmpty += fractionEmptyVector.at(j);
-	  fractionFixed += fractionFixedVector.at(j);
+		meanFreq += meanVector.at(j);
+		varFreq += varVector.at(j);
+		fractionEmpty += fractionEmptyVector.at(j);
+		fractionFixed += fractionFixedVector.at(j);
 	}
 	meanFreq /= numberOfChromosomesAnalyzed;
 	varFreq /= numberOfChromosomesAnalyzed;
