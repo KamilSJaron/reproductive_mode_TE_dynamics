@@ -176,49 +176,42 @@ Population * Population::SexualReproduction() {
 	double fitness = 0.0;
 	int chr = Genome::GetNumberOfChromosomes();
 
-	for (int a=0; a < popSize; a++)
-	{
+	for (int a=0; a < popSize; a++) {
 		viable = false;
-		while (!viable)
-		{
-		p=1;
+		while (!viable) {
+			p=1;
 
-		while (p <= 2)
-		{
-			ind = (int)((rand.Uniform())*(popSize));
-			Genome parent(GetIndividual(ind));
+			while (p <= 2) {
+				ind = (int)((rand.Uniform())*(popSize));
+				Genome parent(GetIndividual(ind));
 
-			parent.Recombination();
+				parent.Recombination();
 
-			for (int i=1; i <= chr; i++)
-			{
-			if (rand.Uniform() < 0.5)
-				c = 1;
-			else
-				c = 2;
+				for (int i=1; i <= chr; i++) {
+					if (rand.Uniform() < 0.5)
+						c = 1;
+					else
+						c = 2;
 
-			Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
+					Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
 
-			while (current != 0)
-			{
-				newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
-				current = current->GetNext();
+					while (current != 0) {
+						newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
+						current = current->GetNext();
+					}
+					} // for
+
+				p++;
+			} // while (p <= 2)
+
+			fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
+
+			if (rand.Uniform() < fitness)
+				viable = true;
+			else {
+				newPopulation->DeleteIndividual(a);
+				viable = false;
 			}
-			} // for
-
-			p++;
-		} // while (p <= 2)
-
-		fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
-
-		if (rand.Uniform() < fitness)
-			viable = true;
-		else
-		{
-			newPopulation->DeleteIndividual(a);
-			viable = false;
-		}
-
 		} // while (!viable)
 	} // for
 
