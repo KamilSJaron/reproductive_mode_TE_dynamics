@@ -23,23 +23,20 @@ public:
   Genome();
   Genome(int, int);
   Genome(const Genome &);
-  ~Genome();
 
   static void SetParameters();
 
   static unsigned int GetNumberOfChromosomes();
-  static unsigned int GetPloidy();
   static double GetFAF();
 
   unsigned int GetGenomeTECount() const;
   unsigned int GetGenomeTECountAffectingFitness() const;
-  const Chromosome & GetChromosome(int, int) const;
-  Chromosome & GetChromosome(int, int);
+  const Chromosome & GetChromosome(int) const;
+  Chromosome & GetChromosome(int);
   double GetGenomeFitness() const;
   double GetGenomeFitness(int) const;
 
   void SetChromosome(Chromosome&);
-//  void SetGenomeParameters(int, int);
 
   void Transpose();
   void Transpose(double, double);
@@ -60,7 +57,6 @@ public:
   //static double rGenome;		// genome wide recombination rate between TE sites
   static int initialTE;
   static int numberOfChromosomes;
-  static int ploidy;
   static int chromLengths[];
   static double chromRecRates[];
   static bool parametersSet;
