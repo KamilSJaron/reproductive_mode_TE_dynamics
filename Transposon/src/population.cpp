@@ -156,66 +156,19 @@ void Population::Initialize(bool fromFile) {
 	// }
 }
 
-Genome Population::MakeIndividual()
-{
-	// for ploidy == 2
-
-	Genome newIndividual;
-
-	int ind = 0;
-	int c = 0;
-	int p = 1;
-	double fitness = 0.0;
-	int chr = Genome::GetNumberOfChromosomes();
-
-	while (p <= 2)
-	{
-		ind = (int)((rand.Uniform())*(popSize));
-		Genome parent(GetIndividual(ind));
-		fitness = parent.GetGenomeFitness();
-
-		if (rand.Uniform() < fitness)
-		{
-			parent.Recombination();
-
-			for (int i=1; i <= chr; i++)
-			{
-			if (rand.Uniform() < 0.5)
-				c = 1;
-			else
-				c = 2;
-
-			//std::cout << "Strand #" << c << " inherited." << std::endl;
-
-			Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
-
-			while (current != 0)
-			{
-				newIndividual.GetChromosome(i,p).Insert(current->GetTransposon());
-				current = current->GetNext();
-			}
-			}
-			p++;
-		}
-	}
-	return newIndividual;
-}
-
-void Population::DeleteIndividual(int x)
-{
+void Population::DeleteIndividual(int x) {
 	int chromNumber = Genome::GetNumberOfChromosomes();
 	int ploidy = Genome::GetPloidy();
 
-	for (int i=1; i <= chromNumber; i++)
-		for (int j=1; j <= ploidy; j++)
-		{
-		delete genoVector.at(x).GetChromosome(i,j).GetHeadLocus();
-		genoVector.at(x).GetChromosome(i,j).SetHeadLocus(0);
+	for (int i=1; i <= chromNumber; i++) {
+		for (int j=1; j <= ploidy; j++) {
+			delete genoVector.at(x).GetChromosome(i,j).GetHeadLocus();
+			genoVector.at(x).GetChromosome(i,j).SetHeadLocus(0);
 		}
+	}
 }
 
-Population * Population::SexualReproduction()
-{
+Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 
 	int ind = 0, c = 0, p = 0;
@@ -272,8 +225,7 @@ Population * Population::SexualReproduction()
 	return newPopulation;
 }
 
-Population * Population::AsexualReproduction()
-{
+Population * Population::AsexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 
 	int ind = 0;
@@ -319,114 +271,6 @@ Population * Population::AsexualReproduction()
 
 	return newPopulation;
 }
-
-// fitnessBased: true if bottleneck based on fitness of surviving individuals, false if random
-Population * Population::Bottleneck(int bottleneckSize, bool fitnessBased, bool sexual)
-{
-	Population * newPopulation = new Population(popSize);
-
-	int ind = 0, vectorPosition = 0;
-	bool viable = false;
-	double fitness = 0.0;
-	int chr = Genome::GetNumberOfChromosomes();
-	std::vector<int>bottleneckVector(bottleneckSize,0);
-
-	for (int i=0; i < bottleneckSize; i++) {
-		if (fitnessBased) {
-			do {
-				ind = (int)((rand.Uniform())*(popSize));
-				fitness = GetIndividual(ind).GetGenomeFitness();
-
-				if (rand.Uniform() < fitness)
-					viable = true;
-				else
-					viable = false;
-			} while (!viable);
-		} else {
-		ind = (int)((rand.Uniform())*(popSize));
-		}
-		bottleneckVector.at(i) = ind;
-	}
-
-	if (sexual) {
-		int c=0, p=0;
-		for (int a=0; a < popSize; a++) {
-			viable = false;
-			while (!viable) {
-				p=1;
-
-				while (p <= 2) {
-					vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
-					ind = bottleneckVector.at(vectorPosition);
-					Genome parent(GetIndividual(ind));
-
-					parent.Recombination();
-
-					for (int i=1; i <= chr; i++) {
-						if (rand.Uniform() < 0.5)
-							c = 1;
-						else
-							c = 2;
-
-						Locus * current = parent.GetChromosome(i,c).GetHeadLocus();
-
-						while (current != 0) {
-							newPopulation->GetIndividual(a).GetChromosome(i,p).Insert(current->GetTransposon());
-							current = current->GetNext();
-						}
-					} // for
-
-					p++;
-				} // while (p <= 2)
-
-				fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
-
-				if (rand.Uniform() < fitness)
-					viable = true;
-				else {
-					newPopulation->DeleteIndividual(a);
-					viable = false;
-				}
-			} // while (!viable)
-		} // for
-	} // if
-
-	else {
-		int pl = Genome::GetPloidy();
-
-		for (int a=0; a < popSize; a++) {
-			viable = false;
-			do {
-			vectorPosition = (int)((rand.Uniform())*(bottleneckSize));
-			ind = bottleneckVector.at(vectorPosition);
-			fitness = GetIndividual(ind).GetGenomeFitness();
-
-			if (rand.Uniform() < fitness)
-				viable = true;
-			else
-				viable = false;
-
-			} while (!viable);
-
-			Genome parent(GetIndividual(ind));
-
-			for (int i=1; i <= chr; i++) {
-				for (int j=1; j<= pl; j++) {
-					Locus * current = parent.GetChromosome(i,j).GetHeadLocus();
-
-					while (current != 0) {
-						newPopulation->GetIndividual(a).GetChromosome(i,j).Insert(current->GetTransposon());
-						current = current->GetNext();
-					}
-				}
-			}
-		} // for
-	} // else
-
-	std::cout << std::endl << "Population bottleneck of size[" << bottleneckSize << "]" << std::endl;
-	return newPopulation;
-}
-
 
 void Population::TranspositionAndLoss()
 {
