@@ -34,7 +34,6 @@ public:
   void DeleteIndividual(int);
   Population * SexualReproduction();
   Population * AsexualReproduction();
-  Population * Bottleneck(int, bool, bool);
   void TranspositionAndLoss();
 
   void ListPopulationSites() const;
