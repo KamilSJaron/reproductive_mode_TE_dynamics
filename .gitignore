@@ -1,7 +1,7 @@
 *.o
-Transposon/Transposon
+Transposon/transposon
 Transposon/summary.txt
 Transposon/detailed.txt
 TE_Sim
 simulation*
-Transposon/src/gitversion.h
+Transposon/include/gitversion.h
