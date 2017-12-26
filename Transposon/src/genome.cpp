@@ -73,12 +73,12 @@ Genome::Genome() {
 	  SetParameters();
 
 	for (int i=1; i <= numberOfChromosomes; i++) {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+		chromoVector.at(i-1).SetChromNumberAndCopy(i);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 	}
 }
 
-Genome::Genome(int num, int pl) {
+Genome::Genome(int num) {
 	numberOfChromosomes = num;
 
 	chromoVector.resize(numberOfChromosomes);
@@ -86,7 +86,7 @@ Genome::Genome(int num, int pl) {
 	  SetParameters();
 
 	for (int i=1; i <= numberOfChromosomes; i++) {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+		chromoVector.at(i-1).SetChromNumberAndCopy(i);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 	}
 }
@@ -99,7 +99,7 @@ Genome::Genome(const Genome & rhs) {
 	Locus * current;
 
 	for (int i=1; i <= numberOfChromosomes; i++){
-		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+		chromoVector.at(i-1).SetChromNumberAndCopy(i);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 		current = rhs.GetChromosome(i).GetHeadLocus();
 		while (current != 0) {
