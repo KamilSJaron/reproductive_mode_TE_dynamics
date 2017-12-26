@@ -9,7 +9,7 @@
 //
 // *********************************************************************
 
-#include "genome.h"
+#include "../include/genome.h"
 #include <math.h>
 #include <fstream>
 #include <iostream>

@@ -10,7 +10,7 @@
 // *********************************************************************
 
 
-#include "random.h"
+#include "../include/random.h"
 #include "time.h"
 #include "math.h"
 

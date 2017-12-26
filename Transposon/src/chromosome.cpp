@@ -10,7 +10,7 @@
 // *********************************************************************
 
 #include <iostream>
-#include "chromosome.h"
+#include "../include/chromosome.h"
 
 
 Chromosome::Chromosome():
