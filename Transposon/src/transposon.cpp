@@ -9,7 +9,7 @@
 //
 // *********************************************************************
 
-#include "transposon.h"
+#include "../include/transposon.h"
 
 Transposon::Transposon():
   location(0),

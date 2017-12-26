@@ -9,9 +9,9 @@
 //
 // *********************************************************************
 
-#include "population.h"
-// #include "ascus.h"
-#include "genome.h"
+#include "../include/population.h"
+// #include "../include/ascus.h"
+#include "../include/genome.h"
 #include <fstream>
 #include <iostream>
 #include <time.h>

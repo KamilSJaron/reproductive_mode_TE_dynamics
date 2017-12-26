@@ -9,7 +9,7 @@
 //
 // *********************************************************************
 
-#include "locus.h"
+#include "../include/locus.h"
 #include <iostream>
 
 //Locus::Locus():
