@@ -8,6 +8,7 @@ CPP_FILES = $(wildcard src/*.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(CPP_FILES))
 # INSTAL_PREFIX = /usr/local
 
+# BUILDING
 
 $(PRG) : $(GIT_HEADER) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJ)
@@ -27,6 +28,16 @@ $(GIT_HEADER) : ../.git/HEAD ../.git/COMMIT_EDITMSG
 .git/COMMIT_EDITMSG :
 	touch $@
 
+# TESTING
+
+transposon_test : test/transposon_test.o test/TestTransposon.o src/Transposon.o
+	gcc -o $@ $^ -lstdc++ -lcppunit -ldl
+
+.PHONY : test
+test : transposon_test
+	./$<
+
+# CLEANING
 .PHONY : clean
 clean :
-	rm transposon src/*.o
+	rm transposon src/*.o test/*.o

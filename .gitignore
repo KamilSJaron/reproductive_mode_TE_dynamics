@@ -1,5 +1,6 @@
 *.o
 Transposon/transposon
+Transposon/transposon_test
 Transposon/summary.txt
 Transposon/detailed.txt
 TE_Sim
