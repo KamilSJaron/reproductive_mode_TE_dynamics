@@ -10,8 +10,8 @@
 // *********************************************************************
 
 #include <iostream>
-#include "../include/chromosome.h"
 
+#include "../include/Chromosome.h"
 
 Chromosome::Chromosome():
   chromNumber(0),

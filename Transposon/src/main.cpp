@@ -1,11 +1,13 @@
-#include "../include/population.h"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
 
-#include "../include/random.h"
 #include "time.h"
+
+#include "../include/Population.h"
+#include "../include/Random.h"
 #include "../include/gitversion.h"
 
 #define REPLICATES 1

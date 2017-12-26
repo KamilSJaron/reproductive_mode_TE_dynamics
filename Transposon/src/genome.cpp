@@ -9,10 +9,11 @@
 //
 // *********************************************************************
 
-#include "../include/genome.h"
 #include <math.h>
 #include <fstream>
 #include <iostream>
+
+#include "../include/Genome.h"
 
 //int Genome::N = 0;
 double Genome::ut = 0;
