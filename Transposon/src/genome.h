@@ -21,7 +21,7 @@ class Genome {
 
 public:
   Genome();
-  Genome(int, int);
+  Genome(int);
   Genome(const Genome &);
 
   static void SetParameters();

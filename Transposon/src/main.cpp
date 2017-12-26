@@ -67,11 +67,13 @@ int main(int argc, char **argv){
         fin.close();
 
         Population * pop = new Population(N);
+        // cerr << "Population created" << endl;
         Population * temp;
 
         int size = pop->GetPopSize();
-
+        // cerr << "Population size : " << size << endl;
         pop->Initialize(fromFile);
+        // cerr << "Population initiated" << endl;
         pop->PrintParameters(detailed_out);
 
         if (run==1) pop->PrintParameters(summary_out);
