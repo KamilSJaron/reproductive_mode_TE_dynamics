@@ -9,10 +9,11 @@
 //
 // *********************************************************************
 
-#include "../include/ascus.h"
 #include <math.h>
 #include <fstream>
 #include <iostream>
+
+#include "../include/Ascus.h"
 
 //int Ascus::N = 0;
 double Ascus::ut = 0;

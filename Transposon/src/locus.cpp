@@ -9,8 +9,9 @@
 //
 // *********************************************************************
 
-#include "../include/locus.h"
 #include <iostream>
+
+#include "../include/Locus.h"
 
 //Locus::Locus():
 //  transElem(0),
