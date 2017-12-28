@@ -14,22 +14,22 @@
 #include "../include/Chromosome.h"
 
 Chromosome::Chromosome():
-  chromNumber(0),
-  chromCopy(0),
-  length(0),
-  rChrom(0)
-  {
-    headLocus = 0;
-  }
+	chromNumber(0),
+	chromCopy(0),
+	length(0),
+	rChrom(0)
+	{
+		headLocus = 0;
+	}
 
 Chromosome::Chromosome(int num, int copy, int len, double r):
-  chromNumber(num),
-  chromCopy(copy),
-  length(len),
-  rChrom(r)
-  {
+	chromNumber(num),
+	chromCopy(copy),
+	length(len),
+	rChrom(r)
+	{
 	headLocus = 0;
-  }
+	}
 
 Chromosome::~Chromosome()
 {
@@ -56,7 +56,7 @@ unsigned int Chromosome::GetChromTECountAffectingFitness() const
 	while (current != 0)
 	{
 		if (current->GetTransposon().GetEffect())
-		  count++;
+			count++;
 		current = current->GetNext();
 	}
 	return count;
@@ -107,14 +107,14 @@ bool Chromosome::TestEmpty(int site) const
 	Locus * current = headLocus;
 
 	while ((current != 0) && (current->GetTransposon().GetLocation() < site))
-	  current = current->GetNext();
+		current = current->GetNext();
 
 	if (current == 0)
-	  return true;
+		return true;
 	if (current->GetTransposon().GetLocation() == site)
-	  return false;
+		return false;
 	else
-	  return true;
+		return true;
 }
 
 void Chromosome::Insert (Transposon te)
@@ -200,12 +200,12 @@ void Chromosome::ListChromSites() const
 	std::cout << "Strand [" << chromNumber << "," << chromCopy << "]: ";
 	if (loc != 0)
 	{
-	  while (loc->GetNext() != 0)
-	  {
+		while (loc->GetNext() != 0)
+		{
 		std::cout<<loc->GetTransposon().GetLocation()<<", ";
 		loc = loc->GetNext();
-	  }
-	  std::cout<<loc->GetTransposon().GetLocation()<<".";
+		}
+		std::cout<<loc->GetTransposon().GetLocation()<<".";
 	}
 	std::cout << std::endl;
 }

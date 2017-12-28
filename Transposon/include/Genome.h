@@ -20,51 +20,51 @@
 class Genome {
 
 public:
-  Genome();
-  Genome(int);
-  Genome(const Genome &);
+	Genome();
+	Genome(int);
+	Genome(const Genome &);
 
-  static void SetParameters();
+	static void SetParameters();
 
-  static unsigned int GetNumberOfChromosomes();
-  static double GetFAF();
+	static unsigned int GetNumberOfChromosomes();
+	static double GetFAF();
 
-  unsigned int GetGenomeTECount() const;
-  unsigned int GetGenomeTECountAffectingFitness() const;
-  const Chromosome & GetChromosome(int) const;
-  Chromosome & GetChromosome(int);
-  double GetGenomeFitness() const;
-  double GetGenomeFitness(int) const;
+	unsigned int GetGenomeTECount() const;
+	unsigned int GetGenomeTECountAffectingFitness() const;
+	const Chromosome & GetChromosome(int) const;
+	Chromosome & GetChromosome(int);
+	double GetGenomeFitness() const;
+	double GetGenomeFitness(int) const;
 
-  void SetChromosome(Chromosome&);
+	void SetChromosome(Chromosome&);
 
-  void Transpose();
-  void Transpose(double, double);
-  void ElementLoss();
-  void Recombination();
-  //Genome MakeGamete();
-  void ListGenomeSites() const;
+	void Transpose();
+	void Transpose(double, double);
+	void ElementLoss();
+	void Recombination();
+	//Genome MakeGamete();
+	void ListGenomeSites() const;
 
 public:
 
-  // class variables
-//  static int N;					// Population size
-  static double sa;				// selection coefficient alpha under synergistic epistasis
-  static double sb;				// selection coefficient beta under synergistic epistasis
-  static double ut;				// transposition rate
-  static double vt;				// rate of element loss
-  static double faf;			// fraction affecting fitness (FAF)
-  //static double rGenome;		// genome wide recombination rate between TE sites
-  static int initialTE;
-  static int numberOfChromosomes;
-  static int chromLengths[];
-  static double chromRecRates[];
-  static bool parametersSet;
+	// class variables
+//	static int N;					// Population size
+	static double sa;				// selection coefficient alpha under synergistic epistasis
+	static double sb;				// selection coefficient beta under synergistic epistasis
+	static double ut;				// transposition rate
+	static double vt;				// rate of element loss
+	static double faf;			// fraction affecting fitness (FAF)
+	//static double rGenome;		// genome wide recombination rate between TE sites
+	static int initialTE;
+	static int numberOfChromosomes;
+	static int chromLengths[];
+	static double chromRecRates[];
+	static bool parametersSet;
 
 private:
 
-  static Random rand;
-  std::vector<Chromosome> chromoVector;
+	static Random rand;
+	std::vector<Chromosome> chromoVector;
 
 };
 

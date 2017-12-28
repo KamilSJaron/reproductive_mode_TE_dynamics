@@ -18,7 +18,7 @@
 class Chromosome
 {
   public:
-    Chromosome();
+	Chromosome();
 	Chromosome(int, int, int, double);
 	~Chromosome();
 

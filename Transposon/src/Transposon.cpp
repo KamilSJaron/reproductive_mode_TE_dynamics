@@ -12,14 +12,14 @@
 #include "../include/Transposon.h"
 
 Transposon::Transposon():
-  location(0),
-  effect(false)
-  {}
+	location(0),
+	effect(false)
+	{}
 
 Transposon::Transposon(int site, bool e):
-  location(site),
-  effect(e)
-  {}
+	location(site),
+	effect(e)
+	{}
 
 int Transposon::GetLocation() const
 {

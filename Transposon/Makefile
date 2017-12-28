@@ -13,7 +13,7 @@ OBJ_TESTS = $(patsubst %.cpp, %.o, $(CPP_TEST_CLASSES))
 # BUILDING
 
 $(PRG) : src/main.o $(GIT_HEADER) $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJ)
 
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
