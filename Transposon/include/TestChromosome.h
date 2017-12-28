@@ -12,6 +12,8 @@ using namespace std;
 class TestChromosome : public CPPUNIT_NS :: TestFixture {
 	CPPUNIT_TEST_SUITE (TestChromosome);
 	CPPUNIT_TEST (testConstructor);
+	CPPUNIT_TEST (testTEcount);
+	CPPUNIT_TEST (testTestEmpty);
 	CPPUNIT_TEST_SUITE_END ();
 
 	public:
@@ -20,6 +22,8 @@ class TestChromosome : public CPPUNIT_NS :: TestFixture {
 
 	protected:
 		void testConstructor (void);
+		void testTEcount (void);
+		void testTestEmpty (void);
 
 	private:
 		Chromosome *ch1, *ch2;
