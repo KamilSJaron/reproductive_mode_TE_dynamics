@@ -21,9 +21,6 @@ Transposon::Transposon(int site, bool e):
   effect(e)
   {}
 
-Transposon::~Transposon()
-  {}
-
 int Transposon::GetLocation() const
 {
 	return location;
