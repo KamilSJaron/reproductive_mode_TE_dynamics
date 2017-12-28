@@ -19,19 +19,19 @@
 class Random {
 
 public:
-  Random();
-  ~Random();
+	Random();
+	~Random();
 
-  double Uniform();
-  double Poisson(double);
+	double Uniform();
+	double Poisson(double);
 
 private:
-  //RNG rng;
-  unsigned int seed;
-  MTRand rng;
-  MTRand_open rng_open;
+	//RNG rng;
+	unsigned int seed;
+	MTRand rng;
+	MTRand_open rng_open;
 
-  //static const double PI = 3.1415926535897932;
+	//static const double PI = 3.1415926535897932;
 };
 
 

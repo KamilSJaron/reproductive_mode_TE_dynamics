@@ -10,13 +10,13 @@ using namespace CppUnit;
 using namespace std;
 
 void TestTransposon::setUp(void) {
-    transposon = new Transposon(230, true);
+	transposon = new Transposon(230, true);
 }
 
 void TestTransposon::tearDown(void) {
-    delete transposon;
+	delete transposon;
 }
 
 void TestTransposon::testGetter(void) {
-    CPPUNIT_ASSERT_EQUAL(transposon->GetLocation(), 230);
+	CPPUNIT_ASSERT_EQUAL(transposon->GetLocation(), 230);
 }

@@ -44,7 +44,7 @@ Random Genome::rand;
 void Genome::SetParameters() {
 	std::ifstream fin("input.txt");
 	if (! fin.is_open())
-	  {std::cout << "Error opening file"; exit (1); }
+		{std::cout << "Error opening file"; exit (1); }
 
 	char tempChar[100];
 	while(!fin.getline(tempChar, 100).eof())
@@ -71,7 +71,7 @@ void Genome::SetParameters() {
 Genome::Genome() {
 	chromoVector.resize(numberOfChromosomes);
 	if (!parametersSet)
-	  SetParameters();
+		SetParameters();
 
 	for (int i=1; i <= numberOfChromosomes; i++) {
 		chromoVector.at(i-1).SetChromNumberAndCopy(i);
@@ -84,7 +84,7 @@ Genome::Genome(int num) {
 
 	chromoVector.resize(numberOfChromosomes);
 	if (!parametersSet)
-	  SetParameters();
+		SetParameters();
 
 	for (int i=1; i <= numberOfChromosomes; i++) {
 		chromoVector.at(i-1).SetChromNumberAndCopy(i);
@@ -122,7 +122,7 @@ double Genome::GetFAF() {
 unsigned int Genome::GetGenomeTECount() const {
 	unsigned int genomeTEcount = 0;
 	for (int i=1; i <= numberOfChromosomes; i++) {
-	  genomeTEcount += GetChromosome(i).GetChromTECount();
+		genomeTEcount += GetChromosome(i).GetChromTECount();
 	}
 	return genomeTEcount;
 }
@@ -130,18 +130,18 @@ unsigned int Genome::GetGenomeTECount() const {
 unsigned int Genome::GetGenomeTECountAffectingFitness() const {
 	unsigned int genomeTEcount = 0;
 	for (int i=1; i <= numberOfChromosomes; i++) {
-	  genomeTEcount += GetChromosome(i).GetChromTECountAffectingFitness();
+		genomeTEcount += GetChromosome(i).GetChromTECountAffectingFitness();
 	}
 	return genomeTEcount;
 }
 
 // input is chromosome number and copy number
 const Chromosome & Genome::GetChromosome(int num) const {
-	  return chromoVector.at(num + 1);
+		return chromoVector.at(num + 1);
 }
 
 Chromosome & Genome::GetChromosome(int num) {
-	  return chromoVector.at(num + 1);
+		return chromoVector.at(num + 1);
 }
 
 double Genome::GetGenomeFitness() const
@@ -175,12 +175,12 @@ void Genome::Transpose() {
 	unsigned int transposeCount = (int)rand.Poisson(ut*teCount);
 
 	for (int i=1; i <= numberOfChromosomes; i++)
-	  totalLength += GetChromosome(i).GetLength();
+		totalLength += GetChromosome(i).GetLength();
 
 	if (transposeCount > teCount)
-	  transposeCount = teCount;
+		transposeCount = teCount;
 	if (transposeCount > (2*totalLength - teCount))
-	  transposeCount = (2*totalLength - teCount);
+		transposeCount = (2*totalLength - teCount);
 
 	// for number of transpositions, randomly insert into the genome
 	for (int j=0; j < transposeCount; j++) {
@@ -194,7 +194,7 @@ void Genome::Transpose() {
 					pos -= currentLength;
 				}
 				else
-				  break;
+					break;
 			}
 		} while (!GetChromosome(num).TestEmpty(pos));
 
@@ -225,11 +225,11 @@ void Genome::ElementLoss()
 		}
 
 		for (int k=0; k < lossCount; k++) {
-		  nthTE = (int)(rand.Uniform()*chromTEcount + 1);
-		  chromoVector.at(i-1).Delete(nthTE);
-		  chromTEcount--;
+			nthTE = (int)(rand.Uniform()*chromTEcount + 1);
+			chromoVector.at(i-1).Delete(nthTE);
+			chromTEcount--;
 		}
-    }
+		}
 }
 
 void Genome::ListGenomeSites() const

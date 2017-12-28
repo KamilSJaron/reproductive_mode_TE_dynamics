@@ -9,14 +9,14 @@ using namespace CppUnit;
 using namespace std;
 
 void TestGenome::setUp(void) {
-    Genome::SetParameters();
-    ind1 = new Genome();
-    ind2 = new Genome(4);
-    // ind3 = new Genome( ind1 );
+	Genome::SetParameters();
+	ind1 = new Genome();
+	ind2 = new Genome(4);
+	// ind3 = new Genome( ind1 );
 }
 
 void TestGenome::tearDown(void) {
-    delete ind1;
+	delete ind1;
 }
 
 void TestGenome::testConstructor(void) {}

@@ -19,35 +19,35 @@
 class Population {
 
 public:
-  Population(int);
-  ~Population();
+	Population(int);
+	~Population();
 
-  Genome & GetIndividual(int);
-  const Genome & GetIndividual(int) const;
-  int GetPopSize() const;
-  unsigned int GetPopulationTECount() const;
-  unsigned int GetPopulationTECountAffectingFitness() const;
-  double GetPopulationMeanFitness() const;
+	Genome & GetIndividual(int);
+	const Genome & GetIndividual(int) const;
+	int GetPopSize() const;
+	unsigned int GetPopulationTECount() const;
+	unsigned int GetPopulationTECountAffectingFitness() const;
+	double GetPopulationMeanFitness() const;
 
-  void Initialize(bool);
-  Genome MakeIndividual();
-  void DeleteIndividual(int);
-  Population * SexualReproduction();
-  Population * AsexualReproduction();
-  void TranspositionAndLoss();
+	void Initialize(bool);
+	Genome MakeIndividual();
+	void DeleteIndividual(int);
+	Population * SexualReproduction();
+	Population * AsexualReproduction();
+	void TranspositionAndLoss();
 
-  void ListPopulationSites() const;
-  void PrintParameters(const char *);
-  void SummaryStatistics(const char *, int);
-  void RecordPopulation(const char *, int);
+	void ListPopulationSites() const;
+	void PrintParameters(const char *);
+	void SummaryStatistics(const char *, int);
+	void RecordPopulation(const char *, int);
 
-  void SummaryStatistics(int);
-  void SummaryStatistics(int, int);
+	void SummaryStatistics(int);
+	void SummaryStatistics(int, int);
 
 private:
-  std::vector<Genome> genoVector;
-  int popSize;
-  static Random rand;
+	std::vector<Genome> genoVector;
+	int popSize;
+	static Random rand;
 
 };
 

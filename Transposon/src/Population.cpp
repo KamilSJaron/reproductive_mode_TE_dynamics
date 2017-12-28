@@ -143,9 +143,9 @@ void Population::Initialize(bool fromFile) {
 	// else {
 	// 	double fractionAffectingW = Genome::GetFAF();
 	// 	bool affectW = false;
-    //
+		//
 	// 	for (int i=0; i < popSize; i++) {
-    //
+		//
 	// 		for (int j=0; j < individualNumberOfTEs; j++) {
 	// 			do {
 	// 				pos = (int)((rand.Uniform()*totalLength) + 1);
@@ -163,13 +163,13 @@ void Population::Initialize(bool fromFile) {
 	// 				}
 	// 				copy = (int)((rand.Uniform())*(genomePloidy) + 1);
 	// 			} while (!GetIndividual(i).GetChromosome(num, copy).TestEmpty(pos));
-    //
-    //
+		//
+		//
 	// 			if (fractionAffectingW > rand.Uniform())
 	// 				affectW = true;
 	// 			else
 	// 				affectW = false;
-    //
+		//
 	// 			GetIndividual(i).GetChromosome(num,copy).Insert(Transposon(pos, affectW));
 	// 		}
 	// 	}
