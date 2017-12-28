@@ -3,14 +3,16 @@ CXXFLAGS = -g
 
 PRG = transposon
 GIT_HEADER = include/gitversion.h
-CPP_FILES = $(wildcard src/*.cpp)
+CPP_FILES = $(wildcard src/[A-Z]*.cpp)
+CPP_TEST_CLASSES = $(wildcard test/[A-Z]*.cpp)
 # TEST_FILES = $(wildcard test/*.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(CPP_FILES))
+OBJ_TESTS = $(patsubst %.cpp, %.o, $(CPP_TEST_CLASSES))
 # INSTAL_PREFIX = /usr/local
 
 # BUILDING
 
-$(PRG) : $(GIT_HEADER) $(OBJ)
+$(PRG) : src/main.o $(GIT_HEADER) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $(OBJ)
 
 %.o: %.cpp
@@ -30,12 +32,12 @@ $(GIT_HEADER) : ../.git/HEAD ../.git/COMMIT_EDITMSG
 
 # TESTING
 
-transposon_test : test/transposon_test.o test/TestTransposon.o src/Transposon.o
+transposon_test : test/transposon_test.o $(OBJ) $(OBJ_TESTS)
 	gcc -o $@ $^ -lstdc++ -lcppunit -ldl
 
 .PHONY : test
 test : transposon_test
-	./$<
+	./$< && rm $<
 
 # CLEANING
 .PHONY : clean

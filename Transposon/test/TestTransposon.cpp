@@ -1,5 +1,5 @@
 // simulator Transposon
-// testing class
+// testing class Transposon
 
 // #include "../include/Transposon.h"
 #include "../include/TestTransposon.h"
