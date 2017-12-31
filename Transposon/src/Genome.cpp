@@ -73,11 +73,9 @@ Genome::Genome() {
 	if (!parametersSet)
 		SetParameters();
 
-	// std::cerr << "\n";
 	for (int i=1; i <= numberOfChromosomes; i++) {
 		chromoVector.at(i-1).SetChromNumber(i);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLength, chromRecRates[i-1]);
-		// std::cerr << "chromosome : " << i << " created. " << chromoVector.size() << " in total.\n";
 	}
 }
 
@@ -98,10 +96,6 @@ Genome::Genome(const Genome & rhs) {
 			current = current->GetNext();
 		}
 	}
-}
-
-unsigned int Genome::GetNumberOfChromosomes() {
-	return numberOfChromosomes;
 }
 
 double Genome::GetFAF() {
