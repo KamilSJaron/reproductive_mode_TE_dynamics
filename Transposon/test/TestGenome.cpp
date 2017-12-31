@@ -19,7 +19,7 @@ void TestGenome::tearDown(void) {
 }
 
 void TestGenome::testConstructor(void) {
-	int static_ch = Genome::GetNumberOfChromosomes();
+	int static_ch = Genome::numberOfChromosomes;
 	int size_of_ind1_ch_vector = ind1->GetEmpiricalNumberOfChromosomes();
 	// int size_of_ind2_ch_vector = ind2->GetEmpiricalNumberOfChromosomes();
 

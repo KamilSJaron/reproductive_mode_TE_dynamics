@@ -24,8 +24,6 @@ public:
 	Genome(const Genome &);
 
 	static void SetParameters();
-
-	static unsigned int GetNumberOfChromosomes();
 	static double GetFAF();
 
 	unsigned int GetGenomeTECount() const;
@@ -41,9 +39,10 @@ public:
 	void Transpose(double, double);
 	void ElementLoss();
 	void Recombination();
-	//Genome MakeGamete();
+	//Ascus MakeAscus();
 	void ListGenomeSites() const;
 
+	/// just for testing
 	int GetEmpiricalNumberOfChromosomes();
 
 public:
