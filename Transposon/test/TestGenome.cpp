@@ -11,12 +11,18 @@ using namespace std;
 void TestGenome::setUp(void) {
 	Genome::SetParameters();
 	ind1 = new Genome();
-	ind2 = new Genome(4);
-	// ind3 = new Genome( ind1 );
+	// ind2 = new Genome( ind1 );
 }
 
 void TestGenome::tearDown(void) {
 	delete ind1;
 }
 
-void TestGenome::testConstructor(void) {}
+void TestGenome::testConstructor(void) {
+	int static_ch = Genome::GetNumberOfChromosomes();
+	int size_of_ind1_ch_vector = ind1->GetEmpiricalNumberOfChromosomes();
+	// int size_of_ind2_ch_vector = ind2->GetEmpiricalNumberOfChromosomes();
+
+	CPPUNIT_ASSERT_EQUAL(static_ch, size_of_ind1_ch_vector);
+	// CPPUNIT_ASSERT_EQUAL(static_ch, size_of_ind2_ch_vector);
+}

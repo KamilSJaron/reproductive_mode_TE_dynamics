@@ -74,18 +74,15 @@ void Population::Initialize(bool fromFile) {
 	int n = Genome::initialTE;
 	int step = 1;
 
-	std::cerr << "Step : " << step << std::endl;
+	std::cerr << "Step 1 : " << step << std::endl;
 	step++;
 
 	std::cerr << "Total " << numberOfChromosomes << " ch" << std::endl;
 	std::cerr << "Num of genomes : " << genoVector.size() << std::endl;
 
-	for (int i=1; i <= numberOfChromosomes; i++){
-		GetIndividual(0).GetNumberOfChromosomes();
-		totalLength += GetIndividual(0).GetChromosome(i - 1).GetLength();
-	}
+	totalLength = Genome::chromLength * Genome::numberOfChromosomes;
 
-	std::cerr << "Step : " << step << std::endl;
+	std::cerr << "Step 2 : " << step << std::endl;
 	step++;
 
 	individualNumberOfTEs = n;
@@ -96,11 +93,11 @@ void Population::Initialize(bool fromFile) {
 		exit(EXIT_FAILURE);
 	}
 
-	std::cerr << "Step : " << step << std::endl;
+	std::cerr << "Step 3 : " << step << std::endl;
 	step++;
 
 	for (int j=0; j < individualNumberOfTEs; j++) {
-
+		// std::cerr << "Creating TE : " << j+1 << std::endl;
 		do {
 			pos = (int)((rand.Uniform()*totalLength) + 1);
 			num = 1;
@@ -120,7 +117,7 @@ void Population::Initialize(bool fromFile) {
 		GetIndividual(0).GetChromosome(num).Insert(Transposon(pos, true));
 	}
 
-	std::cerr << "Step : " << step << std::endl;
+	std::cerr << "Step 4 : " << step << std::endl;
 	step++;
 
 	/// individual generation generate individuals from the
