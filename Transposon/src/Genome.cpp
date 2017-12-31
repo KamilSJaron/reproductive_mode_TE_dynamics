@@ -31,9 +31,9 @@ int Genome::initialTE = 0;
 //int Genome::initialTE = 50;
 //int Genome::N = 0;
 
-int Genome::numberOfChromosomes = 16;
-/// This is quite weurd, if I give it 16 numbers it does not work, I do not really get why
-int Genome::chromLengths[16] = {200,200,200,200,200,200,200,200};
+const int Genome::numberOfChromosomes = 16;
+const int Genome::chromLength = 200;
+/// maybe I should turn chromRec to constant as well
 double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
 //double Genome::rGenome = 0.01;
 
@@ -73,35 +73,25 @@ Genome::Genome() {
 	if (!parametersSet)
 		SetParameters();
 
+	// std::cerr << "\n";
 	for (int i=1; i <= numberOfChromosomes; i++) {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i);
-		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-	}
-}
-
-Genome::Genome(int num) {
-	numberOfChromosomes = num;
-
-	chromoVector.resize(numberOfChromosomes);
-	if (!parametersSet)
-		SetParameters();
-
-	for (int i=1; i <= numberOfChromosomes; i++) {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i);
-		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+		chromoVector.at(i-1).SetChromNumber(i);
+		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLength, chromRecRates[i-1]);
+		// std::cerr << "chromosome : " << i << " created. " << chromoVector.size() << " in total.\n";
 	}
 }
 
 Genome::Genome(const Genome & rhs) {
 	chromoVector.resize(numberOfChromosomes);
+
 	if (!parametersSet)
 		SetParameters();
 
 	Locus * current;
 
 	for (int i=1; i <= numberOfChromosomes; i++){
-		chromoVector.at(i-1).SetChromNumberAndCopy(i);
-		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+		chromoVector.at(i-1).SetChromNumber(i);
+		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLength, chromRecRates[i-1]);
 		current = rhs.GetChromosome(i).GetHeadLocus();
 		while (current != 0) {
 			chromoVector.at(i-1).Insert(current->GetTransposon());
@@ -137,11 +127,11 @@ unsigned int Genome::GetGenomeTECountAffectingFitness() const {
 
 // input is chromosome number and copy number
 const Chromosome & Genome::GetChromosome(int num) const {
-		return chromoVector.at(num + 1);
+		return chromoVector.at(num - 1);
 }
 
 Chromosome & Genome::GetChromosome(int num) {
-		return chromoVector.at(num + 1);
+		return chromoVector.at(num - 1);
 }
 
 double Genome::GetGenomeFitness() const
@@ -238,4 +228,8 @@ void Genome::ListGenomeSites() const
 		chromoVector.at(i).ListChromSites();
 	}
 	std::cout << std::endl;
+}
+
+int Genome::GetEmpiricalNumberOfChromosomes() {
+	return(chromoVector.size());
 }

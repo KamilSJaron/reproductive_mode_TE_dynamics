@@ -21,7 +21,6 @@ class Genome {
 
 public:
 	Genome();
-	Genome(int);
 	Genome(const Genome &);
 
 	static void SetParameters();
@@ -45,6 +44,8 @@ public:
 	//Genome MakeGamete();
 	void ListGenomeSites() const;
 
+	int GetEmpiricalNumberOfChromosomes();
+
 public:
 
 	// class variables
@@ -56,8 +57,8 @@ public:
 	static double faf;			// fraction affecting fitness (FAF)
 	//static double rGenome;		// genome wide recombination rate between TE sites
 	static int initialTE;
-	static int numberOfChromosomes;
-	static int chromLengths[];
+	const static int numberOfChromosomes;
+	const static int chromLength;
 	static double chromRecRates[];
 	static bool parametersSet;
 

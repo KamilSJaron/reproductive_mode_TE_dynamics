@@ -92,7 +92,7 @@ void Chromosome::SetHeadLocus(Locus * newHead)
 	headLocus = newHead;
 }
 
-void Chromosome::SetChromNumberAndCopy(int num) {
+void Chromosome::SetChromNumber(int num) {
 	chromNumber = num;
 }
 
