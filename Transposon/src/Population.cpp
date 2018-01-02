@@ -126,26 +126,35 @@ void Population::DeleteIndividual(int x) {
 
 Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
+	int chiasma = 0, num_of_chiasmas = 0;
 
-	int ind = 0, parents = 0;
-	bool viable = false;
-	double fitness = 0.0;
-    //
-	// for (int a=0; a < popSize; a++) {
-	// 	viable = false;
-    //
-    //
-	// 		while (p <= 2) {
-	// 			while (!viable){
-	// 				ind = (int)((rand.Uniform())*(popSize));
-	// 				fitness = GetIndividual(ind)->GetGenomeFitness();
-	// 				if (rand.Uniform() < fitness)
-	// 					viable = true;
-	// 			}
-    //
-    //
-    //
-    //
+	/// Every two selected parents will generate 4 ofsprings.
+	for (int ind = 0; ind < popSize; ind += 4) {
+			// 			Genome parent(GetIndividual(ind));
+		Genome parent1(GetIndividual(SelectVitalIndividual()));
+		Genome parent2(GetIndividual(SelectVitalIndividual()));
+
+// roll numbers of chiasmas
+// roll recombination positions
+
+		for (int ch = 0; ch < Genome::numberOfChromosomes; ch++){
+			Locus * par_locus_1 = parent1.GetChromosome(ch).GetHeadLocus();
+			Locus * par_locus_2 = parent2.GetChromosome(ch).GetHeadLocus();
+			// newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
+			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+				// chiasma = chiasmas[chiasma_i];
+				// while( par_locus_1 < chiasma or par_locus_2 < chiasma){
+				// 	if( par_locus_1 < chiasma ){
+				// 		std::cerr << "add it somewhere";
+				// 	}
+				// 	if( par_locus_2 < chiasma ){
+				// 		std::cerr << "add it somewhere else";
+				// 	}
+				// }
+			}
+
+		}
+
 	// 			Genome parent(GetIndividual(ind));
     //
 	// 			// parent.Recombination();
@@ -171,8 +180,7 @@ Population * Population::SexualReproduction() {
 	// 			newPopulation->DeleteIndividual(a);
 	// 			viable = false;
 	// 		}
-    //
-	// } // for
+	} // for
 
 	return newPopulation;
 }
