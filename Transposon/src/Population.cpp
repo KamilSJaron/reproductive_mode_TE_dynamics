@@ -103,6 +103,20 @@ void Population::Initialize(bool fromFile) {
 	}
 }
 
+int Population::SelectVitalIndividual() const{
+	bool viable = false;
+	double fitness = 0;
+	int ind = -1;
+
+	while (!viable){
+		ind = (int)((rand.Uniform())*(popSize));
+		fitness = GetIndividual(ind).GetGenomeFitness();
+		if (rand.Uniform() < fitness)
+			viable = true;
+	}
+	return ind;
+}
+
 void Population::DeleteIndividual(int x) {
 	for (int i=1; i <= Genome::numberOfChromosomes; i++) {
 		delete genoVector.at(x).GetChromosome(i).GetHeadLocus();
@@ -113,44 +127,52 @@ void Population::DeleteIndividual(int x) {
 Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 
-	int ind = 0, p = 0;
+	int ind = 0, parents = 0;
 	bool viable = false;
 	double fitness = 0.0;
-
-	for (int a=0; a < popSize; a++) {
-		viable = false;
-		while (!viable) {
-			p=1;
-
-			while (p <= 2) {
-				ind = (int)((rand.Uniform())*(popSize));
-				Genome parent(GetIndividual(ind));
-
-				// parent.Recombination();
-
-				for (int i=1; i <= Genome::numberOfChromosomes; i++) {
-
-					Locus * current = parent.GetChromosome(i).GetHeadLocus();
-
-					while (current != 0) {
-						newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
-						current = current->GetNext();
-					}
-				} // for
-
-				p++;
-			} // while (p <= 2)
-
-			fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
-
-			if (rand.Uniform() < fitness)
-				viable = true;
-			else {
-				newPopulation->DeleteIndividual(a);
-				viable = false;
-			}
-		} // while (!viable)
-	} // for
+    //
+	// for (int a=0; a < popSize; a++) {
+	// 	viable = false;
+    //
+    //
+	// 		while (p <= 2) {
+	// 			while (!viable){
+	// 				ind = (int)((rand.Uniform())*(popSize));
+	// 				fitness = GetIndividual(ind)->GetGenomeFitness();
+	// 				if (rand.Uniform() < fitness)
+	// 					viable = true;
+	// 			}
+    //
+    //
+    //
+    //
+	// 			Genome parent(GetIndividual(ind));
+    //
+	// 			// parent.Recombination();
+    //
+	// 			for (int i=1; i <= Genome::numberOfChromosomes; i++) {
+    //
+	// 				Locus * current = parent.GetChromosome(i).GetHeadLocus();
+    //
+	// 				while (current != 0) {
+	// 					newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
+	// 					current = current->GetNext();
+	// 				}
+	// 			} // for
+    //
+	// 			parents++;
+	// 		} // while (p <= 2)
+    //
+	// 		fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
+    //
+	// 		if (rand.Uniform() < fitness)
+	// 			viable = true;
+	// 		else {
+	// 			newPopulation->DeleteIndividual(a);
+	// 			viable = false;
+	// 		}
+    //
+	// } // for
 
 	return newPopulation;
 }

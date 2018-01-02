@@ -30,6 +30,7 @@ public:
 	double GetPopulationMeanFitness() const;
 
 	void Initialize(bool);
+	int SelectVitalIndividual() const;
 	Genome MakeIndividual();
 	void DeleteIndividual(int);
 	Population * SexualReproduction();
@@ -48,7 +49,6 @@ private:
 	std::vector<Genome> genoVector;
 	int popSize;
 	static Random rand;
-
 };
 
 
