@@ -1,5 +1,3 @@
-// CppUnit-Tutorial
-// file: fractiontest.h
 #ifndef CHROMTEST_H
 #define CHROMTEST_H
 

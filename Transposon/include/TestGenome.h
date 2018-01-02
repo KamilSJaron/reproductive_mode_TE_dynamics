@@ -1,5 +1,3 @@
-// CppUnit-Tutorial
-// file: fractiontest.h
 #ifndef GENOMETEST_H
 #define GENOMETEST_H
 

@@ -1,5 +1,3 @@
-// CppUnit-Tutorial
-// file: fractiontest.h
 #ifndef LOCUSTEST_H
 #define LOCUSTEST_H
 

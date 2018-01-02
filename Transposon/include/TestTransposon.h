@@ -1,5 +1,3 @@
-// CppUnit-Tutorial
-// file: fractiontest.h
 #ifndef TRANSPOSONTEST_H
 #define TRANSPOSONTEST_H
 
