@@ -68,7 +68,6 @@ double Population::GetPopulationMeanFitness() const
 }
 
 void Population::Initialize(bool fromFile) {
-	int num=0, pos=0, currentLength=0;
 	int rolled_position = 0, rolled_chromosome = 0, rolled_position_on_ch = 0;
 	int totalLength = Genome::chromLength * Genome::numberOfChromosomes;
 
@@ -86,7 +85,7 @@ void Population::Initialize(bool fromFile) {
 			rolled_position = (int)((rand.Uniform()*totalLength) + 1);
 			rolled_position_on_ch = rolled_position % Genome::chromLength;
 			rolled_chromosome = (rolled_position / Genome::chromLength) + 1;
-		} while (!GetIndividual(0).GetChromosome(num).TestEmpty(pos));
+		} while (!GetIndividual(0).GetChromosome(rolled_chromosome).TestEmpty(rolled_position_on_ch));
 
 		GetIndividual(0).GetChromosome(rolled_chromosome).Insert(Transposon(rolled_position_on_ch, true));
 	}
@@ -102,42 +101,6 @@ void Population::Initialize(bool fromFile) {
 			}
 		}
 	}
-
-	// // not clonal
-	// else {
-	// 	double fractionAffectingW = Genome::GetFAF();
-	// 	bool affectW = false;
-		//
-	// 	for (int i=0; i < popSize; i++) {
-		//
-	// 		for (int j=0; j < Genome::initialTE; j++) {
-	// 			do {
-	// 				pos = (int)((rand.Uniform()*totalLength) + 1);
-	// 				num = 1;
-	// 				for (int k=1; k <= Genome::numberOfChromosomes; k++)
-	// 				{
-	// 				currentLength = GetIndividual(i).GetChromosome(k, 1).GetLength();
-	// 				if (pos > currentLength)
-	// 				{
-	// 					num++;
-	// 					pos -= currentLength;
-	// 				}
-	// 				else
-	// 					break;
-	// 				}
-	// 				copy = (int)((rand.Uniform())*(genomePloidy) + 1);
-	// 			} while (!GetIndividual(i).GetChromosome(num, copy).TestEmpty(pos));
-		//
-		//
-	// 			if (fractionAffectingW > rand.Uniform())
-	// 				affectW = true;
-	// 			else
-	// 				affectW = false;
-		//
-	// 			GetIndividual(i).GetChromosome(num,copy).Insert(Transposon(pos, affectW));
-	// 		}
-	// 	}
-	// }
 }
 
 void Population::DeleteIndividual(int x) {
