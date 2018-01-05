@@ -127,6 +127,8 @@ void Population::DeleteIndividual(int x) {
 Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 	int chiasma = 0, num_of_chiasmas = 0;
+	int pos1 = 0, pos2 = 0;
+
 
 	/// Every two selected parents will generate 4 ofsprings.
 	for (int ind = 0; ind < popSize; ind += 4) {
@@ -138,19 +140,23 @@ Population * Population::SexualReproduction() {
 // roll recombination positions
 
 		for (int ch = 0; ch < Genome::numberOfChromosomes; ch++){
+			/// following two lines are dropping an error "St12out_of_range"
 			Locus * par_locus_1 = parent1.GetChromosome(ch).GetHeadLocus();
 			Locus * par_locus_2 = parent2.GetChromosome(ch).GetHeadLocus();
 			// newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
 			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
 				// chiasma = chiasmas[chiasma_i];
-				// while( par_locus_1 < chiasma or par_locus_2 < chiasma){
-				// 	if( par_locus_1 < chiasma ){
-				// 		std::cerr << "add it somewhere";
-				// 	}
-				// 	if( par_locus_2 < chiasma ){
-				// 		std::cerr << "add it somewhere else";
-				// 	}
-				// }
+				pos1 = par_locus_1->GetPosition();
+				pos2 = par_locus_2->GetPosition();
+				/// what about case of pos1 === 0
+				while(pos1 < chiasma or pos2 < chiasma){
+					if( pos1 < chiasma ){
+						std::cerr << "add it somewhere";
+					}
+					if( pos2 < chiasma ){
+						std::cerr << "add it somewhere else";
+					}
+				}
 			}
 
 		}

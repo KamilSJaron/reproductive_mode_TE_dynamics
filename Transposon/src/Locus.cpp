@@ -47,6 +47,10 @@ Locus * Locus::GetNext() const {
 	return next;
 }
 
+int Locus::GetPosition() const {
+	return transElem.GetLocation();
+}
+
 void Locus::SetNext(Locus * loc) {
 	next = loc;
 }

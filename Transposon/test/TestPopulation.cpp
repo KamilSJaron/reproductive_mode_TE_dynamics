@@ -31,3 +31,8 @@ void TestPopulation::testSelectVitalIndividual(void) {
 	// }
 	CPPUNIT_ASSERT(selected_ind >= 0 && selected_ind <= 9);
 }
+
+void TestPopulation::testSexualReproduction(void) {
+	Population * new_population;
+	new_population = pop->SexualReproduction();
+}
