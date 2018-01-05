@@ -26,6 +26,7 @@ class Locus
 
 	Transposon GetTransposon() const;
 	Locus * GetNext() const;
+    int GetPosition() const;
 	void SetNext(Locus * loc);
 
   private:
