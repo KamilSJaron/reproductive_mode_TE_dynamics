@@ -54,18 +54,14 @@ int main(int argc, char **argv){
 		for (int run=1; run <= REPLICATES; run++) {
 				cerr << "Run : " << run << endl;
 				std::ifstream fin(input_file);
-						if (! fin.is_open())
-							{ cerr << "Error opening file : " << input_file << endl; exit (1); }
+					if (! fin.is_open())
+						{ cerr << "Error opening file : " << input_file << endl; exit (1); }
 
-						// Initialize population size & whether to generate new population or load from file
-						int N;
-
-						/// fromFile=true is caling a code that reads stuff from a file that is missing
-						/// code was commented and warning message was added
-						bool fromFile = false;
-						char tempChar[100];
-						fin.getline(tempChar,100);
-						N=strtol(tempChar,0,10);
+					// Initialize population size & whether to generate new population or load from file
+					int N;
+					char tempChar[100];
+					fin.getline(tempChar,100);
+					N=strtol(tempChar,0,10);
 				fin.close();
 
 				Population * pop = new Population(N);
@@ -74,7 +70,7 @@ int main(int argc, char **argv){
 
 				int size = pop->GetPopSize();
 				// cerr << "Population size : " << size << endl;
-				pop->Initialize(fromFile);
+				pop->Initialize();
 				// cerr << "Population initiated" << endl;
 				pop->PrintParameters(detailed_out);
 
