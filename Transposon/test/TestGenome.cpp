@@ -2,6 +2,7 @@
 // testing class Locus
 
 #include "../include/TestGenome.h"
+#include "../include/Locus.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION (TestGenome);
 
@@ -25,4 +26,15 @@ void TestGenome::testConstructor(void) {
 
 	CPPUNIT_ASSERT_EQUAL(static_ch, size_of_ind1_ch_vector);
 	// CPPUNIT_ASSERT_EQUAL(static_ch, size_of_ind2_ch_vector);
+}
+
+void TestGenome::testLocusIteration(void){
+	Locus * current;
+	for (int i=1; i <= Genome::numberOfChromosomes; i++) {
+		current = ind1->GetChromosome(i).GetHeadLocus();
+
+		while (current != 0) {
+			current = current->GetNext();
+		}
+	} // for
 }

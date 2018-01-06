@@ -12,6 +12,7 @@ using namespace std;
 void TestPopulation::setUp(void) {
 	Genome::SetParameters();
 	pop = new Population(10);
+	pop->Initialize();
 }
 
 void TestPopulation::tearDown(void) {
