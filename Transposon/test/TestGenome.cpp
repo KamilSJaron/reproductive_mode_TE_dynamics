@@ -38,3 +38,33 @@ void TestGenome::testLocusIteration(void){
 		}
 	} // for
 }
+
+void TestGenome::testRandomness(void){
+	std::vector<int> generated_chiasmas;
+	std::vector<int> generated_positions;
+	int generated_number = -1;
+
+	for (int ch = 1; ch <= 1; ch++){ //Genome::numberOfChromosomes
+		for (int i = 0; i < 10000; i++){
+			generated_chiasmas.push_back(Genome::GenerateNumberOfChiasmas(ch));
+		}
+	}
+
+	int zeros = 0;
+	int genome_lengths = 0;
+
+	for (int i = 0; i < 10000; i++){
+		generated_number = Genome::GenerateGapPositionOnChromosome();
+		// if (generated_number == 0){
+		// 	zeros++;
+		// }
+		// if(generated_number == Genome::chromLength){
+		// 	genome_lengths++;
+		// }
+		// generated_positions.push_back(generated_number);
+	}
+
+	// std::cerr << "\n" << "Proportion of zeros : " << (double)zeros / 10000 << "\n";
+	// std::cerr << "Proportion of max : " << (double)genome_lengths / 10000 << "\n";
+	// std::cerr << "expected proportion : " << (double)1 / (Genome::chromLength + 1) << "\n";
+}

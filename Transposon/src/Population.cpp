@@ -12,6 +12,7 @@
 #include "../include/Population.h"
 // #include "../include/Ascus.h"
 #include "../include/Genome.h"
+#include "../include/Random.h"
 #include <fstream>
 #include <iostream>
 #include <time.h>
@@ -128,7 +129,7 @@ Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 	int chiasma = 0, num_of_chiasmas = 0;
 	int pos1 = 0, pos2 = 0;
-
+	std::vector<int> chiasmas;
 
 	/// Every two selected parents will generate 4 ofsprings.
 	for (int ind = 0; ind < popSize; ind += 4) {
@@ -140,14 +141,24 @@ Population * Population::SexualReproduction() {
 // roll recombination positions
 
 		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++){
-			/// following two lines are dropping an error "St12out_of_range"
+			/// generated segmentation fault, bug is ireproducible, pff
+			// std::cerr << std::endl << " Chromosome : " << ch << "\tRec rate : " << Genome::chromRecRates[ch-1] << std::endl;
+			num_of_chiasmas = Genome::GenerateNumberOfChiasmas(ch);
+			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+				chiasmas.push_back(Genome::GenerateGapPositionOnChromosome());
+			}
+
 			Locus * par_locus_1 = parent1.GetChromosome(ch).GetHeadLocus();
 			Locus * par_locus_2 = parent2.GetChromosome(ch).GetHeadLocus();
 			// newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
 			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+				// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
+				/// chiasma is now ALWAYS 0, but it got to work
 				// chiasma = chiasmas[chiasma_i];
+				///  GetPosition() is causing the segmentation fault (revealed thogh upper and lower messages)
 				pos1 = par_locus_1->GetPosition();
 				pos2 = par_locus_2->GetPosition();
+				// std::cerr << "...position loaced...\n";
 				/// what about case of pos1 === 0
 				while(pos1 < chiasma or pos2 < chiasma){
 					if( pos1 < chiasma ){

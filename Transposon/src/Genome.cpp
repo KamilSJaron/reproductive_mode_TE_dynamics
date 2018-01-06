@@ -34,7 +34,7 @@ int Genome::initialTE = 0;
 const int Genome::numberOfChromosomes = 16;
 const int Genome::chromLength = 200;
 /// maybe I should turn chromRec to constant as well
-double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
+double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
 //double Genome::rGenome = 0.01;
 
 bool Genome::parametersSet = false;
@@ -101,6 +101,16 @@ Genome::Genome(const Genome & rhs) {
 double Genome::GetFAF() {
 	/// frequency of TEs affecting fitness
 	return faf;
+}
+
+int Genome::GenerateNumberOfChiasmas(int chromosome){
+	return(rand.Poisson(Genome::chromRecRates[chromosome-1]));
+}
+
+/// to be checked if generates what I want
+int Genome::GenerateGapPositionOnChromosome(){
+	/// supposed to generate int 0 ... 400
+	return(round((rand.Uniform() * (chromLength + 1)) - 0.5));
 }
 
 unsigned int Genome::GetGenomeTECount() const {
