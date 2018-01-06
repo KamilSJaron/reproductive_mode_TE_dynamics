@@ -139,7 +139,7 @@ Population * Population::SexualReproduction() {
 // roll numbers of chiasmas
 // roll recombination positions
 
-		for (int ch = 0; ch < Genome::numberOfChromosomes; ch++){
+		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++){
 			/// following two lines are dropping an error "St12out_of_range"
 			Locus * par_locus_1 = parent1.GetChromosome(ch).GetHeadLocus();
 			Locus * par_locus_2 = parent2.GetChromosome(ch).GetHeadLocus();
