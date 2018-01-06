@@ -67,7 +67,7 @@ double Population::GetPopulationMeanFitness() const
 	return populationFitness;
 }
 
-void Population::Initialize(bool fromFile) {
+void Population::Initialize() {
 	int rolled_position = 0, rolled_chromosome = 0, rolled_position_on_ch = 0;
 	int totalLength = Genome::chromLength * Genome::numberOfChromosomes;
 
