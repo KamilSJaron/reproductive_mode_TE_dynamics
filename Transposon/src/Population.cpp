@@ -132,6 +132,7 @@ Population * Population::SexualReproduction() {
 
 	int chiasma = 0, num_of_chiasmas = 0;
 	int pos1 = 0, pos2 = 0;
+	int last_roll = -1;
 	Locus *loc_par1, *loc_par2;
 	std::vector<int> chiasmas;
 	bool crossing = false;
@@ -150,45 +151,71 @@ Population * Population::SexualReproduction() {
 		///							offspring2 ---- parent2
 
 		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++) {
+
+			/// Roll chiasmas for positions, sort them and kick out position rolled twice
 			num_of_chiasmas = Genome::GenerateNumberOfChiasmas(ch);
-			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
-				chiasmas.push_back(Genome::GenerateGapPositionOnChromosome());
+			for(int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+				chiasmas.push_back( Genome::GenerateGapPositionOnChromosome() );
+			}
+			sort(chiasmas.begin(), chiasmas.end());
+
+			for(int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+				if(last_roll == chiasmas[chiasma_i]){
+					chiasmas.erase (chiasmas.begin() + chiasma_i, chiasmas.begin() + chiasma_i + 1);
+					chiasma_i -= 2;
+					num_of_chiasmas -= 2;
+					last_roll = -1;
+				} else {
+					last_roll = chiasmas[chiasma_i];
+				}
 			}
 
+			/// load head loci of chromosomes ch of selected parents
 			loc_par1 = parent1.GetChromosome(ch).GetHeadLocus();
 			loc_par2 = parent2.GetChromosome(ch).GetHeadLocus();
+			pos1 = getLocusPosition(loc_par1);
+			pos2 = getLocusPosition(loc_par2);
 
 			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
 				// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
 				/// chiasma is now ALWAYS 0, but it got to work
 				chiasma = chiasmas[chiasma_i];
 
-				if (loc_par1 == 0)
-					pos1 = 0; /// i.e. chromosome is TEless
-				else
-					pos1 = loc_par1->GetPosition();
-
-				if (loc_par2 == 0)
-					pos2 = 0; /// i.e. chromosome is TEless
-				else
-					pos2 = loc_par2->GetPosition();
-
-				/// what about case of pos1 === 0
-				// while(pos1 < chiasma or pos2 < chiasma){
-				// 	if( pos1 < chiasma ){
-				// 		std::cerr << "add it somewhere";
+				/// TODO resolve how to make 4, not 2 gametes
+				/// (perhaps a function that will take a reference to new population and basal index to fill)
+				/// TODO resolve follwing seg fault
+				// if (crossing) {
+				// 	/// parent1 to offspring ind
+				// 	while(pos1 < chiasma){
+				// 		newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+				// 		loc_par1 = loc_par1->GetNext();
+				// 		pos1 = getLocusPosition(loc_par1);
 				// 	}
-				// 	if( pos2 < chiasma ){
-				// 		std::cerr << "add it somewhere else";
+				// 	/// parent2 to offspring ind + 1
+				// 	while(pos2 < chiasma){
+				// 		newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par2->GetTransposon());
+				// 		loc_par2 = loc_par2->GetNext();
+				// 		pos2 = getLocusPosition(loc_par2);
 				// 	}
-				// }
+				// } else {
+				// 	/// parent1 to offspring ind + 1
+				// 	while(pos1 < chiasma){
+				// 		newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+				// 		loc_par1 = loc_par1->GetNext();
+				// 		pos1 = getLocusPosition(loc_par1);
+				// 	}
+				// 	/// parent2 to offspring ind
+				// 	while(pos2 < chiasma){
+				// 		newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par2->GetTransposon());
+				// 		loc_par2 = loc_par2->GetNext();
+				// 		pos2 = getLocusPosition(loc_par2);
+				// 	}
+				}
+
+				crossing = !crossing;
 			}
 
-			/// asexual way
-			while (loc_par1 != 0) {
-				newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
-				loc_par1 = loc_par1->GetNext();
-			}
+			/// TODO throw the rest of TEs when we run out of chiasmas (next set of while loops)
 		}
 	} // for
 
@@ -613,4 +640,15 @@ void Population::SummaryStatistics(int numFirst, int numLast)
 	std::cout << "Variance in element frequency: " << varFreq << std::endl;
 	std::cout << "Fraction of loci with zero frequency: " << fractionEmpty << std::endl;
 	std::cout << "Fraction of fixed loci: " << fractionFixed << std::endl << std::endl;
+}
+
+///////////////
+/// PRIVATE ///
+///////////////
+
+int Population::getLocusPosition(Locus * loc) const {
+	if (loc == 0)
+		return 0; /// i.e. chromosome is TEless
+	else
+		return loc->GetPosition();
 }

@@ -12,7 +12,7 @@
 #ifndef POPULATION_H_EDOLGIN_TE
 #define POPULATION_H_EDOLGIN_TE
 
-#include "genome.h"
+#include "Genome.h"
 #include <vector>
 
 
@@ -49,6 +49,8 @@ private:
 	std::vector<Genome> genoVector;
 	int popSize;
 	static Random rand;
+
+	int getLocusPosition(Locus *) const;
 };
 
 
