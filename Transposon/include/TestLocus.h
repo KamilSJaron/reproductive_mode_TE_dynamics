@@ -9,7 +9,7 @@ using namespace std;
 
 class TestLocus : public CPPUNIT_NS :: TestFixture {
 	CPPUNIT_TEST_SUITE (TestLocus);
-	CPPUNIT_TEST (testConstructor);
+	CPPUNIT_TEST (testGetPosition);
 	CPPUNIT_TEST_SUITE_END ();
 
 	public:
@@ -17,10 +17,10 @@ class TestLocus : public CPPUNIT_NS :: TestFixture {
 		void tearDown (void);
 
 	protected:
-		void testConstructor (void);
+		void testGetPosition (void);
 
 	private:
-		Locus *locus1, *locus2;
+		Locus *locus1, *locus2, *locus3;
 };
 
 #endif

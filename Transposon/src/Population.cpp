@@ -84,7 +84,9 @@ void Population::Initialize() {
 		// std::cerr << "Creating TE : " << j+1 << std::endl;
 		do {
 			rolled_position = (int)((rand.Uniform()*totalLength) + 1);
+			/// in range from 1 to Genome::chromLength
 			rolled_position_on_ch = rolled_position % Genome::chromLength;
+			/// in range from 1 to Genome::numberOfChromosomes
 			rolled_chromosome = (rolled_position / Genome::chromLength) + 1;
 		} while (!GetIndividual(0).GetChromosome(rolled_chromosome).TestEmpty(rolled_position_on_ch));
 
@@ -130,6 +132,7 @@ Population * Population::SexualReproduction() {
 
 	int chiasma = 0, num_of_chiasmas = 0;
 	int pos1 = 0, pos2 = 0;
+	Locus *loc_par1, *loc_par2;
 	std::vector<int> chiasmas;
 
 	/// Every two selected parents will generate 4 ofsprings.
@@ -146,33 +149,39 @@ Population * Population::SexualReproduction() {
 				chiasmas.push_back(Genome::GenerateGapPositionOnChromosome());
 			}
 
-			Locus * current1 = parent1.GetChromosome(ch).GetHeadLocus();
-			Locus * current2 = parent1.GetChromosome(ch).GetHeadLocus();
+			loc_par1 = parent1.GetChromosome(ch).GetHeadLocus();
+			loc_par2 = parent2.GetChromosome(ch).GetHeadLocus();
 
-			// for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
-			// 	// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
-			// 	/// chiasma is now ALWAYS 0, but it got to work
-			// 	chiasma = chiasmas[chiasma_i];
-			// 	///  GetPosition() is SOMETIMES causing the segmentation fault (revealed thogh upper and lower messages)
-			// 	/// generated segmentation fault, bug is reproducible
-			// 	pos1 = current1->GetPosition();
-			// 	pos2 = current2->GetPosition();
-			// 	// std::cerr << "...position loaced...\n";
-			// 	/// what about case of pos1 === 0
-			// 	while(pos1 < chiasma or pos2 < chiasma){
-			// 		if( pos1 < chiasma ){
-			// 			std::cerr << "add it somewhere";
-			// 		}
-			// 		if( pos2 < chiasma ){
-			// 			std::cerr << "add it somewhere else";
-			// 		}
-			// 	}
-			// }
+			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+				// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
+				/// chiasma is now ALWAYS 0, but it got to work
+				chiasma = chiasmas[chiasma_i];
+
+				if (loc_par1 == 0)
+					pos1 = 0; /// i.e. chromosome is TEless
+				else
+					pos1 = loc_par1->GetPosition();
+
+				if (loc_par2 == 0)
+					pos2 = 0; /// i.e. chromosome is TEless
+				else
+					pos2 = loc_par2->GetPosition();
+
+				/// what about case of pos1 === 0
+				// while(pos1 < chiasma or pos2 < chiasma){
+				// 	if( pos1 < chiasma ){
+				// 		std::cerr << "add it somewhere";
+				// 	}
+				// 	if( pos2 < chiasma ){
+				// 		std::cerr << "add it somewhere else";
+				// 	}
+				// }
+			}
 
 			/// asexual way
-			while (current1 != 0) {
-				newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(current1->GetTransposon());
-				current1 = current1->GetNext();
+			while (loc_par1 != 0) {
+				newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+				loc_par1 = loc_par1->GetNext();
 			}
 		}
 	} // for
