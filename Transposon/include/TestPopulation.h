@@ -11,6 +11,7 @@ using namespace std;
 class TestPopulation : public CPPUNIT_NS :: TestFixture {
 	CPPUNIT_TEST_SUITE (TestPopulation);
 	CPPUNIT_TEST (testSelectVitalIndividual);
+	CPPUNIT_TEST (testAsexualReproduction);
 	CPPUNIT_TEST (testSexualReproduction);
 	CPPUNIT_TEST_SUITE_END ();
 
@@ -20,6 +21,7 @@ class TestPopulation : public CPPUNIT_NS :: TestFixture {
 
 	protected:
 		void testSelectVitalIndividual (void);
+		void testAsexualReproduction (void);
 		void testSexualReproduction (void);
 
 	private:
