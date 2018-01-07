@@ -113,6 +113,13 @@ int Genome::GenerateGapPositionOnChromosome(){
 	return(round((rand.Uniform() * (chromLength + 1)) - 0.5));
 }
 
+bool Genome::GenerateTossACoin(){
+	if (rand.Uniform() < 0.5)
+		return(true);
+	else
+		return(false);
+}
+
 unsigned int Genome::GetGenomeTECount() const {
 	unsigned int genomeTEcount = 0;
 	for (int i=1; i <= numberOfChromosomes; i++) {

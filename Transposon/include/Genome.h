@@ -27,6 +27,7 @@ public:
 	static double GetFAF();
 	static int GenerateNumberOfChiasmas(int chromosome);
 	static int GenerateGapPositionOnChromosome();
+	static bool GenerateTossACoin();
 
 	unsigned int GetGenomeTECount() const;
 	unsigned int GetGenomeTECountAffectingFitness() const;

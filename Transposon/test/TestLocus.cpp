@@ -16,8 +16,8 @@ void TestLocus::setUp(void) {
 }
 
 void TestLocus::tearDown(void) {
-	// delete locus1;
-	delete locus2;
+	delete locus2; /// destructor of Locus destroys whole chain of loci
+	delete locus3;
 }
 
 void TestLocus::testGetPosition(void) {
