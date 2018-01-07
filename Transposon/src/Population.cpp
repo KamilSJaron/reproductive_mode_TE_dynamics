@@ -134,15 +134,21 @@ Population * Population::SexualReproduction() {
 	int pos1 = 0, pos2 = 0;
 	Locus *loc_par1, *loc_par2;
 	std::vector<int> chiasmas;
+	bool crossing = false;
 
 	/// Every two selected parents will generate 4 ofsprings.
 	for (int ind = 0; ind < popSize; ind += 4) {
-		// std::cerr << "Creating with ind " << a << " from pop of " << popSize << " individuals." << std::endl;
-		/// taking selected individual : ind
+		/// selecting parents for ind, ind+1, ind+2, ind+3
 		Genome parent1(GetIndividual(SelectVitalIndividual()));
 		Genome parent2(GetIndividual(SelectVitalIndividual()));
 
-		/// not entiraly sure what this bit does
+		/// for each pair
+		crossing = Genome::GenerateTossACoin();
+		/// crossing == true --> 	offspring1 -\/- parent2 &
+		///							offspring2 -/\- parent1
+		/// crossing == false --> 	offspring1 ---- parent1 &
+		///							offspring2 ---- parent2
+
 		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++) {
 			num_of_chiasmas = Genome::GenerateNumberOfChiasmas(ch);
 			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){

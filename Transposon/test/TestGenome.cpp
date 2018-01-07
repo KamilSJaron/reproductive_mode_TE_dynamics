@@ -40,21 +40,26 @@ void TestGenome::testLocusIteration(void){
 }
 
 void TestGenome::testRandomness(void){
-	std::vector<int> generated_chiasmas;
-	std::vector<int> generated_positions;
-	int generated_number = -1;
+	// This test is due to random nature hard to test automatically
+	// Hence it's sort of manual - uncoment secion and run it and be/not be satisfied
 
-	for (int ch = 1; ch <= 1; ch++){ //Genome::numberOfChromosomes
-		for (int i = 0; i < 10000; i++){
-			generated_chiasmas.push_back(Genome::GenerateNumberOfChiasmas(ch));
-		}
-	}
-
-	int zeros = 0;
-	int genome_lengths = 0;
-
-	for (int i = 0; i < 10000; i++){
-		generated_number = Genome::GenerateGapPositionOnChromosome();
+	// std::vector<int> generated_chiasmas;
+	// std::vector<int> generated_positions;
+	// std::vector<int> tosses_by_coin;
+    //
+	// int generated_number = -1;
+    //
+	// for (int ch = 1; ch <= 1; ch++){ //Genome::numberOfChromosomes
+	// 	for (int i = 0; i < 10000; i++){
+	// 		generated_chiasmas.push_back(Genome::GenerateNumberOfChiasmas(ch));
+	// 	}
+	// }
+    //
+	// int zeros = 0;
+	// int genome_lengths = 0;
+    //
+	// for (int i = 0; i < 10000; i++){
+	// 	generated_number = Genome::GenerateGapPositionOnChromosome();
 		// if (generated_number == 0){
 		// 	zeros++;
 		// }
@@ -62,9 +67,16 @@ void TestGenome::testRandomness(void){
 		// 	genome_lengths++;
 		// }
 		// generated_positions.push_back(generated_number);
-	}
+	// }
 
 	// std::cerr << "\n" << "Proportion of zeros : " << (double)zeros / 10000 << "\n";
 	// std::cerr << "Proportion of max : " << (double)genome_lengths / 10000 << "\n";
 	// std::cerr << "expected proportion : " << (double)1 / (Genome::chromLength + 1) << "\n";
+
+	// int generated_sum = 0;
+	// for (int i = 0; i < 1000000; i++){
+	// 	generated_sum += Genome::GenerateTossACoin();
+	// }
+    //
+	// std::cerr << "\n" << "Proportion of true : " << (double)generated_sum / 1000000 << "\n";
 }
