@@ -10,8 +10,7 @@ using namespace CppUnit;
 using namespace std;
 
 void TestPopulation::setUp(void) {
-	Genome::SetParameters();
-	pop = new Population(10);
+	pop = new Population(20);
 	pop->Initialize();
 }
 
@@ -30,10 +29,15 @@ void TestPopulation::testSelectVitalIndividual(void) {
 	// 	}
 	// 	std::cerr << "\n";
 	// }
-	CPPUNIT_ASSERT(selected_ind >= 0 && selected_ind <= 9);
+	CPPUNIT_ASSERT(selected_ind >= 0 && selected_ind <= 19);
 }
 
 void TestPopulation::testSexualReproduction(void) {
 	Population * new_population;
 	new_population = pop->SexualReproduction();
+}
+
+void TestPopulation::testAsexualReproduction(void) {
+	Population * new_population;
+	new_population = pop->AsexualReproduction();
 }

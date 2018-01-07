@@ -127,76 +127,54 @@ void Population::DeleteIndividual(int x) {
 
 Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
+
 	int chiasma = 0, num_of_chiasmas = 0;
 	int pos1 = 0, pos2 = 0;
 	std::vector<int> chiasmas;
 
 	/// Every two selected parents will generate 4 ofsprings.
 	for (int ind = 0; ind < popSize; ind += 4) {
-			// 			Genome parent(GetIndividual(ind));
+		// std::cerr << "Creating with ind " << a << " from pop of " << popSize << " individuals." << std::endl;
+		/// taking selected individual : ind
 		Genome parent1(GetIndividual(SelectVitalIndividual()));
 		Genome parent2(GetIndividual(SelectVitalIndividual()));
 
-// roll numbers of chiasmas
-// roll recombination positions
-
-		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++){
-			/// generated segmentation fault, bug is ireproducible, pff
-			// std::cerr << std::endl << " Chromosome : " << ch << "\tRec rate : " << Genome::chromRecRates[ch-1] << std::endl;
+		/// not entiraly sure what this bit does
+		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++) {
 			num_of_chiasmas = Genome::GenerateNumberOfChiasmas(ch);
 			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
 				chiasmas.push_back(Genome::GenerateGapPositionOnChromosome());
 			}
 
-			Locus * par_locus_1 = parent1.GetChromosome(ch).GetHeadLocus();
-			Locus * par_locus_2 = parent2.GetChromosome(ch).GetHeadLocus();
-			// newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
-			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
-				// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
-				/// chiasma is now ALWAYS 0, but it got to work
-				// chiasma = chiasmas[chiasma_i];
-				///  GetPosition() is causing the segmentation fault (revealed thogh upper and lower messages)
-				pos1 = par_locus_1->GetPosition();
-				pos2 = par_locus_2->GetPosition();
-				// std::cerr << "...position loaced...\n";
-				/// what about case of pos1 === 0
-				while(pos1 < chiasma or pos2 < chiasma){
-					if( pos1 < chiasma ){
-						std::cerr << "add it somewhere";
-					}
-					if( pos2 < chiasma ){
-						std::cerr << "add it somewhere else";
-					}
-				}
+			Locus * current1 = parent1.GetChromosome(ch).GetHeadLocus();
+			Locus * current2 = parent1.GetChromosome(ch).GetHeadLocus();
+
+			// for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+			// 	// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
+			// 	/// chiasma is now ALWAYS 0, but it got to work
+			// 	chiasma = chiasmas[chiasma_i];
+			// 	///  GetPosition() is SOMETIMES causing the segmentation fault (revealed thogh upper and lower messages)
+			// 	/// generated segmentation fault, bug is reproducible
+			// 	pos1 = current1->GetPosition();
+			// 	pos2 = current2->GetPosition();
+			// 	// std::cerr << "...position loaced...\n";
+			// 	/// what about case of pos1 === 0
+			// 	while(pos1 < chiasma or pos2 < chiasma){
+			// 		if( pos1 < chiasma ){
+			// 			std::cerr << "add it somewhere";
+			// 		}
+			// 		if( pos2 < chiasma ){
+			// 			std::cerr << "add it somewhere else";
+			// 		}
+			// 	}
+			// }
+
+			/// asexual way
+			while (current1 != 0) {
+				newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(current1->GetTransposon());
+				current1 = current1->GetNext();
 			}
-
 		}
-
-	// 			Genome parent(GetIndividual(ind));
-    //
-	// 			// parent.Recombination();
-    //
-	// 			for (int i=1; i <= Genome::numberOfChromosomes; i++) {
-    //
-	// 				Locus * current = parent.GetChromosome(i).GetHeadLocus();
-    //
-	// 				while (current != 0) {
-	// 					newPopulation->GetIndividual(a).GetChromosome(i).Insert(current->GetTransposon());
-	// 					current = current->GetNext();
-	// 				}
-	// 			} // for
-    //
-	// 			parents++;
-	// 		} // while (p <= 2)
-    //
-	// 		fitness = newPopulation->GetIndividual(a).GetGenomeFitness();
-    //
-	// 		if (rand.Uniform() < fitness)
-	// 			viable = true;
-	// 		else {
-	// 			newPopulation->DeleteIndividual(a);
-	// 			viable = false;
-	// 		}
 	} // for
 
 	return newPopulation;
@@ -205,32 +183,10 @@ Population * Population::SexualReproduction() {
 Population * Population::AsexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 
-	int ind = 0;
-	bool viable = false;
-	double fitness = 0.0;
-
 	for (int a=0; a < popSize; a++) {
-		// std::cerr << "Dealing with ind " << a << " from pop of " << popSize << " individuals." << std::endl;
-		viable = false;
-		/// Monte Carlo approach for selection of parents
-		/// take a random individual, select if it has fitness greater than a random number
-		/// requires fitness to be in interval (0,1>
-		while (!viable) {
-			ind = (int)((rand.Uniform())*(popSize));
-			fitness = GetIndividual(ind).GetGenomeFitness();
-
-			if (rand.Uniform() < fitness){
-				// std::cerr << "accepting : " << ind << " with fitness" << fitness << std::endl;
-				viable = true;
-			} else {
-				// std::cerr << "rejecting : " << ind << " with fitness" << fitness << std::endl;
-				viable = false;
-			}
-
-		}
-
+		// std::cerr << "Creating with ind " << a << " from pop of " << popSize << " individuals." << std::endl;
 		/// taking selected individual : ind
-		Genome parent(GetIndividual(ind));
+		Genome parent(GetIndividual(SelectVitalIndividual()));
 
 		/// not entiraly sure what this bit does
 		for (int i=1; i <= Genome::numberOfChromosomes; i++) {

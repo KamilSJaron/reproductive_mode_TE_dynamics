@@ -10,6 +10,7 @@
 // *********************************************************************
 
 #include "../include/Transposon.h"
+#include <iostream>
 
 Transposon::Transposon():
 	location(0),
