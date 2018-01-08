@@ -136,7 +136,7 @@ Population * Population::SexualReproduction() {
 		Genome parent1(GetIndividual(SelectVitalIndividual()));
 		Genome parent2(GetIndividual(SelectVitalIndividual()));
 
-		/// every pair of parents generate 4 offsprings
+		/// every pair of parents generate 4 offsprings (2 and 2)
 		generateTwoOspring(ind, newPopulation, parent1, parent2);
 		generateTwoOspring(ind + 2, newPopulation, parent1, parent2);
 	}

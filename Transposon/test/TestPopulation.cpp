@@ -33,11 +33,13 @@ void TestPopulation::testSelectVitalIndividual(void) {
 }
 
 void TestPopulation::testSexualReproduction(void) {
-	Population * new_population;
+	Population * new_population, * new_new_population;
 	new_population = pop->SexualReproduction();
+	new_new_population = new_population->SexualReproduction();
 }
 
 void TestPopulation::testAsexualReproduction(void) {
-	Population * new_population;
+	Population * new_population, * new_new_population;
 	new_population = pop->AsexualReproduction();
+	new_new_population = new_population->AsexualReproduction();
 }
