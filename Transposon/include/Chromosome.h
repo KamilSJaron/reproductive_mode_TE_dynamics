@@ -18,7 +18,7 @@
 class Chromosome
 {
   public:
-    Chromosome();
+	Chromosome();
 	Chromosome(int, int, int, double);
 	~Chromosome();
 
@@ -31,7 +31,7 @@ class Chromosome
 	Locus * GetHeadLocus() const;
 
 	void SetHeadLocus(Locus *);
-	void SetChromNumberAndCopy(int, int);
+	void SetChromNumber(int);
 	void SetChromLengthAndRecRate(int, double);
 
 	bool TestEmpty(int) const;

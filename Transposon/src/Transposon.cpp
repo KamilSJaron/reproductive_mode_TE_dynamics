@@ -9,20 +9,18 @@
 //
 // *********************************************************************
 
-#include "transposon.h"
+#include "../include/Transposon.h"
+#include <iostream>
 
 Transposon::Transposon():
-  location(0),
-  effect(false)
-  {}
+	location(0),
+	effect(false)
+	{}
 
 Transposon::Transposon(int site, bool e):
-  location(site),
-  effect(e)
-  {}
-
-Transposon::~Transposon()
-  {}
+	location(site),
+	effect(e)
+	{}
 
 int Transposon::GetLocation() const
 {

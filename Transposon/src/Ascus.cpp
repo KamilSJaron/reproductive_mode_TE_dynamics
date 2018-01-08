@@ -1,6 +1,6 @@
 // *********************************************************************
 //
-// genome.cpp
+// Ascus.cpp
 //
 // Created by: Elie Dolgin, University of Edinburgh
 //
@@ -9,39 +9,39 @@
 //
 // *********************************************************************
 
-#include "genome.h"
 #include <math.h>
 #include <fstream>
 #include <iostream>
 
-//int Genome::N = 0;
-double Genome::ut = 0;
-double Genome::vt = 0;
-double Genome::sa = 0;
-double Genome::sb = 0;
-double Genome::faf = 0;
-int Genome::initialTE = 0;
+#include "../include/Ascus.h"
 
-//double Genome::ut = 0.01;
-//double Genome::vt = 0.001;
-//double Genome::sa = 0.001;
-//double Genome::sb = 0.00018;
-//double Genome::faf = 1.0;
-//int Genome::initialTE = 50;
-//int Genome::N = 0;
+//int Ascus::N = 0;
+double Ascus::ut = 0;
+double Ascus::vt = 0;
+double Ascus::sa = 0;
+double Ascus::sb = 0;
+double Ascus::faf = 0;
+int Ascus::initialTE = 0;
 
-int Genome::numberOfChromosomes = 16;
-int Genome::ploidy = 1;
-int Genome::chromLengths[16] = {200,200,200,200,200,200,200,200};
-double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
-//double Genome::rGenome = 0.01;
+//double Ascus::ut = 0.01;
+//double Ascus::vt = 0.001;
+//double Ascus::sa = 0.001;
+//double Ascus::sb = 0.00018;
+//double Ascus::faf = 1.0;
+//int Ascus::initialTE = 50;
+//int Ascus::N = 0;
 
-bool Genome::clonal = true;
-bool Genome::parametersSet = false;
+int Ascus::numberOfChromosomes = 16;
+int Ascus::ploidy = 2;
+int Ascus::chromLengths[16] = {200,200,200,200,200,200,200,200,200,200,200,200,200,200,200,200};
+double Ascus::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
+//double Ascus::rAscus = 0.01;
 
-Random Genome::rand;
+bool Ascus::parametersSet = false;
 
-void Genome::SetParameters()
+Random Ascus::rand;
+
+void Ascus::SetParameters()
 {
 	std::ifstream fin("input.txt");
 	if (! fin.is_open())
@@ -69,27 +69,27 @@ void Genome::SetParameters()
 	parametersSet = true;
 }
 
-Genome::Genome()
+Ascus::Ascus()
 {
 	chromoVector.resize((numberOfChromosomes*ploidy));
 	if (!parametersSet)
 	  SetParameters();
 
-	for (int i=1; i <= numberOfChromosomes; i++) {
-		if (ploidy == 1) {
-			chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
-			chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-		}
-		if (ploidy == 2) {
-			chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
-			chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-			chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
-			chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-		}
-    }
+	// for (int i=1; i <= numberOfChromosomes; i++) {
+	// 	if (ploidy == 1) {
+	// 		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+	// 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+	// 	}
+	// 	if (ploidy == 2) {
+	// 		chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
+	// 		chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+	// 		chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
+	// 		chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+	// 	}
+    // }
 }
 
-Genome::Genome(int num, int pl)
+Ascus::Ascus(int num, int pl)
 {
 	numberOfChromosomes = num;
 	ploidy = pl;
@@ -98,24 +98,24 @@ Genome::Genome(int num, int pl)
 	if (!parametersSet)
 	  SetParameters();
 
-	for (int i=1; i <= numberOfChromosomes; i++)
-	{
-	  if (ploidy == 1)
-	  {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
-		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-	  }
-	  if (ploidy == 2)
-	  {
-	    chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
-		chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-		chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
-		chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-	  }
-    }
+	// for (int i=1; i <= numberOfChromosomes; i++)
+	// {
+	//   if (ploidy == 1)
+	//   {
+	// 	chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+	// 	chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+	//   }
+	//   if (ploidy == 2)
+	//   {
+	//     chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
+	// 	chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+	// 	chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
+	// 	chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
+	//   }
+    // }
 }
 
-Genome::Genome(const Genome & rhs)
+Ascus::Ascus(const Ascus & rhs)
 {
 	chromoVector.resize((numberOfChromosomes*ploidy));
 	if (!parametersSet)
@@ -127,7 +127,7 @@ Genome::Genome(const Genome & rhs)
 	{
 	  if (ploidy == 1)
 	  {
-		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
+		// chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
 		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 		current = rhs.GetChromosome(i,1).GetHeadLocus();
 		while (current != 0)
@@ -138,7 +138,7 @@ Genome::Genome(const Genome & rhs)
 	  }
 	  if (ploidy == 2)
 	  {
-	    chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
+	    // chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
 		chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 		current = rhs.GetChromosome(i,1).GetHeadLocus();
 		while (current != 0)
@@ -146,7 +146,7 @@ Genome::Genome(const Genome & rhs)
 			chromoVector.at(2*i-2).Insert(current->GetTransposon());
 			current = current->GetNext();
 		}
-		chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
+		// chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
 		chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
 		current = rhs.GetChromosome(i,2).GetHeadLocus();
 		while (current != 0)
@@ -158,50 +158,50 @@ Genome::Genome(const Genome & rhs)
     }
 }
 
-Genome::~Genome()
+Ascus::~Ascus()
 {}
 
-unsigned int Genome::GetNumberOfChromosomes()
+unsigned int Ascus::GetNumberOfChromosomes()
 {
 	return numberOfChromosomes;
 }
 
-unsigned int Genome::GetPloidy()
+unsigned int Ascus::GetPloidy()
 {
 	return ploidy;
 }
 
-double Genome::GetFAF()
+double Ascus::GetFAF()
 {
 	return faf;
 }
 
-unsigned int Genome::GetGenomeTECount() const
+unsigned int Ascus::GetAscusTECount() const
 {
-	unsigned int genomeTEcount = 0;
+	unsigned int AscusTEcount = 0;
 	for (int i=1; i <= numberOfChromosomes; i++)
 	{
-	  genomeTEcount += GetChromosome(i, 1).GetChromTECount();
+	  AscusTEcount += GetChromosome(i, 1).GetChromTECount();
 	  if (ploidy==2)
-		genomeTEcount += GetChromosome(i, 2).GetChromTECount();
+		AscusTEcount += GetChromosome(i, 2).GetChromTECount();
 	}
-	return genomeTEcount;
+	return AscusTEcount;
 }
 
-unsigned int Genome::GetGenomeTECountAffectingFitness() const
+unsigned int Ascus::GetAscusTECountAffectingFitness() const
 {
-	unsigned int genomeTEcount = 0;
+	unsigned int AscusTEcount = 0;
 	for (int i=1; i <= numberOfChromosomes; i++)
 	{
-	  genomeTEcount += GetChromosome(i, 1).GetChromTECountAffectingFitness();
+	  AscusTEcount += GetChromosome(i, 1).GetChromTECountAffectingFitness();
 	  if (ploidy==2)
-	    genomeTEcount += GetChromosome(i, 2).GetChromTECountAffectingFitness();
+	    AscusTEcount += GetChromosome(i, 2).GetChromTECountAffectingFitness();
 	}
-	return genomeTEcount;
+	return AscusTEcount;
 }
 
 // input is chromosome number and copy number
-const Chromosome & Genome::GetChromosome(int num, int copy) const
+const Chromosome & Ascus::GetChromosome(int num, int copy) const
 {
 	if (ploidy == 1)
 	  return chromoVector.at(num+copy-2);
@@ -209,7 +209,7 @@ const Chromosome & Genome::GetChromosome(int num, int copy) const
 	  return chromoVector.at((2*num)+copy-3);
 }
 
-Chromosome & Genome::GetChromosome(int num, int copy)
+Chromosome & Ascus::GetChromosome(int num, int copy)
 {
 	if (ploidy == 1)
 	  return chromoVector.at(num+copy-2);
@@ -217,18 +217,18 @@ Chromosome & Genome::GetChromosome(int num, int copy)
 	  return chromoVector.at((2*num)+copy-3);
 }
 
-double Genome::GetGenomeFitness() const
+double Ascus::GetAscusFitness() const
 {
-	unsigned int genomeTEcount = GetGenomeTECountAffectingFitness();
+	unsigned int AscusTEcount = GetAscusTECountAffectingFitness();
 
-	//return (1 - 0.001*pow(genomeTEcount, 1.5));
+	//return (1 - 0.001*pow(AscusTEcount, 1.5));
 
 	// assume synergistic epistatic selection
-	return exp ( -(sa * genomeTEcount) - (0.5 * sb * pow(genomeTEcount,2) ) );
+	return exp ( -(sa * AscusTEcount) - (0.5 * sb * pow(AscusTEcount,2) ) );
 }
 
 // overloaded function when mean TE count is constant
-double Genome::GetGenomeFitness(int meanCount) const
+double Ascus::GetAscusFitness(int meanCount) const
 {
 	//return (1 - 0.001*pow(meanCount, 1.5));
 
@@ -236,8 +236,7 @@ double Genome::GetGenomeFitness(int meanCount) const
 	return exp ( -(sa * meanCount) - (0.5 * sb * pow(meanCount,2) ) );
 }
 
-void Genome::SetChromosome(Chromosome & c)
-{
+void Ascus::SetChromosome(Chromosome & c) {
 	int num = c.GetChromNumber();
 	int copy = c.GetChromCopy();
 
@@ -247,35 +246,10 @@ void Genome::SetChromosome(Chromosome & c)
 	  chromoVector.at((2*num)+copy-3) = c;
 }
 
-//void Genome::SetGenomeParameters(int num, int pl)
-//{
-//	numberOfChromosomes = num;
-//	ploidy = pl;
-//
-//	chromoVector.resize((numberOfChromosomes*ploidy));
-//
-//	for (int i=1; i <= numberOfChromosomes; i++)
-//	{
-//	  if (ploidy == 1)
-//	  {
-//		chromoVector.at(i-1).SetChromNumberAndCopy(i,1);
-//		chromoVector.at(i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-//	  }
-//	  if (ploidy == 2)
-//	  {
-//	    chromoVector.at(2*i-2).SetChromNumberAndCopy(i,1);
-//		chromoVector.at(2*i-2).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-//		chromoVector.at(2*i-1).SetChromNumberAndCopy(i,2);
-//		chromoVector.at(2*i-1).SetChromLengthAndRecRate(chromLengths[i-1], chromRecRates[i-1]);
-//	  }
-//    }
-//}
-
-void Genome::Transpose()
-{
+void Ascus::Transpose() {
 	unsigned int num=0, copy=0, pos=0, totalLength=0, currentLength=0;
 	bool affectW = false;
-	unsigned int teCount = GetGenomeTECount();
+	unsigned int teCount = GetAscusTECount();
 	unsigned int transposeCount = (int)rand.Poisson(ut*teCount);
 
 	for (int i=1; i <= numberOfChromosomes; i++)
@@ -286,7 +260,7 @@ void Genome::Transpose()
 	if (transposeCount > (2*totalLength - teCount))
 	  transposeCount = (2*totalLength - teCount);
 
-	// for number of transpositions, randomly insert into the genome
+	// for number of transpositions, randomly insert into the Ascus
 	for (int j=0; j < transposeCount; j++)
 	{
 	  do {
@@ -316,7 +290,7 @@ void Genome::Transpose()
 }
 
 // Overloaded Transpose method used for when at equilibrium copy number
-void Genome::Transpose(double rate, double meanCopyNumber)
+void Ascus::Transpose(double rate, double meanCopyNumber)
 {
 	int num=0, copy=0, pos=0, currentLength=0, totalLength=0;
 	bool affectW = false;
@@ -330,7 +304,7 @@ void Genome::Transpose(double rate, double meanCopyNumber)
 	if (totalLength < (transposeCount + meanCopyNumber))
 	  transposeCount = (totalLength - (int)meanCopyNumber);
 
-	// for number of transpositions, randomly insert into the genome
+	// for number of transpositions, randomly insert into the Ascus
 	for (int j=0; j < transposeCount; j++)
 	{
 	  do {
@@ -359,7 +333,7 @@ void Genome::Transpose(double rate, double meanCopyNumber)
 	}
 }
 
-void Genome::ElementLoss()
+void Ascus::ElementLoss()
 {
 	if (vt == 0)
 	  return;
@@ -402,7 +376,7 @@ void Genome::ElementLoss()
     }
 }
 
-void Genome::Recombination()
+void Ascus::Recombination()
 {
 	if (ploidy != 2)
 	  return;
@@ -545,13 +519,13 @@ void Genome::Recombination()
 } // Recombination method
 
 
-//Genome Genome::MakeGamete()
+//Ascus Ascus::MakeAscus()
 //{
 //
 //	// for ploidy == 2
 //
 //	Recombination();
-//	Genome gamete(numberOfChromosomes, 1);
+//	Ascus gamete(numberOfChromosomes, 1);
 //
 //	int c = 0;
 //
@@ -573,7 +547,7 @@ void Genome::Recombination()
 //	return gamete;
 //}
 
-void Genome::ListGenomeSites() const
+void Ascus::ListAscusSites() const
 {
 	for (int i=0; i < (numberOfChromosomes*ploidy); i++)
 	  chromoVector.at(i).ListChromSites();

@@ -18,7 +18,6 @@ class Transposon
   public:
 	Transposon();
 	Transposon(int, bool);
-	~Transposon();
 	int GetLocation() const;
 	bool GetEffect() const;
 
