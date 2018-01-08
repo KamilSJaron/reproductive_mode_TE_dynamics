@@ -34,7 +34,7 @@ int Genome::initialTE = 0;
 const int Genome::numberOfChromosomes = 16;
 const int Genome::chromLength = 200;
 /// maybe I should turn chromRec to constant as well
-double Genome::chromRecRates[16] = {0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030,0.030};
+double Genome::chromRecRates[16] = {5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6};
 //double Genome::rGenome = 0.01;
 
 bool Genome::parametersSet = false;
