@@ -12,6 +12,7 @@
 #include <math.h>
 #include <fstream>
 #include <iostream>
+#include <stdlib.h>
 
 #include "../include/Genome.h"
 
