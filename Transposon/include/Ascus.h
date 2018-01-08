@@ -9,21 +9,21 @@
 //
 // *********************************************************************
 
-#ifndef GENOME_H_EDOLGIN_TE
-#define GENOME_H_EDOLGIN_TE
+#ifndef ASCUS_H_EDOLGIN_TE
+#define ASCUS_H_EDOLGIN_TE
 
 #include "chromosome.h"
 #include "random.h"
 
 #include <vector>
 
-class Genome {
+class Ascus {
 
 public:
-  Genome();
-  Genome(int, int);
-  Genome(const Genome &);
-  ~Genome();
+  Ascus();
+  Ascus(int, int);
+  Ascus(const Ascus &);
+  ~Ascus();
 
   static void SetParameters();
 
@@ -31,22 +31,22 @@ public:
   static unsigned int GetPloidy();
   static double GetFAF();
 
-  unsigned int GetGenomeTECount() const;
-  unsigned int GetGenomeTECountAffectingFitness() const;
+  unsigned int GetAscusTECount() const;
+  unsigned int GetAscusTECountAffectingFitness() const;
   const Chromosome & GetChromosome(int, int) const;
   Chromosome & GetChromosome(int, int);
-  double GetGenomeFitness() const;
-  double GetGenomeFitness(int) const;
+  double GetAscusFitness() const;
+  double GetAscusFitness(int) const;
 
   void SetChromosome(Chromosome&);
-//  void SetGenomeParameters(int, int);
+//  void SetAscusParameters(int, int);
 
   void Transpose();
   void Transpose(double, double);
   void ElementLoss();
   void Recombination();
-  //Genome MakeGamete();
-  void ListGenomeSites() const;
+  //Ascus MakeAscus();
+  void ListAscusSites() const;
 
 public:
 
@@ -57,13 +57,12 @@ public:
   static double ut;				// transposition rate
   static double vt;				// rate of element loss
   static double faf;			// fraction affecting fitness (FAF)
-  //static double rGenome;		// genome wide recombination rate between TE sites
+  //static double rAscus;		// genome wide recombination rate between TE sites
   static int initialTE;
   static int numberOfChromosomes;
   static int ploidy;
   static int chromLengths[];
   static double chromRecRates[];
-  static bool clonal;
   static bool parametersSet;
 
 private:

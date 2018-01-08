@@ -10,26 +10,26 @@
 // *********************************************************************
 
 #include <iostream>
-#include "chromosome.h"
 
+#include "../include/Chromosome.h"
 
 Chromosome::Chromosome():
-  chromNumber(0),
-  chromCopy(0),
-  length(0),
-  rChrom(0)
-  {
-    headLocus = 0;
-  }
+	chromNumber(0),
+	chromCopy(0),
+	length(0),
+	rChrom(0)
+	{
+		headLocus = 0;
+	}
 
 Chromosome::Chromosome(int num, int copy, int len, double r):
-  chromNumber(num),
-  chromCopy(copy),
-  length(len),
-  rChrom(r)
-  {
+	chromNumber(num),
+	chromCopy(copy),
+	length(len),
+	rChrom(r)
+	{
 	headLocus = 0;
-  }
+	}
 
 Chromosome::~Chromosome()
 {
@@ -56,7 +56,7 @@ unsigned int Chromosome::GetChromTECountAffectingFitness() const
 	while (current != 0)
 	{
 		if (current->GetTransposon().GetEffect())
-		  count++;
+			count++;
 		current = current->GetNext();
 	}
 	return count;
@@ -92,10 +92,8 @@ void Chromosome::SetHeadLocus(Locus * newHead)
 	headLocus = newHead;
 }
 
-void Chromosome::SetChromNumberAndCopy(int num, int copy)
-{
+void Chromosome::SetChromNumber(int num) {
 	chromNumber = num;
-	chromCopy = copy;
 }
 
 void Chromosome::SetChromLengthAndRecRate(int len, double r)
@@ -109,14 +107,14 @@ bool Chromosome::TestEmpty(int site) const
 	Locus * current = headLocus;
 
 	while ((current != 0) && (current->GetTransposon().GetLocation() < site))
-	  current = current->GetNext();
+		current = current->GetNext();
 
 	if (current == 0)
-	  return true;
+		return true;
 	if (current->GetTransposon().GetLocation() == site)
-	  return false;
+		return false;
 	else
-	  return true;
+		return true;
 }
 
 void Chromosome::Insert (Transposon te)
@@ -165,18 +163,15 @@ void Chromosome::Insert (Transposon te)
 	}
 }
 
-void Chromosome::Delete(int pos)
-{
-	if ((pos > GetChromTECount()) || pos < 1)
-	{
-		std::cout << "Deletion error." << std::endl;
+void Chromosome::Delete(int pos) {
+	if ((pos > GetChromTECount()) || pos < 1) {
+		std::cerr << "Deletion error." << std::endl;
 		return;
 	}
 
 	Locus * current = headLocus;
 
-	if (pos == 1) // delete headLocus
-	{
+	if (pos == 1) { // delete headLocus
 		headLocus = headLocus->GetNext();
 		current->SetNext(0);
 		delete current;
@@ -191,23 +186,20 @@ void Chromosome::Delete(int pos)
 	current->SetNext(next->GetNext());
 	next->SetNext(0);
 	delete next;
-	next=0;
+	next = 0;
 	return;
 }
 
-void Chromosome::ListChromSites() const
-{
+void Chromosome::ListChromSites() const {
 	Locus * loc = headLocus;
 
-	std::cout << "Strand [" << chromNumber << "," << chromCopy << "]: ";
-	if (loc != 0)
-	{
-	  while (loc->GetNext() != 0)
-	  {
-		std::cout<<loc->GetTransposon().GetLocation()<<", ";
-		loc = loc->GetNext();
-	  }
-	  std::cout<<loc->GetTransposon().GetLocation()<<".";
+	std::cerr << "Chromosome " << chromNumber << " : ";
+	if (loc != 0) {
+		while (loc->GetNext() != 0) {
+			std::cerr << loc->GetPosition() << ", ";
+			loc = loc->GetNext();
+		}
+		std::cerr<<loc->GetPosition()<<".";
 	}
-	std::cout << std::endl;
+	std::cerr << std::endl;
 }

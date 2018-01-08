@@ -1,112 +1,115 @@
-#include "population.h"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
 
-#include "random.h"
 #include "time.h"
-#include "gitversion.h"
+
+#include "../include/Population.h"
+#include "../include/Random.h"
+#include "../include/gitversion.h"
+
+#define REPLICATES 1
 
 using namespace std;
 
 int main(int argc, char **argv){
 
-    string input_file = "input.txt";
+		/* constants - input and output files */
+		const char *detailed_out = "detailed.txt";
+		const char *summary_out = "summary.txt";
+		const char *input_file = "input.txt";
+		bool sex = false;
+		string runnig_sex = "False";
 
-    if(argc > 1){
-        if(strcmp( argv[1], "--help") == 0 or strcmp( argv[1], "-h") == 0){
-            cout << "most of parameters are read form an input file (specified by argument or file input.txt by default)" << endl;
-            cout << "details are in readme file" << endl;
-            cout << "\t Transposon [--version] [--help] [input_file.txt]" << endl;
+		cerr << "Running Transposon" << endl;
+		/* start of dev vesion */
+		cerr << "Commit: " << GITVERSION << endl;
+		/* end */
+		cerr << "Input : " << input_file << endl;
 
-            return 0;
-        }
-        if(strcmp( argv[1], "--version") == 0 or strcmp( argv[1], "-v") == 0){
-            cout << "Transposon v1.? fork" << endl;
-            cout << "\thttps://github.com/KamilSJaron/yeast_TE_load_prediction/tree/master/Transposon" << endl;
-            /* start of dev vesion */
-            cout << "\tcommit: " << GITVERSION << endl;
-            /* end */
-            return 0;
-        }
+		if(argc > 1){
+				if (strcmp( argv[1], "--help") == 0 or strcmp( argv[1], "-h") == 0) {
+						cout << "most of parameters are read form an input file input.txt" << endl;
+						cout << "details are in readme file" << endl;
+						cout << "\t Transposon [--version] [--help] [--sex]" << endl;
 
-        input_file = argv[1];
+						return 0;
+				}
+				if (strcmp( argv[1], "--version") == 0 or strcmp( argv[1], "-v") == 0) {
+						cout << "Transposon v1.? fork" << endl;
+						cout << "\thttps://github.com/KamilSJaron/yeast_TE_load_prediction/tree/master/Transposon" << endl;
+						cout << "\tcommit: " << GITVERSION << endl;
+						return 0;
+				}
+				if (strcmp( argv[1], "--sex") == 0){
+						sex = true;
+						runnig_sex = "True";
+				}
+		}
 
-    }
+		cerr << "Sex every 90 generations : " << runnig_sex << endl;
 
-    cerr << "Running Transposon" << endl;
-    /* start of dev vesion */
-    cerr << "Commit: " << GITVERSION << endl;
-    /* end */
-    cerr << "Loading ... " << input_file << endl;
+		for (int run=1; run <= REPLICATES; run++) {
+				cerr << "Run : " << run << endl;
+				std::ifstream fin(input_file);
+					if (! fin.is_open())
+						{ cerr << "Error opening file : " << input_file << endl; exit (1); }
 
-    /* constant arrays */
-    const char *detailed_out = "detailed.txt";
-    const char *summary_out = "summary.txt";
+					// Initialize population size & whether to generate new population or load from file
+					int N;
+					char tempChar[100];
+					fin.getline(tempChar,100);
+					N=strtol(tempChar,0,10);
+				fin.close();
 
-    for (int run=1; run<=10; run++) {
-        cerr << "Run : " << run << endl;
-        std::ifstream fin(input_file);
-            if (! fin.is_open())
-              { cerr << "Error opening file : " << input_file << endl; exit (1); }
+				Population * pop = new Population(N);
+				// cerr << "Population created" << endl;
+				Population * temp;
 
-            // Initialize population size & whether to generate new population or load from file
-            int N;
+				int size = pop->GetPopSize();
+				// cerr << "Population size : " << size << endl;
+				pop->Initialize();
+				// cerr << "Population initiated" << endl;
+				pop->PrintParameters(detailed_out);
 
-            /// fromFile=true is caling a code that reads stuff from a file that is missing
-            /// code was commented and warning message was added
-            bool fromFile = false;
-            char tempChar[100];
-            fin.getline(tempChar,100);
-            N=strtol(tempChar,0,10);
-        fin.close();
+				if (run==1) pop->PrintParameters(summary_out);
+				pop->SummaryStatistics(detailed_out, 0);
 
-        Population * pop = new Population(N);
-        Population * temp;
+				for (int gen = 1; gen <= 990; gen++) {
+						// cerr << "Running generation " << gen << "." << endl;
 
-        int size = pop->GetPopSize();
-        bool clonal = Genome::clonal;
+						if (pop->GetPopulationTECount() == 0 or ((double)pop->GetPopulationTECount()/(double)size) > 150.0)
+						{
+							// cerr << "No TEs at generation [" << gen << "]." << endl << endl;
+							// cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
+							pop->SummaryStatistics(summary_out, gen);
+							pop->SummaryStatistics(detailed_out, gen);
+							break;
+						}
 
-        pop->Initialize(clonal, fromFile);
-        pop->PrintParameters(detailed_out);
+						// cerr << "Reproducing " << endl;
+						// REPRODUCTION
+						temp = pop->AsexualReproduction();
+						delete pop;
+						pop = temp;
 
-        if (run==1) pop->PrintParameters(summary_out);
-        pop->SummaryStatistics(detailed_out, 0);
+						// cerr << "Transposing " << endl;
+						// TRANSPOSITION & LOSS
+						pop->TranspositionAndLoss();
 
-        for (int gen = 1; gen <= 990; gen++) {
-            // cerr << "Running generation " << gen << "." << endl;
+						/// printing results after transposition
+						cerr << ".";
+						if (gen % 90 == 0) {
+							cerr << endl;
+							pop->SummaryStatistics(detailed_out, gen);
+						}
+				}
 
-            if (pop->GetPopulationTECount() == 0 or ((double)pop->GetPopulationTECount()/(double)size) > 150.0)
-            {
-              // cerr << "No TEs at generation [" << gen << "]." << endl << endl;
-              // cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
-              pop->SummaryStatistics(summary_out, gen);
-              pop->SummaryStatistics(detailed_out, gen);
-              break;
-            }
+				delete pop;
 
-            // cerr << "Reproducing " << endl;
-            // REPRODUCTION
-            temp = pop->AsexualReproduction();
-            delete pop;
-            pop = temp;
+		}
 
-            // cerr << "Transposing " << endl;
-            // TRANSPOSITION & LOSS
-            pop->TranspositionAndLoss();
-
-            /// printing results after transposition
-            cerr << ".";
-            if (gen % 90 == 0) {
-              cerr << endl;
-              pop->SummaryStatistics(detailed_out, gen);
-            }
-        }
-
-        delete pop;
-
-    }
-
-  return 0;
+	return 0;
 }
