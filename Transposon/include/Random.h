@@ -13,7 +13,7 @@
 #define RANDOM_H_EDOLGIN_TE
 
 //#include "rng.h"
-#include "mtrand.h"
+#include "../include/mtrand.h"
 
 
 class Random {
