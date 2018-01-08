@@ -1,7 +1,7 @@
 CXXFLAGS = -g
  # -std=c++11 -O3 -Wall -pedantic
 
-PRG = transposon
+PRG = TEAscus
 GIT_HEADER = include/gitversion.h
 CPP_FILES = $(wildcard src/[A-Z]*.cpp)
 CPP_TEST_CLASSES = $(wildcard test/[A-Z]*.cpp)
@@ -32,11 +32,11 @@ $(GIT_HEADER) : ../.git/HEAD ../.git/COMMIT_EDITMSG
 
 # TESTING
 
-transposon_test : test/transposon_test.o $(OBJ) $(OBJ_TESTS)
+TEAscus_test : test/TEAscus_test.o $(OBJ) $(OBJ_TESTS)
 	gcc -o $@ $^ -lstdc++ -lcppunit -ldl
 
 .PHONY : test
-test : transposon_test
+test : TEAscus_test
 	./$< && rm $<
 
 # CLEANING

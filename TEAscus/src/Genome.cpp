@@ -24,16 +24,8 @@ double Genome::sb = 0;
 double Genome::faf = 0;
 int Genome::initialTE = 0;
 
-//double Genome::ut = 0.01;
-//double Genome::vt = 0.001;
-//double Genome::sa = 0.001;
-//double Genome::sb = 0.00018;
-//double Genome::faf = 1.0;
-//int Genome::initialTE = 50;
-//int Genome::N = 0;
-
 const int Genome::numberOfChromosomes = 16;
-const int Genome::chromLength = 200;
+const int Genome::chromLength = 500;
 /// maybe I should turn chromRec to constant as well
 double Genome::chromRecRates[16] = {5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6};
 //double Genome::rGenome = 0.01;

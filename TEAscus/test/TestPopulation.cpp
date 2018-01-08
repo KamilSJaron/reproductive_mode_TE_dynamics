@@ -2,7 +2,7 @@
 // testing class Locus
 
 #include "../include/TestPopulation.h"
-#include "../include/genome.h"
+#include "../include/Genome.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION (TestPopulation);
 
