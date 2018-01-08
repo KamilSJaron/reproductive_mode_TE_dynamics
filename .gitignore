@@ -1,8 +1,8 @@
 *.o
-Transposon/transposon
-Transposon/transposon_test
-Transposon/summary.txt
-Transposon/detailed.txt
+TEAscus/TEAscus
+TEAscus/TEAscus_test
+TEAscus/summary.txt
+TEAscus/detailed.txt
 TE_Sim
 simulation*
-Transposon/include/gitversion.h
+TEAscus/include/gitversion.h
