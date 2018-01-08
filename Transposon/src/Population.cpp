@@ -10,12 +10,13 @@
 // *********************************************************************
 
 #include "../include/Population.h"
-// #include "../include/Ascus.h"
 #include "../include/Genome.h"
 #include "../include/Random.h"
 #include <fstream>
 #include <iostream>
 #include <time.h>
+#include <stdlib.h>
+#include <algorithm>
 
 Random Population::rand;
 

@@ -15,7 +15,7 @@ OBJ_TESTS = $(patsubst %.cpp, %.o, $(CPP_TEST_CLASSES))
 $(PRG) : src/main.o $(GIT_HEADER) $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $< $(OBJ)
 
-%.o: %.cpp
+%.o : %.cpp $(GIT_HEADER)
 	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 # .git/COMMIT_EDITMSG is a file that get updated with every commit
@@ -27,7 +27,7 @@ $(GIT_HEADER) : ../.git/HEAD ../.git/COMMIT_EDITMSG
 # if repository is cloned, it does not contain last commit message
 # to make a git header regarless if absence of the last commit message
 # we create a blank file with last commit message
-.git/COMMIT_EDITMSG :
+../.git/COMMIT_EDITMSG :
 	touch $@
 
 # TESTING

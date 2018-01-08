@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <stdlib.h>
+#include <cstring> 
 
 #include "time.h"
 
