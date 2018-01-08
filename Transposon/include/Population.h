@@ -12,7 +12,7 @@
 #ifndef POPULATION_H_EDOLGIN_TE
 #define POPULATION_H_EDOLGIN_TE
 
-#include "Genome.h"
+#include "../include/Genome.h"
 #include <vector>
 
 
