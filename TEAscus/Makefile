@@ -8,7 +8,7 @@ CPP_TEST_CLASSES = $(wildcard test/[A-Z]*.cpp)
 # TEST_FILES = $(wildcard test/*.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(CPP_FILES))
 OBJ_TESTS = $(patsubst %.cpp, %.o, $(CPP_TEST_CLASSES))
-# INSTAL_PREFIX = /usr/local
+INSTAL_PREFIX = /usr/local
 
 # BUILDING
 
@@ -38,6 +38,12 @@ TEAscus_test : test/TEAscus_test.o $(OBJ) $(OBJ_TESTS)
 .PHONY : test
 test : TEAscus_test
 	./$< && rm $<
+
+# INSTALL
+
+.PHONY : install
+install : $(PRG)
+	install -C $< $(INSTAL_PREFIX)/bin
 
 # CLEANING
 .PHONY : clean
