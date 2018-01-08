@@ -2,9 +2,38 @@
 
 Transposable element simulator of haploid yeast with sexual reproduction though ascus.
 
-### Basic info
+### Installation
 
-Simulator is created to reproduce experiment of [McDonald et al.](www.nature.com/doifinder/10.1038/nature17143). Simulations run for *1000 generations*, every 90 generations there is (or isn't) a sexual generation, this is also the generation when stats are captured (after reproduction).
+```
+git clone https://github.com/KamilSJaron/yeast_TE_load_prediction
+cd yeast_TE_load_prediction/TEAscus
+make
+# make test
+make install
+```
+
+### Usage
+
+```
+TEAscus [--version] [--help] [--sex]
+```
+
+where `--sex` cause a sexual generation every 90 generations. Few parameters are hardcoded (number of chromosomes, number of loci, recombination rates in `src/Genome.cpp`, number of generations, number of replicates and frequency of sex / output in `src/main.cpp`)
+
+The rest of parameters are loaded from file `input.txt`
+
+```
+Line 1: N (population size)
+Line 2: ut (transposition rate u)
+Line 3: vt (excision rate v)
+Line 4: sa (a, selection parameter)
+Line 5: sb (b, synergism within family selection parameter)
+Line 6: faf (frequency affecting fitness)
+```
+
+### Details of simulation
+
+Simulator is created to reproduce experiment of [McDonald et al.](www.nature.com/doifinder/10.1038/nature17143) as closely as possible. Simulations run for *990 generations*, every 90 generations there is (or isn't) a sexual generation, this is also the generation when stats are captured (after reproduction).
 
  * 16 segregating Chromosomes
  * 500 slots (loci) for TEs on each chromosome (i.e. 8000 in total)
@@ -26,7 +55,7 @@ make test
 
 which automatically (re)compiles what is needed, compile testing program, run it and if it passes then also delete the testing program.
 
-The tests were written and tested on OS X using `clang` compiler
+The tests were written and tested on OS X using `clang` compiler. Simple test on Ubuntu with CppUnit installed though `apt-get` have failed with non-trivial error. Pull-requests are welcomed on this issue.
 
 ### Origin of the code
 

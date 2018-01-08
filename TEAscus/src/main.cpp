@@ -12,6 +12,8 @@
 #include "../include/gitversion.h"
 
 #define REPLICATES 1
+#define NUMBER_OF_GENERATIONS 990
+#define REPORT_AND_SEX_PERIOD 90
 
 using namespace std;
 
@@ -34,7 +36,7 @@ int main(int argc, char **argv){
 			if (strcmp( argv[1], "--help") == 0 or strcmp( argv[1], "-h") == 0) {
 					cout << "most of parameters are read form an input file input.txt" << endl;
 					cout << "details are in readme file" << endl;
-					cout << "\t Transposon [--version] [--help] [--sex]" << endl;
+					cout << "\t TEAscus [--version] [--help] [--sex]" << endl;
 
 					return 0;
 			}
@@ -50,7 +52,7 @@ int main(int argc, char **argv){
 			}
 	}
 
-	cerr << "Sex every 90 generations : " << runnig_sex << endl;
+	cerr << "Sex every " << REPORT_AND_SEX_PERIOD << " generations : " << runnig_sex << endl;
 
 	for (int run=1; run <= REPLICATES; run++) {
 		cerr << "Run : " << run << endl;
@@ -78,7 +80,7 @@ int main(int argc, char **argv){
 		if (run==1) pop->PrintParameters(summary_out);
 		pop->SummaryStatistics(detailed_out, 0);
 
-		for (int gen = 1; gen <= 990; gen++) {
+		for (int gen = 1; gen <= NUMBER_OF_GENERATIONS; gen++) {
 			// cerr << "Running generation " << gen << "." << endl;
 
 			if (pop->GetPopulationTECount() == 0 or ((double)pop->GetPopulationTECount()/(double)size) > 150.0) {
@@ -91,7 +93,7 @@ int main(int argc, char **argv){
 
 			// cerr << "Reproducing " << endl;
 			// REPRODUCTION
-			if ( gen % 90 == 0 and sex ){
+			if ( gen % REPORT_AND_SEX_PERIOD == 0 and sex ){
 				temp = pop->SexualReproduction();
 			} else {
 				temp = pop->AsexualReproduction();
@@ -106,7 +108,7 @@ int main(int argc, char **argv){
 
 			/// printing results after transposition
 			cerr << ".";
-			if (gen % 90 == 0) {
+			if (gen % REPORT_AND_SEX_PERIOD == 0) {
 				cerr << endl;
 				pop->SummaryStatistics(detailed_out, gen);
 			}
