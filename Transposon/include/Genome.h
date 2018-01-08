@@ -12,8 +12,8 @@
 #ifndef GENOME_H_EDOLGIN_TE
 #define GENOME_H_EDOLGIN_TE
 
-#include "../include/chromosome.h"
-#include "../include/random.h"
+#include "../include/Chromosome.h"
+#include "../include/Random.h"
 
 #include <vector>
 
