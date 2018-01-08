@@ -12,7 +12,7 @@
 #ifndef CHROMOSOME_H_EDOLGIN_TE
 #define CHROMOSOME_H_EDOLGIN_TE
 
-#include "../include/locus.h"
+#include "../include/Locus.h"
 
 
 class Chromosome

@@ -12,7 +12,7 @@
 #ifndef LOCUS_H_EDOLGIN_TE
 #define LOCUS_H_EDOLGIN_TE
 
-#include "../include/transposon.h"
+#include "../include/Transposon.h"
 
 
 class Locus
