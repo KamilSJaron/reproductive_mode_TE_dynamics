@@ -51,6 +51,7 @@ private:
 	static Random rand;
 
 	int getLocusPosition(Locus *) const;
+	void generateTwoOspring(int ind, Population * newPopulation, Genome & parent1, Genome & parent2);
 };
 
 

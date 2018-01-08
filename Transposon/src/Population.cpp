@@ -130,94 +130,16 @@ void Population::DeleteIndividual(int x) {
 Population * Population::SexualReproduction() {
 	Population * newPopulation = new Population(popSize);
 
-	int chiasma = 0, num_of_chiasmas = 0;
-	int pos1 = 0, pos2 = 0;
-	int last_roll = -1;
-	Locus *loc_par1, *loc_par2;
-	std::vector<int> chiasmas;
-	bool crossing = false;
-
 	/// Every two selected parents will generate 4 ofsprings.
 	for (int ind = 0; ind < popSize; ind += 4) {
 		/// selecting parents for ind, ind+1, ind+2, ind+3
 		Genome parent1(GetIndividual(SelectVitalIndividual()));
 		Genome parent2(GetIndividual(SelectVitalIndividual()));
 
-		/// for each pair
-		crossing = Genome::GenerateTossACoin();
-		/// crossing == true --> 	offspring1 -\/- parent2 &
-		///							offspring2 -/\- parent1
-		/// crossing == false --> 	offspring1 ---- parent1 &
-		///							offspring2 ---- parent2
-
-		for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++) {
-
-			/// Roll chiasmas for positions, sort them and kick out position rolled twice
-			num_of_chiasmas = Genome::GenerateNumberOfChiasmas(ch);
-			for(int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
-				chiasmas.push_back( Genome::GenerateGapPositionOnChromosome() );
-			}
-			sort(chiasmas.begin(), chiasmas.end());
-
-			for(int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
-				if(last_roll == chiasmas[chiasma_i]){
-					chiasmas.erase (chiasmas.begin() + chiasma_i, chiasmas.begin() + chiasma_i + 1);
-					chiasma_i -= 2;
-					num_of_chiasmas -= 2;
-					last_roll = -1;
-				} else {
-					last_roll = chiasmas[chiasma_i];
-				}
-			}
-
-			/// load head loci of chromosomes ch of selected parents
-			loc_par1 = parent1.GetChromosome(ch).GetHeadLocus();
-			loc_par2 = parent2.GetChromosome(ch).GetHeadLocus();
-			pos1 = getLocusPosition(loc_par1);
-			pos2 = getLocusPosition(loc_par2);
-
-			for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
-				// std::cerr << "\n...recombining...  chromosome " << ch << "\n";
-				/// chiasma is now ALWAYS 0, but it got to work
-				chiasma = chiasmas[chiasma_i];
-
-				/// TODO resolve how to make 4, not 2 gametes
-				/// (perhaps a function that will take a reference to new population and basal index to fill)
-				/// TODO resolve follwing seg fault
-				// if (crossing) {
-				// 	/// parent1 to offspring ind
-				// 	while(pos1 < chiasma){
-				// 		newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
-				// 		loc_par1 = loc_par1->GetNext();
-				// 		pos1 = getLocusPosition(loc_par1);
-				// 	}
-				// 	/// parent2 to offspring ind + 1
-				// 	while(pos2 < chiasma){
-				// 		newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par2->GetTransposon());
-				// 		loc_par2 = loc_par2->GetNext();
-				// 		pos2 = getLocusPosition(loc_par2);
-				// 	}
-				// } else {
-				// 	/// parent1 to offspring ind + 1
-				// 	while(pos1 < chiasma){
-				// 		newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par1->GetTransposon());
-				// 		loc_par1 = loc_par1->GetNext();
-				// 		pos1 = getLocusPosition(loc_par1);
-				// 	}
-				// 	/// parent2 to offspring ind
-				// 	while(pos2 < chiasma){
-				// 		newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par2->GetTransposon());
-				// 		loc_par2 = loc_par2->GetNext();
-				// 		pos2 = getLocusPosition(loc_par2);
-				// 	}
-				}
-
-				crossing = !crossing;
-			}
-
-			/// TODO throw the rest of TEs when we run out of chiasmas (next set of while loops)
-		}
-	} // for
+		/// every pair of parents generate 4 offsprings
+		generateTwoOspring(ind, newPopulation, parent1, parent2);
+		generateTwoOspring(ind + 2, newPopulation, parent1, parent2);
+	}
 
 	return newPopulation;
 }
@@ -651,4 +573,115 @@ int Population::getLocusPosition(Locus * loc) const {
 		return 0; /// i.e. chromosome is TEless
 	else
 		return loc->GetPosition();
+}
+
+void Population::generateTwoOspring(int ind,
+									Population * newPopulation,
+									Genome & parent1, Genome & parent2){
+
+	Locus *loc_par1, *loc_par2;
+	int pos1 = 0, pos2 = 0;
+	std::vector<int> chiasmas;
+	int chiasma = 0, num_of_chiasmas = 0;
+	int last_roll = -1;
+	bool crossing = Genome::GenerateTossACoin();
+	/// crossing == true --> 	offspring1 -\/- parent2 &
+	///							offspring2 -/\- parent1
+	/// crossing == false --> 	offspring1 ---- parent1 &
+	///							offspring2 ---- parent2
+
+	/// every chromosome will be rocombined separatedly
+	for (int ch = 1; ch <= Genome::numberOfChromosomes; ch++) {
+
+		/// Roll chiasmas for positions and sort them
+		num_of_chiasmas = Genome::GenerateNumberOfChiasmas(ch);
+		for(int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+			chiasmas.push_back( Genome::GenerateGapPositionOnChromosome() );
+		}
+		sort(chiasmas.begin(), chiasmas.end());
+
+		/// kick out position rolled twice
+		for(int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+			if(last_roll == chiasmas[chiasma_i]){
+				chiasmas.erase (chiasmas.begin() + chiasma_i, chiasmas.begin() + chiasma_i + 1);
+				chiasma_i -= 2;
+				num_of_chiasmas -= 2;
+				last_roll = -1;
+			} else {
+				last_roll = chiasmas[chiasma_i];
+			}
+		}
+
+		/// load head loci of chromosomes ch of selected parents
+		loc_par1 = parent1.GetChromosome(ch).GetHeadLocus();
+		loc_par2 = parent2.GetChromosome(ch).GetHeadLocus();
+		/// get their location of the chromosome
+		pos1 = getLocusPosition(loc_par1);
+		pos2 = getLocusPosition(loc_par2);
+
+		/// for each chiasma write parental TEs to appropriate offpring determined by variable crossing
+		for (int chiasma_i = 0; chiasma_i < num_of_chiasmas; chiasma_i++){
+			chiasma = chiasmas[chiasma_i]; // load apropriate chiasma
+
+			/// TODO resolve how to make 4, not 2 gametes
+			/// (perhaps a function that will take a reference to new population and basal index to fill)
+			if (crossing) {
+				/// write parent1 to offspring ind
+				while(pos1 < chiasma and pos1 != 0){
+					newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+					loc_par1 = loc_par1->GetNext();
+					pos1 = getLocusPosition(loc_par1);
+				}
+				/// write parent2 to offspring ind + 1
+				while(pos2 < chiasma and pos2 != 0){
+					newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par2->GetTransposon());
+					loc_par2 = loc_par2->GetNext();
+					pos2 = getLocusPosition(loc_par2);
+				}
+			} else {
+				/// write parent1 to offspring ind + 1
+				while(pos1 < chiasma and pos1 != 0){
+					newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+					loc_par1 = loc_par1->GetNext();
+					pos1 = getLocusPosition(loc_par1);
+				}
+				/// write parent2 to offspring ind
+				while(pos2 < chiasma and pos2 != 0){
+					newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par2->GetTransposon());
+					loc_par2 = loc_par2->GetNext();
+					pos2 = getLocusPosition(loc_par2);
+				}
+			}
+
+			crossing = !crossing;
+		}
+
+		if (crossing) {
+			/// parent1 to offspring ind
+			while(pos1 != 0){
+				newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+				loc_par1 = loc_par1->GetNext();
+				pos1 = getLocusPosition(loc_par1);
+			}
+			/// parent2 to offspring ind + 1
+			while(pos2 != 0){
+				newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par2->GetTransposon());
+				loc_par2 = loc_par2->GetNext();
+				pos2 = getLocusPosition(loc_par2);
+			}
+		} else {
+			/// parent1 to offspring ind + 1
+			while(pos1 != 0){
+				newPopulation->GetIndividual(ind+1).GetChromosome(ch).Insert(loc_par1->GetTransposon());
+				loc_par1 = loc_par1->GetNext();
+				pos1 = getLocusPosition(loc_par1);
+			}
+			/// parent2 to offspring ind
+			while(pos2 != 0){
+				newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par2->GetTransposon());
+				loc_par2 = loc_par2->GetNext();
+				pos2 = getLocusPosition(loc_par2);
+			}
+		}
+	}
 }
