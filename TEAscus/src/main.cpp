@@ -75,9 +75,12 @@ int main(int argc, char **argv){
 		// cerr << "Population size : " << size << endl;
 		pop->Initialize();
 		// cerr << "Population initiated" << endl;
-		pop->PrintParameters(detailed_out);
+		pop->SaveParameters(detailed_out);
 
-		if (run==1) pop->PrintParameters(summary_out);
+		if (run==1) {
+			pop->PrintParameters();
+			pop->SaveParameters(summary_out);
+		}
 		pop->SummaryStatistics(detailed_out, 0);
 
 		for (int gen = 1; gen <= NUMBER_OF_GENERATIONS; gen++) {

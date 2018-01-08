@@ -176,29 +176,18 @@ void Population::TranspositionAndLoss()
 
 void Population::ListPopulationSites() const {
 	for (int i=0; i < popSize; i++) {
-		std::cout << "INDIVIDUAL [" << i << "]" << std::endl;
+		std::cerr << "INDIVIDUAL [" << i << "]" << std::endl;
 		genoVector.at(i).ListGenomeSites();
 	}
 }
 
-void Population::PrintParameters(const char * fileName) {
+void Population::SaveParameters(const char * fileName) {
 	std::ofstream fout(fileName,std::ios::app);
 
 	time_t rawtime;
 	struct tm * timeinfo;
 	time ( &rawtime );
 	timeinfo = localtime ( &rawtime );
-
-	// OUTPUT TO SCREEN
-
-	std::cout << asctime (timeinfo) << std::endl;
-	std::cout << "Population Size = " << popSize << std::endl;
-	std::cout << "Transposition Rate = " << Genome::ut << std::endl;
-	std::cout << "Excision Rate = " << Genome::vt << std::endl;
-	std::cout << "Initial TE count = " << Genome::initialTE << std::endl;
-	std::cout << "Proportion affecting fitness = " << Genome::faf << std::endl;
-	std::cout << "Selection parameters, a = " << Genome::sa << ", b = " << Genome::sb << std::endl;
-	std::cout << "Number of chromosomes = " << Genome::numberOfChromosomes << ". Ploidy = haploid" << std::endl << std::endl;
 
 	// OUTPUT TO FILE
 
@@ -214,6 +203,24 @@ void Population::PrintParameters(const char * fileName) {
 	fout << "empty" << "\t" << "fixed" << "\t" << "min#" << "\t" << "minFreq" << "\n";
 
 	fout.close();
+}
+
+void Population::PrintParameters(){
+	time_t rawtime;
+	struct tm * timeinfo;
+	time ( &rawtime );
+	timeinfo = localtime ( &rawtime );
+
+	// OUTPUT TO SCREEN
+
+	std::cerr << asctime (timeinfo) << std::endl;
+	std::cerr << "Population Size = " << popSize << std::endl;
+	std::cerr << "Transposition Rate = " << Genome::ut << std::endl;
+	std::cerr << "Excision Rate = " << Genome::vt << std::endl;
+	std::cerr << "Initial TE count = " << Genome::initialTE << std::endl;
+	std::cerr << "Proportion affecting fitness = " << Genome::faf << std::endl;
+	std::cerr << "Selection parameters, a = " << Genome::sa << ", b = " << Genome::sb << std::endl;
+	std::cerr << "Number of chromosomes = " << Genome::numberOfChromosomes << ". Ploidy = haploid" << std::endl << std::endl;
 }
 
 // Statisitics for entire genome
