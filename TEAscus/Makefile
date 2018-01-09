@@ -8,7 +8,9 @@ CPP_TEST_CLASSES = $(wildcard test/[A-Z]*.cpp)
 # TEST_FILES = $(wildcard test/*.cpp)
 OBJ = $(patsubst %.cpp, %.o, $(CPP_FILES))
 OBJ_TESTS = $(patsubst %.cpp, %.o, $(CPP_TEST_CLASSES))
-INSTAL_PREFIX = /usr/local
+ifndef INSTAL_PREFIX
+    INSTAL_PREFIX = /usr/local
+endif
 
 # BUILDING
 

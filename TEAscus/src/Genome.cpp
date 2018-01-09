@@ -16,6 +16,9 @@
 
 #include "../include/Genome.h"
 
+#define CHROMOSOMES 16
+#define CHROM_LENGTH 500
+
 //int Genome::N = 0;
 double Genome::ut = 0;
 double Genome::vt = 0;
@@ -24,8 +27,8 @@ double Genome::sb = 0;
 double Genome::faf = 0;
 int Genome::initialTE = 0;
 
-const int Genome::numberOfChromosomes = 16;
-const int Genome::chromLength = 500;
+const int Genome::numberOfChromosomes = CHROMOSOMES;
+const int Genome::chromLength = CHROM_LENGTH;
 /// maybe I should turn chromRec to constant as well
 double Genome::chromRecRates[16] = {5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6};
 //double Genome::rGenome = 0.01;

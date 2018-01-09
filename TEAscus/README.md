@@ -9,8 +9,10 @@ git clone https://github.com/KamilSJaron/yeast_TE_load_prediction
 cd yeast_TE_load_prediction/TEAscus
 make
 # make test
-make install
+make install [INSTAL_PREFIX=/where/to/install]
 ```
+
+default installation location is `INSTAL_PREFIX=/usr/local` and `make` always add `/bin` in the end of the path.
 
 ### Usage
 
@@ -62,6 +64,10 @@ The tests were written and tested on OS X using `clang` compiler. Simple test on
 The original code was provided by Elie Dolgin and it was used for publication "[The Fate of Transposable Elements in Asexual Populations](https://doi.org/10.1534/genetics.106.060434)"; DOI: 10.1534/genetics.106.060434
 (the code as it was shared with me is accessible in commit [7daac13](https://github.com/KamilSJaron/yeast_TE_load_prediction/tree/7daac13fdccd4b5ce1d2c7f169c63a269f9442cc/Transposon)). The software was called simply Transposon and it have implemented asexual reproduction and sexual reproduction of diploid individuals.
 
-The main modification is fixed haploid individuals with possible sexual and asexual reproduction mode.
+The main modification are enforced haploid individuals with possible asexual and sexual reproduction modes (sex through ascus).
 
-I also added unit tests, and simplified code on several places.
+- I added unit tests
+- simplified code on several places (deleting getters of static variables etc)
+- Logging was moved to error stream from standard stream, which was cleared for printing output if ever desired.
+- When development code is compiled, git commit is saved in binary and it's printed to log every time simulator is executed
+- hardcoded parameters are turned at least to define directives whenever possible
