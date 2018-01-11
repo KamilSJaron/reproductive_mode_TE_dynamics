@@ -4,5 +4,6 @@ TEAscus/TEAscus_test
 TEAscus/summary.txt
 TEAscus/detailed.txt
 TE_Sim
-simulation*
+sims
 TEAscus/include/gitversion.h
+figures

@@ -1,21 +1,17 @@
-file <- readLines('simulation_ch2/detailed.txt')
+# 1. sim
+# 2. output
 
-sim <- list()
+args <- commandArgs(trailingOnly = TRUE)
 
-for(i in 1:10){
-    one_sim_lines <- file[(11 + (i - 1) * 23):(23 + (i - 1) * 23)]
-    header <- unlist(strsplit(one_sim_lines[1], split = '\t'))
-    temp_df <- t(sapply(one_sim_lines[-1], function(x){as.numeric(unlist(strsplit(x, split = '\t')))}))
-    rownames(temp_df) <- c(1:12)
-    colnames(temp_df) <- header
-    sim[[i]] <- as.data.frame(temp_df)
-}
+source('scripts/read_simulation.R')
 
-
+# 'sims/001_basic_diploid_ch2/detailed.txt'
+sim <- read_simulation( args[1] )
 
 TEs <- sapply(sim, function(x){ x$n })
 
-png('figures/sim_2ch_literature_pars.png')
+# 'figures/sim_2ch_literature_pars.png'
+png( args[2] )
 
 plot(NULL,
     xlim = c(1, 990), ylim = c(min(TEs), max(TEs)),
