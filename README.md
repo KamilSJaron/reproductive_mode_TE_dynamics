@@ -32,17 +32,16 @@ Here is number of TE copies of 10 replicates over 990 simulated generations
 
 #### Selection model
 
-I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fitness.R](scripts/get_fitness.R), the function uses two parameters that correspond to decrease of fitness due to individual TE insertions and multiplicative effect given number of TEs present already in genome (epistasis). These parameters were selected so they show ~2% fitness decrease between 50 and 51 TE copies, a standard yeast TE copy number that was used in the experiment for estimation of fitness effects in yeast. Evaluation is in script [calculate_sa_and_sb.R](scripts/calculate_sa_and_sb.R) and the resulting fitness function is shown in following figure, where expected simlation space is marked with vertical lines.
+I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fitness.R](scripts/get_fitness.R), the function uses two parameters that correspond to decrease of fitness due to individual TE insertions and multiplicative effect given number of TEs present already in genome (epistasis). These parameters were selected so they show ~2% fitness decrease between 50 and 51 TE copies, a standard yeast TE copy number that was used in the experiment for estimation of fitness effects in yeast. Evaluation is in script [calculate_sa_and_sb.R](scripts/calculate_sa_and_sb.R) and the resulting fitness function is shown in following figure, where expected simulation space is marked with vertical lines.
 
 ![fitness_function](figures/default_fitness_function.png)
 
 ## TODO
 
 - (done) ~first draft asexual simulation~
-- (running) 16 chromosome simulaiton (expected to be same for asex)
-
-- turn model into haploid!
-- allow sexual simulation (need some code modification to have 89 asex, 1 sex  generations)
+- (done) ~16 chromosome simulaiton~ (expected to be same for asex : It is)
+- (done) ~turn model into haploid!~ (asex haplid == asex haplod - as expected)
+- (done) ~allow sexual simulation (need some code modification to have 89 asex, 1 sex  generations)~
 
 - adjust parameters so the number of TEs will remain same over 1000 generations
 - use the same parameters in purely asexual simulation as in the first bullet point
