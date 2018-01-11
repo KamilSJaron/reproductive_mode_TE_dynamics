@@ -1,5 +1,5 @@
-CXXFLAGS = -g
- # -std=c++11 -O3 -Wall -pedantic
+CXXFLAGS = -std=c++11 -O3 
+#-g -Wall -pedantic
 
 PRG = TEAscus
 GIT_HEADER = include/gitversion.h
@@ -35,7 +35,7 @@ $(GIT_HEADER) : ../.git/HEAD ../.git/COMMIT_EDITMSG
 # TESTING
 
 TEAscus_test : test/TEAscus_test.o $(OBJ) $(OBJ_TESTS)
-	gcc -o $@ $^ -lstdc++ -lcppunit -ldl
+	gcc -o $@ $^ -lstdc++ -lcppunit -ldl -lm
 
 .PHONY : test
 test : TEAscus_test
@@ -50,4 +50,4 @@ install : $(PRG)
 # CLEANING
 .PHONY : clean
 clean :
-	rm transposon src/*.o test/*.o
+	-rm $(PRG) src/*.o test/*.o

@@ -11,7 +11,7 @@
 #include "../include/Random.h"
 #include "../include/gitversion.h"
 
-#define REPLICATES 1
+#define REPLICATES 10
 #define NUMBER_OF_GENERATIONS 990
 #define REPORT_AND_SEX_PERIOD 90
 
