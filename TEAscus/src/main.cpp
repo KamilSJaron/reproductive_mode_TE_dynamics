@@ -21,7 +21,6 @@ int main(int argc, char **argv){
 
 	/* constants - input and output files */
 	const char *detailed_out = "detailed.txt";
-	const char *summary_out = "summary.txt";
 	const char *input_file = "input.txt";
 	bool sex = false;
 	string runnig_sex = "False";
@@ -79,7 +78,6 @@ int main(int argc, char **argv){
 
 		if (run==1) {
 			pop->PrintParameters();
-			pop->SaveParameters(summary_out);
 		}
 		pop->SummaryStatistics(detailed_out, 0);
 
@@ -89,7 +87,6 @@ int main(int argc, char **argv){
 			if (pop->GetPopulationTECount() == 0 or ((double)pop->GetPopulationTECount()/(double)size) > 150.0) {
 				// cerr << "No TEs at generation [" << gen << "]." << endl << endl;
 				// cerr << "Population extinction at generation [" << gen << "]." << endl << endl;
-				pop->SummaryStatistics(summary_out, gen);
 				pop->SummaryStatistics(detailed_out, gen);
 				break;
 			}
