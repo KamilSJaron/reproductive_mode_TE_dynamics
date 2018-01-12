@@ -8,7 +8,7 @@ source('scripts/read_simulation.R')
 # 'sims/001_basic_diploid_ch2/detailed.txt'
 sim <- read_simulation( args[1] )
 
-TEs <- sapply(sim, function(x){ x$n })
+TEs <- unlist(sapply(sim, function(x){ x$n }))
 
 # 'figures/sim_2ch_literature_pars.png'
 png( args[2] )
