@@ -1,9 +1,7 @@
 *.o
 TEAscus/TEAscus
 TEAscus/TEAscus_test
-TEAscus/summary.txt
 TEAscus/detailed.txt
-TE_Sim
 sims
 TEAscus/include/gitversion.h
 figures
