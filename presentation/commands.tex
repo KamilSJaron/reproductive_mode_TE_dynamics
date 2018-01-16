@@ -1,0 +1,100 @@
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\newcommand{\btVFill}{\vskip0pt plus 1filll}
+
+\newcommand{\textSlide}[1]{
+	\begin{frame}
+		\Huge
+		\begin{center}
+			#1
+		\end{center}
+	\end{frame}
+}
+
+\newcommand{\textCapSlide}[2]{
+    \begin{frame}
+        \frametitle{#1}
+        \Huge
+        \begin{center}
+            #2
+        \end{center}
+    \end{frame}
+}
+
+
+\newcommand{\picSlideHorizontal}[1]{
+	\textSlide{
+        \includegraphics[width=0.9\textwidth]{#1}
+    }
+}
+
+\newcommand{\picSlideVertical}[1]{
+    \textSlide{
+		\includegraphics[height=0.9\textheight]{#1}
+    }
+}
+
+\newcommand{\FourTilesSlide}[4]{
+	\begin{frame}
+		\begin{center}
+			\begin{tabular}{ C{5cm} C{5cm} }
+				#1 & #2 \\
+				#3 & #4 \\
+			\end{tabular}
+		\end{center}
+	\end{frame}
+}
+
+\newcommand{\simulationSlide}[3]{
+	\begin{frame}
+		\frametitle{#1}
+		\begin{center}
+			\begin{tabular}{ C{7cm} C{3cm} }
+				\includegraphics[height=0.8\textheight]{#2} &
+				\begin{itemize}
+					#3
+				\end{itemize} \\
+			\end{tabular}
+		\end{center}
+	\end{frame}
+}
+
+\newcommand{\picCapSlideHorizontal}[2]{
+	\begin{frame}
+		\frametitle{#1}
+		\begin{center}
+			\includegraphics[width=0.8\textwidth]{#2}
+		\end{center}
+	\end{frame}
+}
+
+\newcommand{\picCapSlideVertical}[2]{
+	\begin{frame}
+		\frametitle{#1}
+		\begin{center}
+			\includegraphics[height=0.8\textheight]{#2}
+		\end{center}
+	\end{frame}
+}
+
+\newcommand{\turnFooterOn}{
+	\setbeamertemplate{footline}{
+		\raisebox{5pt}{
+			\makebox[\paperwidth]{
+			\tiny
+			\begin{tabular}{c c}
+				\textcolor{sex_red}{$\medbullet$}  & \Female~\Male \\
+				\textcolor{asex_blue}{$\medbullet$}  & \Female \\
+			\end{tabular}
+			\hfill
+			\makebox[13pt]{\scriptsize\insertframenumber}
+			}
+		}
+	}
+}
+
+\newcommand{\turnFooterOff}{
+	\setbeamertemplate{footline}{\raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[13pt]{\scriptsize\insertframenumber}}}}
+}

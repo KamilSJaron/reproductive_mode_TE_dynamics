@@ -1,0 +1,127 @@
+\pdfminorversion=4
+
+\documentclass[xcolor=dvipsnames]{beamer}
+\mode<presentation>
+{
+\setbeamercolor{structure}{fg=Yellow!50!black}
+\usetheme{Madrid}
+\setbeamercovered{transparent}
+\usefonttheme{professionalfonts}
+}
+
+
+\usepackage{ucs}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{palatino}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{verbatim}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{txfonts} % medbullt
+\usepackage{marvosym} % sex asex symbols
+\usepackage{amsmath,amsfonts,bm} % math fonts, amsfonts,amsthm,
+\usepackage{array}
+\urlstyle{sf}
+
+%%%%% SET TO CORRECT PATHS %%%
+% popular choices :
+%	{/Volumes/dump/pictures/pool/ampiho/}
+%	{/Volumes/dump/pictures/pool/sex/}{/Volumes/dump/pictures/pool/stick/}
+\graphicspath{
+	{/Volumes/dump/pictures/pool/}
+	{../figures/}
+}
+
+
+
+\input{commands.tex}
+
+\definecolor{asex_blue}{RGB}{146,197,222}
+\definecolor{sex_red}{RGB}{214,96,77}
+% sex_red <- "#D6604DED"
+% asex_blue <- "#92C5DECD"
+
+%%%%%% SET TITLE
+\title{ Accumulation of divergence between haplotypes in the absence of sex }
+\author{ Kamil S. Jaron }
+
+% destroy that thing at the bottom
+\usenavigationsymbolstemplate{}
+\defbeamertemplate*{footline}{mytheme}{\raisebox{5pt}{\makebox[\paperwidth]{\hfill\makebox[13pt]{\scriptsize\insertframenumber}}}}
+
+% \setbeamertemplate{footline}[frame number]
+
+
+\begin{document}
+
+\turnFooterOff
+\Large
+
+\textSlide{ Modeling of TE loads in sexual and asexual yeast. }
+
+\picSlideVertical{yeast_setting}
+
+\picSlideVertical{yiest_TE}
+
+\picCapSlideVertical{ Estimated from data }{TE_inference_over_time}
+
+\textSlide{ Model \large \\
+\begin{itemize}
+    \item fitness proportional to number of TEs
+    \item fixed population size, fitness is relative
+    \item transposition happens in haploid state
+    \item recombination is a poisson process
+	\item chiasmata are uniformly distributed on chromosome
+\end{itemize} }
+
+\picCapSlideVertical{TE load $\rightarrow$ fitness}{default_fitness_function}
+
+\picCapSlideVertical{fitness $\rightarrow$ P(being parent)}{relative_fitness_expl}
+
+\turnFooterOn
+
+\simulationSlide{ Naive-brute asex :-) }{004_basic_asex}{
+\large
+\item $t_r = 10e-6$
+\item $e_r = 10e-6$
+}
+
+\simulationSlide{ The same but sex }{003_basic_sex}{
+\large
+\item $t_r = 10e-6$
+\item $e_r = 10e-6$
+}
+
+\turnFooterOff
+
+\textSlide{ How asex sim will look like for parameters of equillibrium sim? }
+
+\turnFooterOn
+
+\simulationSlide{ Sexual equillibrium }{013_sex_equil}{
+\large
+\item $t_r = 4e-3$
+\item $e_r = 10e-6$
+}
+
+\simulationSlide{ But asexual still accumulate }{015_seq_equil_asex_sim}{
+\large
+\item $t_r = 4e-3$
+\item $e_r = 10e-6$
+}
+
+\textSlide{ What part of reality the model is missing? \large \\
+\begin{itemize}
+    \item Too strong selection?
+    \item Is transition rate of TE adaptive?
+	\item How to model mutations in transition rate?
+    \item Given the inference of TEs form yeast data. Should we measure just proportion of initial TEs?
+\end{itemize} }
+
+\textSlide{\huge Thank you for your attention! \vspace{1.5cm} \\ \includegraphics[width=0.6\textwidth]{logos/wiki_logo_v2.png}}
+
+\picSlideVertical{fitness_parametrization}
+
+\end{document}

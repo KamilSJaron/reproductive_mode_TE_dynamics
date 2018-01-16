@@ -42,9 +42,12 @@ I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fi
 - (done) ~16 chromosome simulaiton~ (expected to be same for asex : It is)
 - (done) ~turn model into haploid!~ (asex haplid == asex haplod - as expected)
 - (done) ~allow sexual simulation (need some code modification to have 89 asex, 1 sex  generations)~
+- (done) adjust parameters so the number of TEs will remain same over 1000 generations
+- (done) use the same parameters in purely asexual simulation as in the first bullet point
 
-- adjust parameters so the number of TEs will remain same over 1000 generations
-- use the same parameters in purely asexual simulation as in the first bullet point
+- ? adjust model to fit reality
+- ?? add adeptive TEs
+- add figures / intput to sims to this repository
 
 ## Notes :
 
