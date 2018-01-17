@@ -11,9 +11,9 @@
 #include "../include/Random.h"
 #include "../include/gitversion.h"
 
-#define REPLICATES 10
-#define NUMBER_OF_GENERATIONS 990
-#define REPORT_AND_SEX_PERIOD 90
+#define REPLICATES 1
+#define NUMBER_OF_GENERATIONS 300000
+#define REPORT_AND_SEX_PERIOD 5000
 
 using namespace std;
 
