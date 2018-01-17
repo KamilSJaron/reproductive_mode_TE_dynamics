@@ -14,6 +14,7 @@
 #define REPLICATES 1
 #define NUMBER_OF_GENERATIONS 50000
 #define REPORT_AND_SEX_PERIOD 5000
+#define BURNIN 20
 
 using namespace std;
 
@@ -79,6 +80,12 @@ int main(int argc, char **argv){
 		if (run==1) {
 			pop->PrintParameters();
 		}
+
+		// cerr << "Running burnin"
+		for (int gen = 1; gen <= BURNIN; gen++){
+			pop->TranspositionAndLoss();
+		}
+
 		pop->SummaryStatistics(detailed_out, 0);
 
 		for (int gen = 1; gen <= NUMBER_OF_GENERATIONS; gen++) {
