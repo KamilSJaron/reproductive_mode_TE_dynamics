@@ -10,7 +10,7 @@ using namespace CppUnit;
 using namespace std;
 
 void TestTransposon::setUp(void) {
-	transposon = new Transposon(230, true);
+	transposon = new Transposon(230, 0.003, true);
 }
 
 void TestTransposon::tearDown(void) {

@@ -18,12 +18,6 @@ Transposon::Transposon():
 	effect(false)
 	{}
 
-Transposon::Transposon(int site, bool e):
-	location(site),
-	u(0),
-	effect(e)
-	{}
-
 Transposon::Transposon(int site, double transposition, bool e):
 	location(site),
 	u(transposition),
@@ -41,7 +35,3 @@ bool Transposon::GetEffect() const {
 double Transposon::GetTranspositionRate() const {
 	return u;
 }
-
-// void Transposon::AdjustTranspositionRate(double change) {
-// 	u += change;
-// }

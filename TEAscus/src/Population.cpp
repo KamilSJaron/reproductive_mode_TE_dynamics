@@ -91,7 +91,7 @@ void Population::Initialize() {
 			rolled_chromosome = (rolled_position / Genome::chromLength) + 1;
 		} while (!GetIndividual(0).GetChromosome(rolled_chromosome).TestEmpty(rolled_position_on_ch));
 
-		GetIndividual(0).GetChromosome(rolled_chromosome).Insert(Transposon(rolled_position_on_ch, true));
+		GetIndividual(0).GetChromosome(rolled_chromosome).Insert(Transposon(rolled_position_on_ch, true, Genome::u_initial));
 	}
 
 	/// copy individual 0 to all other individuals

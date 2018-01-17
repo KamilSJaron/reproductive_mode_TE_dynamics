@@ -28,12 +28,12 @@ void TestChromosome::testTEcount(void) {
 	num_of_chromosomes = ch1->GetChromTECount();
 	CPPUNIT_ASSERT_EQUAL(num_of_chromosomes, 0);
 	/// make a toy transposon and insert it in chromosome
-	ch1->Insert(Transposon(230, true));
+	ch1->Insert(Transposon(230, 0.005, true));
 	/// check that reported GetChromTECOunt is 1
 	num_of_chromosomes = ch1->GetChromTECount();
 	CPPUNIT_ASSERT_EQUAL(num_of_chromosomes, 1);
 	/// insert another one
-	ch1->Insert(Transposon(69, false));
+	ch1->Insert(Transposon(69, 0.005, false));
 	num_of_chromosomes = ch1->GetChromTECount();
 	CPPUNIT_ASSERT_EQUAL(num_of_chromosomes, 2);
 	/// check TE
@@ -47,7 +47,7 @@ void TestChromosome::testTestEmpty(void) {
 	is_empty = ch1->TestEmpty(0);
 	CPPUNIT_ASSERT_EQUAL(is_empty, true);
 
-	ch1->Insert(Transposon(3, true));
+	ch1->Insert(Transposon(3, 0.005, true));
 	CPPUNIT_ASSERT_EQUAL(ch1->TestEmpty(2), true);
 	CPPUNIT_ASSERT_EQUAL(ch1->TestEmpty(3), false);
 	CPPUNIT_ASSERT_EQUAL(ch1->TestEmpty(4), true);
