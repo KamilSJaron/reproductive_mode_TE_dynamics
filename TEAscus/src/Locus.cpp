@@ -51,6 +51,10 @@ int Locus::GetPosition() const {
 	return transElem.GetLocation();
 }
 
+double Locus::GetTranspositionRate() const {
+	return transElem.GetTranspositionRate();
+}
+
 void Locus::SetNext(Locus * loc) {
 	next = loc;
 }

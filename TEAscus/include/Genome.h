@@ -54,7 +54,7 @@ public:
 //	static int N;					// Population size
 	static double sa;				// selection coefficient alpha under synergistic epistasis
 	static double sb;				// selection coefficient beta under synergistic epistasis
-	static double ut;				// transposition rate
+	static double u_initial;				// transposition rate
 	static double vt;				// rate of element loss
 	static double faf;			// fraction affecting fitness (FAF)
 	//static double rGenome;		// genome wide recombination rate between TE sites

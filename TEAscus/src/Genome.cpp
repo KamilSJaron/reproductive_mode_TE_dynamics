@@ -20,7 +20,7 @@
 #define CHROM_LENGTH 500
 
 //int Genome::N = 0;
-double Genome::ut = 0;
+double Genome::u_initial = 0;
 double Genome::vt = 0;
 double Genome::sa = 0;
 double Genome::sb = 0;
@@ -48,7 +48,7 @@ void Genome::SetParameters() {
 	// fin.getline(tempChar,100); /// its read somewhere else
 //	N=strtol(tempChar,0,10);
 	fin.getline(tempChar,100);
-	ut=strtod(tempChar,0);
+	u_initial=strtod(tempChar,0);
 	fin.getline(tempChar,100);
 	vt=strtod(tempChar,0);
 	fin.getline(tempChar,100);
@@ -166,40 +166,44 @@ void Genome::SetChromosome(Chromosome & c) {
 }
 
 void Genome::Transpose() {
-	unsigned int num=0, pos=0, totalLength=0, currentLength=0;
-	bool affectW = false;
-	unsigned int teCount = GetGenomeTECount();
-	unsigned int transposeCount = (int)rand.Poisson(ut*teCount);
+	unsigned int rolled_position = 0, rolled_position_on_ch = 0, rolled_chromosome = 0;
+	unsigned int transposeCount = 0;
+	unsigned int totalLength = chromLength * numberOfChromosomes;
 
-	for (int i=1; i <= numberOfChromosomes; i++)
-		totalLength += GetChromosome(i).GetLength();
+	Locus * current;
+	double transposition_rate = 0;
+	bool affectW = true;
 
-	if (transposeCount > teCount)
-		transposeCount = teCount;
-	if (transposeCount > (2*totalLength - teCount))
-		transposeCount = (2*totalLength - teCount);
+	for (int ch=1; ch <= numberOfChromosomes; ch++){
+		current = GetChromosome(ch).GetHeadLocus();
+		while (current != 0) {
+			// roll number of insertions
+			transposition_rate = current->GetTranspositionRate();
+			transposeCount = (int)rand.Poisson(transposition_rate);
+			for (int t = 0; t < transposeCount; t++) {
+				// roll where
+				do {
+					rolled_position = (int)((rand.Uniform() * totalLength) + 1);
+					/// in range from 1 to chromLength
+					rolled_position_on_ch = rolled_position % chromLength;
+					/// in range from 1 to numberOfChromosomes
+					rolled_chromosome = (rolled_position / chromLength) + 1;
+				} while (!GetChromosome(rolled_chromosome).TestEmpty(rolled_position_on_ch));
 
-	// for number of transpositions, randomly insert into the genome
-	for (int j=0; j < transposeCount; j++) {
-		do {
-			pos = (int)((rand.Uniform()*totalLength) + 1);
-			num = 1;
-			for (int k=1; k <= numberOfChromosomes; k++) {
-				currentLength = GetChromosome(k).GetLength();
-				if (pos > currentLength) {
-					num++;
-					pos -= currentLength;
-				}
+				// roll for TE adjustment
+				// transposition_rate += ????;
+
+				// is new TE going to affect fitness
+				if (faf > rand.Uniform())
+					affectW = true;
 				else
-					break;
-			}
-		} while (!GetChromosome(num).TestEmpty(pos));
+					affectW = false;
 
-		if (faf > rand.Uniform())
-			affectW = true;
-		else
-			affectW = false;
-		GetChromosome(num).Insert(Transposon(pos, affectW));
+				chromoVector.at(rolled_chromosome).Insert(Transposon(rolled_position, transposition_rate, affectW));
+			}
+
+			current = current->GetNext();
+		}
 	}
 }
 

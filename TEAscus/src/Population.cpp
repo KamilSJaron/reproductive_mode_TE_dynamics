@@ -193,7 +193,7 @@ void Population::SaveParameters(const char * fileName) {
 
 	fout << "\n" << asctime (timeinfo) << "\n";
 	fout << "N = " << popSize << "\n";
-	fout << "u = " << Genome::ut << ", v = " << Genome::vt << "\n";
+	fout << "u = " << Genome::u_initial << ", v = " << Genome::vt << "\n";
 	fout << "initialTE = " << Genome::initialTE << "\n";
 	fout << "propAffectW = " << Genome::faf << "\n";
 	fout << "a = " << Genome::sa << ", b = " << Genome::sb << "\n";
@@ -215,7 +215,7 @@ void Population::PrintParameters(){
 
 	std::cerr << asctime (timeinfo) << std::endl;
 	std::cerr << "Population Size = " << popSize << std::endl;
-	std::cerr << "Transposition Rate = " << Genome::ut << std::endl;
+	std::cerr << "Transposition Rate = " << Genome::u_initial << std::endl;
 	std::cerr << "Excision Rate = " << Genome::vt << std::endl;
 	std::cerr << "Initial TE count = " << Genome::initialTE << std::endl;
 	std::cerr << "Proportion affecting fitness = " << Genome::faf << std::endl;
