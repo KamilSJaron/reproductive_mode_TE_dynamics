@@ -20,8 +20,7 @@
 
 Locus::Locus(Transposon te):
 	transElem(te),
-	next(0)
-	{}
+	next(0) { }
 
 Locus::Locus(Transposon te, Locus * n):
 	transElem(te),

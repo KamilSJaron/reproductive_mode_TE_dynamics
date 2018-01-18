@@ -180,7 +180,6 @@ void Genome::Transpose() {
 	int rolled_chromosome = 0, rolled_position_on_ch = 0;
 	unsigned int transposeCount = 0;
 	unsigned int totalLength = chromLength * numberOfChromosomes;
-	Transposon te;
 
 	int TEs = GetGenomeTECount();
 	// std::cerr << "Proportion of gneome covered by TEs : " << TEs / (double)totalLength << std::endl;
