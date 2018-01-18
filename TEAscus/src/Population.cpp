@@ -83,12 +83,8 @@ void Population::Initialize() {
 	/// this generates 10 initial TEs in a genome of individual 0
 	for (int j=0; j < Genome::initialTE; j++) {
 		// std::cerr << "Creating TE : " << j+1 << std::endl;
-		do {
-			rolled_position = (int)((rand.Uniform()*totalLength) + 1);
-			/// in range from 1 to Genome::chromLength
-			rolled_position_on_ch = rolled_position % Genome::chromLength;
-			/// in range from 1 to Genome::numberOfChromosomes
-			rolled_chromosome = (rolled_position / Genome::chromLength) + 1;
+		do { 
+			Genome::GenerateChromosomeAndPosition(& rolled_chromosome, & rolled_position_on_ch);
 		} while (!GetIndividual(0).GetChromosome(rolled_chromosome).TestEmpty(rolled_position_on_ch));
 
 		GetIndividual(0).GetChromosome(rolled_chromosome).Insert(Transposon(rolled_position_on_ch, true, Genome::u_initial));
