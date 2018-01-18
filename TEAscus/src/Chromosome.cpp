@@ -152,6 +152,7 @@ void Chromosome::Insert (Transposon te)
 
 		nextLocus = currentLocus->GetNext();
 		nextLocation = nextLocus->GetTransposon().GetLocation();
+		// std::cerr << nextLocation << std::endl;
 
 		if (nextLocation > newLocation)
 		{

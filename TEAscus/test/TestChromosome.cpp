@@ -51,4 +51,6 @@ void TestChromosome::testTestEmpty(void) {
 	CPPUNIT_ASSERT_EQUAL(ch1->TestEmpty(2), true);
 	CPPUNIT_ASSERT_EQUAL(ch1->TestEmpty(3), false);
 	CPPUNIT_ASSERT_EQUAL(ch1->TestEmpty(4), true);
+	CPPUNIT_ASSERT_EQUAL(ch2->TestEmpty(1000000), true);
+	CPPUNIT_ASSERT_EQUAL(ch2->TestEmpty(-1), true);
 }

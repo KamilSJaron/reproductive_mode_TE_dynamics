@@ -17,6 +17,10 @@ void TestTransposon::tearDown(void) {
 	delete transposon;
 }
 
-void TestTransposon::testGetter(void) {
-	CPPUNIT_ASSERT_EQUAL(transposon->GetLocation(), 230);
+void TestTransposon::testGetLocation(void) {
+	CPPUNIT_ASSERT_EQUAL(230, transposon->GetLocation());
+}
+
+void TestTransposon::testTransposonRate(void) {
+	CPPUNIT_ASSERT_EQUAL(0.003, transposon->GetTranspositionRate());
 }

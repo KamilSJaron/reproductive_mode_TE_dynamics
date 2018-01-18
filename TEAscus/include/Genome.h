@@ -27,6 +27,7 @@ public:
 	static double GetFAF();
 	static int GenerateNumberOfChiasmas(int chromosome);
 	static int GenerateGapPositionOnChromosome();
+	static void GenerateChromosomeAndPosition(int * ch, int * p);
 	static bool GenerateTossACoin();
 
 	unsigned int GetGenomeTECount() const;
