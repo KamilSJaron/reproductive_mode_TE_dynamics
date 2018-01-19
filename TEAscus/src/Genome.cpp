@@ -178,6 +178,26 @@ double Genome::GetGenomeFitness(int meanCount) const {
 	return exp ( -(sa * meanCount) - (0.5 * sb * pow(meanCount,2) ) );
 }
 
+double Genome::GetMeanU() const{
+	double mean_u = 0.0, ch_mean_u = 0.0;
+	int ch_with_TEs = 0;
+	for (int i=1; i <= numberOfChromosomes; i++) {
+		ch_mean_u = GetChromosome(i).GetMeanU();
+		if (ch_mean_u != -1) {
+			mean_u += ch_mean_u;
+			ch_with_TEs++;
+		}
+	}
+
+	if(ch_with_TEs == 0){
+		return -1;
+	}
+
+	mean_u /= (double)ch_with_TEs;
+	return mean_u;
+}
+
+
 void Genome::SetChromosome(Chromosome & c) {
 	int num = c.GetChromNumber();
 

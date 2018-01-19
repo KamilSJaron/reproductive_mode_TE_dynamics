@@ -24,6 +24,7 @@ class Chromosome
 
 	unsigned int GetChromTECount() const;
 	unsigned int GetChromTECountAffectingFitness() const;
+    double GetMeanU() const;
 	unsigned int GetChromNumber() const;
 	unsigned int GetChromCopy() const;
 	unsigned int GetLength() const;

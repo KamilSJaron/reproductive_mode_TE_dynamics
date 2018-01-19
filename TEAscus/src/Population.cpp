@@ -69,6 +69,20 @@ double Population::GetPopulationMeanFitness() const
 	return populationFitness;
 }
 
+double Population::GetMeanU() const {
+	double mean_u = 0.0, genome_mean_u = 0.0;
+	int genomes_with_TEs = 0;
+	for (int i=0; i < popSize; i++) {
+		genome_mean_u = GetIndividual(i).GetMeanU();
+		if (genome_mean_u != -1){
+			mean_u += genome_mean_u;
+			genomes_with_TEs++;
+		}
+	}
+	mean_u /= (double)genomes_with_TEs;
+	return(mean_u);
+}
+
 void Population::Initialize() {
 	int rolled_position = 0, rolled_chromosome = 0, rolled_position_on_ch = 0;
 	int totalLength = Genome::chromLength * Genome::numberOfChromosomes;
@@ -196,7 +210,7 @@ void Population::SaveParameters(const char * fileName) {
 	fout << "chrom# = " << Genome::numberOfChromosomes << ", ploidy# = haploid\n" << "\n";
 
 	fout << "GEN" << "\t" << "n" << "\t" << "Vn" << "\t" << "x" << "\t" << "Vx" << "\t";
-	fout << "empty" << "\t" << "fixed" << "\t" << "min#" << "\t" << "minFreq" << "\n";
+	fout << "empty" << "\t" << "fixed" << "\t" << "min#" << "\t" << "minFreq" << "\t" << "mean_u" << "\n";
 
 	fout.close();
 }
@@ -227,6 +241,7 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 	// to determine mean and variance of copy number per individual
 	double meanCopyNumber=0.0, varCopyNumber=0.0, x=0.0;
 	double proportionAffectingW=0.0;
+	double mean_u = 0.0; //, var_u = 0.0;
 	int chromLength=0, vectorLength=0, y=0;
 
 	int size = GetPopSize();
@@ -239,6 +254,8 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 	std::vector<int> locationVector(vectorLength, 0);
 
 	meanCopyNumber = ((double)GetPopulationTECount()) / ((double)size);
+	mean_u = GetMeanU();
+
 	if (meanCopyNumber != 0)
 		proportionAffectingW = ((double)GetPopulationTECountAffectingFitness()) / ((double)GetPopulationTECount());
 	minCopyNum = (int)meanCopyNumber + 1;
@@ -319,13 +336,15 @@ void Population::SummaryStatistics(const char * fileName, int generation)
 	std::cout << "Fraction of loci with zero frequency: " << fractionEmpty << std::endl;
 	std::cout << "Fraction of fixed loci: " << fractionFixed << std::endl;
 	std::cout << "Minimum copy number: " << minCopyNum << std::endl;
-	std::cout << "Minimum copy frequency: " << minCopyFreq << std::endl << std::endl;
-
+	std::cout << "Minimum copy frequency: " << minCopyFreq << std::endl;
+	std::cout << "Mean transposable rate: " << mean_u << std::endl;
+	std::cout << std::endl;
+	// std::cout << "Variance in transposable rates: " << var_u << std::endl << std::endl;
 	// OUTPUT TO FILE
 
 	fout << generation << "\t" << meanCopyNumber << "\t" << varCopyNumber << "\t" << meanFreq << "\t";
 	fout << varFreq << "\t" << fractionEmpty << "\t" << fractionFixed << "\t" << minCopyNum <<"\t";
-	fout << minCopyFreq << "\n";
+	fout << minCopyFreq << "\t" << mean_u << "\n";
 
 	fout.close();
 }

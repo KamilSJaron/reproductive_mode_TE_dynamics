@@ -62,6 +62,25 @@ unsigned int Chromosome::GetChromTECountAffectingFitness() const
 	return count;
 }
 
+double Chromosome::GetMeanU() const {
+	double mean_u = 0.0;
+	int count = 0;
+	Locus * current = headLocus;
+
+	while (current != 0) {
+		mean_u += current->GetTransposon().GetTranspositionRate();
+		count++;
+		current = current->GetNext();
+	}
+
+	if (count == 0) {
+		return -1;
+	}
+
+	mean_u /= (double)count;
+	return(mean_u);
+}
+
 unsigned int Chromosome::GetChromNumber() const
 {
 	return chromNumber;

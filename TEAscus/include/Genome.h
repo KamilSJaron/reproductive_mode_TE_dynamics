@@ -37,6 +37,7 @@ public:
 	Chromosome & GetChromosome(int);
 	double GetGenomeFitness() const;
 	double GetGenomeFitness(int) const;
+	double GetMeanU() const;
 
 	void SetChromosome(Chromosome&);
 
@@ -76,7 +77,7 @@ private:
 	static std::uniform_int_distribution<int> rpos;
 	static std::uniform_int_distribution<bool> toss;
 	static std::uniform_int_distribution<int> rch;
-	
+
 	std::vector<Chromosome> chromoVector;
 
 };
