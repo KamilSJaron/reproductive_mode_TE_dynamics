@@ -24,7 +24,7 @@ winner
 
 # plot(selections$dist_to_ideal_fitness_decrease)
 # image(matrix(selections$dist_to_ideal_fitness_decrease, nrow = length(as)))
-# 
+#
 # plot(selections$fitness_50, pch = 20)
 # points(0.98 * selections$fitness_50, pch = 20, col = 2)
 # points(selections$fitness_51, pch = 20, col = 3)
@@ -41,3 +41,18 @@ lines(c(50,50), c(-0.2,1.2))
 legend('topright', bty = 'n', legend = c('simulation space', paste('a = ', winner$as), paste('b = ', winner$bs)), lty = c(1, NA, NA))
 
 dev.off()
+
+source('scripts/calculate_equilibrium_state.R')
+
+u = c(0.01, 0.005, 0.001, 0.0001, 0.00001, 0.000001)
+v = 0.000001
+a = 0.00051
+b = 0.00039
+getNeq(a, b, u, v)
+# The parameters from literature are not consistent with theory!
+# Our simulator neither (at least I think it's not I need to veryfy)
+
+get_fitness(51, a, b) - get_fitness(50, a, b)
+plot(get_fitness(1:300, a, b), pch = 20, ylim = c(0, 1.2),
+     xlab = 'number of TEs', ylab = 'relative fitness',
+     main = 'simulation model')

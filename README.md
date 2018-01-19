@@ -44,10 +44,13 @@ I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fi
 - (done) ~allow sexual simulation (need some code modification to have 89 asex, 1 sex  generations)~
 - (done) adjust parameters so the number of TEs will remain same over 1000 generations
 - (done) use the same parameters in purely asexual simulation as in the first bullet point
+- (done) ?? add adeptive TEs
+- (done) add intput anf output of sims to this repository
 
+- Check consistency of D&CH equilibrium prediction with my sims
 - ? adjust model to fit reality
-- ?? add adeptive TEs
-- add figures / intput to sims to this repository
+- ? check consistency with reality - D&CH model can not explain lab measured variables
+
 
 ## Notes :
 

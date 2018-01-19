@@ -13,8 +13,8 @@
 #include "../include/Genome.h"
 
 #define REPLICATES 1
-#define NUMBER_OF_GENERATIONS 50000
-#define REPORT_AND_SEX_PERIOD 5000
+#define NUMBER_OF_GENERATIONS 1000
+#define REPORT_AND_SEX_PERIOD 90
 #define BURNIN 20
 
 using namespace std;
