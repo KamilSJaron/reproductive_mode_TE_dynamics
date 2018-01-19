@@ -18,7 +18,7 @@
 
 #define CHROMOSOMES 16
 #define CHROM_LENGTH 500
-#define TE_MUTATION_SD 0.0002
+#define TE_MUTATION_SD 0.02
 
 //int Genome::N = 0;
 double Genome::u_initial = 0;
@@ -52,22 +52,21 @@ void Genome::SetParameters() {
 		{std::cout << "Error opening file"; exit (1); }
 
 	char tempChar[100];
-	while(!fin.getline(tempChar, 100).eof())
-	{
-	// fin.getline(tempChar,100); /// its read somewhere else
-//	N=strtol(tempChar,0,10);
-	fin.getline(tempChar,100);
-	u_initial=strtod(tempChar,0);
-	fin.getline(tempChar,100);
-	vt=strtod(tempChar,0);
-	fin.getline(tempChar,100);
-	sa=strtod(tempChar,0);
-	fin.getline(tempChar,100);
-	sb=strtod(tempChar,0);
-	fin.getline(tempChar,100);
-	faf=strtod(tempChar,0);
-	fin.getline(tempChar,100);
-	initialTE=strtol(tempChar,0,10);
+	while(!fin.getline(tempChar, 100).eof()) {
+		// fin.getline(tempChar,100); /// its read somewhere else
+	//	N=strtol(tempChar,0,10);
+		fin.getline(tempChar,100);
+		u_initial=strtod(tempChar,0);
+		fin.getline(tempChar,100);
+		vt=strtod(tempChar,0);
+		fin.getline(tempChar,100);
+		sa=strtod(tempChar,0);
+		fin.getline(tempChar,100);
+		sb=strtod(tempChar,0);
+		fin.getline(tempChar,100);
+		faf=strtod(tempChar,0);
+		fin.getline(tempChar,100);
+		initialTE=strtol(tempChar,0,10);
 	}
 	fin.close();
 	parametersSet = true;
@@ -277,7 +276,7 @@ void Genome::ElementLoss() {
 			chromoVector.at(i-1).Delete(nthTE);
 			chromTEcount--;
 		}
-		}
+	}
 }
 
 void Genome::ListGenomeSites() const
