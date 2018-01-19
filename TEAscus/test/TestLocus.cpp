@@ -10,8 +10,8 @@ using namespace CppUnit;
 using namespace std;
 
 void TestLocus::setUp(void) {
-	locus1 = new Locus(Transposon(7, true));
-	locus2 = new Locus(Transposon(4, true), locus1);
+	locus1 = new Locus(Transposon(7, 0.007, true));
+	locus2 = new Locus(Transposon(4, 0.008, true), locus1);
 	locus3 = new Locus(Transposon());
 }
 

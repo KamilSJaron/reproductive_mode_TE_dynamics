@@ -20,7 +20,7 @@ if( grepl('asex', args[1]) ){
 png( args[2] )
 
 plot(NULL,
-    xlim = c(1, 990), ylim = c(min(TEs), max(TEs)),
+    xlim = c(1, max(unlist(sapply(sim, function(x){ x$GEN })))), ylim = c(min(TEs), max(TEs)),
     xlab = 'Generation', ylab = 'number of TEs',
     main = 'simulated TEs')
 

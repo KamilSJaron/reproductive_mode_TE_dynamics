@@ -10,6 +10,7 @@
 #include "../include/Population.h"
 #include "../include/Random.h"
 #include "../include/gitversion.h"
+#include "../include/Genome.h"
 
 #define REPLICATES 1
 #define NUMBER_OF_GENERATIONS 50000
@@ -81,8 +82,8 @@ int main(int argc, char **argv){
 			pop->PrintParameters();
 		}
 
-		// cerr << "Running burnin"
 		for (int gen = 1; gen <= BURNIN; gen++){
+			// cerr << "Runnin burnin" << endl;
 			pop->TranspositionAndLoss();
 		}
 

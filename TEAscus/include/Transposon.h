@@ -17,12 +17,14 @@ class Transposon
 {
   public:
 	Transposon();
-	Transposon(int, bool);
+	Transposon(int, double, bool);
 	int GetLocation() const;
 	bool GetEffect() const;
+	double GetTranspositionRate() const;
 
   private:
 	int location;		// location along chromosome
+	double u; // transposition rate
 	bool effect;		// true if TE effects fitness
 
 };

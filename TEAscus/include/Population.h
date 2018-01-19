@@ -13,6 +13,7 @@
 #define POPULATION_H_EDOLGIN_TE
 
 #include "../include/Genome.h"
+#include "../include/Random.h"
 #include <vector>
 
 
@@ -28,6 +29,7 @@ public:
 	unsigned int GetPopulationTECount() const;
 	unsigned int GetPopulationTECountAffectingFitness() const;
 	double GetPopulationMeanFitness() const;
+	double GetMeanU() const;
 
 	void Initialize();
 	int SelectVitalIndividual() const;

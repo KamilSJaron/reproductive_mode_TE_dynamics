@@ -9,7 +9,8 @@ using namespace std;
 
 class TestTransposon : public CPPUNIT_NS :: TestFixture {
 	CPPUNIT_TEST_SUITE (TestTransposon);
-	CPPUNIT_TEST (testGetter);
+	CPPUNIT_TEST (testGetLocation);
+	CPPUNIT_TEST (testTransposonRate);
 	CPPUNIT_TEST_SUITE_END ();
 
 	public:
@@ -17,7 +18,8 @@ class TestTransposon : public CPPUNIT_NS :: TestFixture {
 		void tearDown (void);
 
 	protected:
-		void testGetter (void);
+		void testGetLocation (void);
+		void testTransposonRate (void);
 
 	private:
 		Transposon *transposon;

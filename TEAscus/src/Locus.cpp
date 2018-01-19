@@ -20,8 +20,7 @@
 
 Locus::Locus(Transposon te):
 	transElem(te),
-	next(0)
-	{}
+	next(0) { }
 
 Locus::Locus(Transposon te, Locus * n):
 	transElem(te),
@@ -49,6 +48,10 @@ Locus * Locus::GetNext() const {
 
 int Locus::GetPosition() const {
 	return transElem.GetLocation();
+}
+
+double Locus::GetTranspositionRate() const {
+	return transElem.GetTranspositionRate();
 }
 
 void Locus::SetNext(Locus * loc) {

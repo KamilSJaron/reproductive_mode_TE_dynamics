@@ -47,7 +47,7 @@ void TestGenome::testRandomness(void){
 	// std::vector<int> generated_positions;
 	// std::vector<int> tosses_by_coin;
     //
-	// int generated_number = -1;
+	int generated_number = -1;
     //
 	// for (int ch = 1; ch <= 1; ch++){ //Genome::numberOfChromosomes
 	// 	for (int i = 0; i < 10000; i++){
@@ -72,6 +72,32 @@ void TestGenome::testRandomness(void){
 	// std::cerr << "\n" << "Proportion of zeros : " << (double)zeros / 10000 << "\n";
 	// std::cerr << "Proportion of max : " << (double)genome_lengths / 10000 << "\n";
 	// std::cerr << "expected proportion : " << (double)1 / (Genome::chromLength + 1) << "\n";
+
+	int ch_zeros = 0, p_zeros = 0;
+	int ch_max = 0, p_max = 0;
+	int rolled_position_on_ch = 0, rolled_chromosome = 0;
+	int replicates = 100000;
+
+	for (int i = 0; i < replicates; i++){
+		Genome::GenerateChromosomeAndPosition(& rolled_chromosome, & rolled_position_on_ch);
+		if (rolled_position_on_ch == 0){
+			p_zeros++;
+		}
+		if (rolled_chromosome == 0){
+			ch_zeros++;
+		}
+		if(rolled_position_on_ch > Genome::chromLength){
+			p_max++;
+		}
+		if (rolled_chromosome > Genome::numberOfChromosomes){
+			ch_max++;
+		}
+	}
+
+	CPPUNIT_ASSERT_EQUAL(0, p_zeros);
+	CPPUNIT_ASSERT_EQUAL(0, ch_zeros);
+	CPPUNIT_ASSERT_EQUAL(0, p_max);
+	CPPUNIT_ASSERT_EQUAL(0, ch_max);
 
 	// int generated_sum = 0;
 	// for (int i = 0; i < 1000000; i++){
