@@ -13,9 +13,10 @@
 #define GENOME_H_EDOLGIN_TE
 
 #include "../include/Chromosome.h"
-#include "../include/Random.h"
+// #include "../include/Random.h"
 
 #include <vector>
+#include <random>
 
 class Genome {
 
@@ -64,10 +65,17 @@ public:
 	const static int chromLength;
 	static double chromRecRates[];
 	static bool parametersSet;
+	static std::normal_distribution<double> rnorm;
+	static std::uniform_int_distribution<int> rgap;
+	static std::uniform_int_distribution<int> rpos;
+	static std::uniform_int_distribution<bool> toss;
+	static std::uniform_int_distribution<int> rch;
 
 private:
 
-	static Random rand;
+	// static Random rand;
+	static std::random_device rd;
+	static std::mt19937 mt;
 	std::vector<Chromosome> chromoVector;
 
 };

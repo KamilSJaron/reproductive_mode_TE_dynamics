@@ -18,6 +18,7 @@
 
 #define CHROMOSOMES 16
 #define CHROM_LENGTH 500
+#define TE_MUTATION_SD 0.0002
 
 //int Genome::N = 0;
 double Genome::u_initial = 0;
@@ -27,6 +28,14 @@ double Genome::sb = 0;
 double Genome::faf = 0;
 int Genome::initialTE = 0;
 
+std::random_device Genome::rd;
+std::mt19937 Genome::mt(Genome::rd());
+std::normal_distribution<double> Genome::rnorm(1, TE_MUTATION_SD);
+std::uniform_int_distribution<int> Genome::rgap(0, CHROM_LENGTH);
+std::uniform_int_distribution<int> Genome::rpos(1, CHROM_LENGTH);
+std::uniform_int_distribution<int> Genome::rch(1, CHROMOSOMES);
+std::uniform_int_distribution<bool> Genome::toss(0,1);
+
 const int Genome::numberOfChromosomes = CHROMOSOMES;
 const int Genome::chromLength = CHROM_LENGTH;
 /// maybe I should turn chromRec to constant as well
@@ -35,7 +44,7 @@ double Genome::chromRecRates[16] = {5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,5.6,
 
 bool Genome::parametersSet = false;
 
-Random Genome::rand;
+// Random Genome::rand;
 
 void Genome::SetParameters() {
 	std::ifstream fin("input.txt");
@@ -100,30 +109,31 @@ double Genome::GetFAF() {
 }
 
 int Genome::GenerateNumberOfChiasmas(int chromosome){
-	return(rand.Poisson(Genome::chromRecRates[chromosome-1]));
+	std::poisson_distribution<int> rpois;
+	rpois = std::poisson_distribution<int>(Genome::chromRecRates[chromosome-1]);
+	return(rpois(mt));
+	// return(rand.Poisson(Genome::chromRecRates[chromosome-1]));
 }
 
 /// to be checked if generates what I want
 int Genome::GenerateGapPositionOnChromosome(){
 	/// supposed to generate int 0 ... 400
-	return(round((rand.Uniform() * (chromLength + 1)) - 0.5));
+	return(rgap(mt));
 }
 
 void Genome::GenerateChromosomeAndPosition(int * ch, int * p){
-	int roll = 0;
-	/// 0 ... (chromLength * numberOfChromosomes) - 1
-	roll = round((rand.Uniform() * chromLength * numberOfChromosomes) - 0.5);
-	/// in range from 1 to chromLength
-	*p = (roll % chromLength) + 1;
 	/// in range from 1 to numberOfChromosomes
-	*ch = (roll / chromLength) + 1;
+	*ch = rch(mt);
+	/// in range from 1 to chromLength
+	*p = rpos(mt);
 }
 
 bool Genome::GenerateTossACoin(){
-	if (rand.Uniform() < 0.5)
-		return(true);
-	else
-		return(false);
+	return(toss(mt));
+	// if (rand.Uniform() < 0.5)
+	// 	return(true);
+	// else
+	// 	return(false);
 }
 
 unsigned int Genome::GetGenomeTECount() const {
@@ -180,6 +190,7 @@ void Genome::Transpose() {
 	int rolled_chromosome = 0, rolled_position_on_ch = 0;
 	unsigned int transposeCount = 0;
 	unsigned int totalLength = chromLength * numberOfChromosomes;
+	std::poisson_distribution<int> rpois;
 
 	int TEs = GetGenomeTECount();
 	// std::cerr << "Proportion of gneome covered by TEs : " << TEs / (double)totalLength << std::endl;
@@ -196,7 +207,9 @@ void Genome::Transpose() {
 			// roll number of insertions
 			// std::cerr << "rolling ";
 			transposition_rate = current->GetTranspositionRate();
-			transposeCount = (int)rand.Poisson(transposition_rate);
+			rpois = std::poisson_distribution<int>(transposition_rate);
+			transposeCount = rpois(mt);
+			// transposeCount = (int)rand.Poisson(transposition_rate);
 			TEs += transposeCount;
 			if ((TEs / (double)totalLength) > 0.8){
 				std::cerr << "ERROR : an individual with more 80% of genome covered by TEs in simualtion." << std::endl;
@@ -217,13 +230,13 @@ void Genome::Transpose() {
 
 				// std::cerr << "position rolled" << std::endl;
 				// roll for TE adjustment
-				// transposition_rate += ????;
+				transposition_rate = transposition_rate * rnorm(mt);
 
-				// is new TE going to affect fitness
-				if (faf > rand.Uniform())
-					affectW = true;
-				else
-					affectW = false;
+				// // is new TE going to affect fitness
+				// if (faf > rand.Uniform())
+				// 	affectW = true;
+				// else
+				// 	affectW = false;
 
 				// std::cerr << "taget ch" << rolled_chromosome << " pos " << rolled_position_on_ch << " transposition_rate " << transposition_rate << " affecting fitness? " << affectW << std::endl;
 				chromoVector.at(rolled_chromosome - 1).Insert(Transposon(rolled_position_on_ch, transposition_rate, affectW));
@@ -236,17 +249,20 @@ void Genome::Transpose() {
 	}
 }
 
-void Genome::ElementLoss()
-{
+void Genome::ElementLoss() {
 	if (vt == 0){
 		return;
 	}
 
 	unsigned int lossCount=0, chromTEcount=0, nthTE=0;
+	std::poisson_distribution<int> rpois;
+	std::uniform_int_distribution<int> runif;
 
 	for (int i=1; i <= numberOfChromosomes; i++) {
 		chromTEcount = chromoVector.at(i-1).GetChromTECount();
-		lossCount = (int)rand.Poisson(vt*chromTEcount);
+		rpois = std::poisson_distribution<int>(vt*chromTEcount);
+		lossCount = rpois(mt);
+		// lossCount = (int)rand.Poisson(vt*chromTEcount);
 
 		/// if by any chance poisson distribution generates number greater than number of TEs
 		if (lossCount > chromTEcount) {
@@ -255,7 +271,9 @@ void Genome::ElementLoss()
 		}
 
 		for (int k=0; k < lossCount; k++) {
-			nthTE = (int)(rand.Uniform()*chromTEcount + 1);
+			runif = std::uniform_int_distribution<int>(1, chromTEcount);
+			nthTE = runif(mt);
+			// nthTE = (int)(rand.Uniform()*chromTEcount + 1);
 			chromoVector.at(i-1).Delete(nthTE);
 			chromTEcount--;
 		}

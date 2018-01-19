@@ -13,6 +13,7 @@
 #define POPULATION_H_EDOLGIN_TE
 
 #include "../include/Genome.h"
+#include "../include/Random.h"
 #include <vector>
 
 
