@@ -36,6 +36,12 @@ I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fi
 
 ![fitness_function](figures/default_fitness_function.png)
 
+#### Adaptive evolution of transposition rates
+
+I have implemented a mutation model for transposable rates. Every single transposon has it's own initial transposable rate (defined as parameter u) and every transposition leads to "mutation" of transposon that will affect transposition rate by a multiplicative coefficient from normal distribution `m_u ~ N(1,sd)`, where `sd` is an constant hardcoded in file [Genome.cpp](src/Genome.cpp).
+
+Simulations 019 and 020 were supposed to explore what are meaningful `sd` but I can not find any evolution of `sd` in any direction. This will require some mode thinking.
+
 ## TODO
 
 - (done) ~first draft asexual simulation~
@@ -48,8 +54,15 @@ I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fi
 - (done) add intput anf output of sims to this repository
 
 - Check consistency of D&CH equilibrium prediction with my sims
-- ? adjust model to fit reality
-- ? check consistency with reality - D&CH model can not explain lab measured variables
+   - my equilibrium sims are predicted to be converge to 0
+   - I should try to take predicted equilibrium (for instance Neq = 50, u=10^-6, v=10^-5, a = 0.01, b=2.828*10^-6) and sim it, either it will drift around equil (good) or go somewhere (bad). If (bad) -> Try the same with original D&Ch sim.
+   - check consistency with reality - D&CH model can not explain lab measured variables. Is it problem of model or measured variables? Could different parameterization of selection model lead to more consistent results?
+- adaptive transposable rates
+   - make a switch for adaptive transposable rates (allow this to be turned off)
+   - reevaluate what `sd` is reasonable.
+   - simulate everything needed
+- record reference and non-reference position of TEs separately (mean TEs, mean ref TEs)
+- (utopia) adjust model to fit reality
 
 
 ## Notes :
