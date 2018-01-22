@@ -18,7 +18,7 @@
 
 #define CHROMOSOMES 16
 #define CHROM_LENGTH 500
-#define TE_MUTATION_SD 0.02
+#define TE_MUTATION_SD 0.1
 
 //int Genome::N = 0;
 double Genome::u_initial = 0;

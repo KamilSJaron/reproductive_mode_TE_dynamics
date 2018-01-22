@@ -30,6 +30,7 @@ public:
 	unsigned int GetPopulationTECountAffectingFitness() const;
 	double GetPopulationMeanFitness() const;
 	double GetMeanU() const;
+	double GetVarU(double mean_u) const;
 
 	void Initialize();
 	int SelectVitalIndividual() const;

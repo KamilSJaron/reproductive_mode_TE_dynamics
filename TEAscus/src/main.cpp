@@ -12,8 +12,8 @@
 #include "../include/gitversion.h"
 #include "../include/Genome.h"
 
-#define REPLICATES 1
-#define NUMBER_OF_GENERATIONS 1000
+#define REPLICATES 10
+#define NUMBER_OF_GENERATIONS 10000
 #define REPORT_AND_SEX_PERIOD 90
 #define BURNIN 20
 
