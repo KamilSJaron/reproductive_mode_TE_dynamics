@@ -4,7 +4,7 @@
 
 However, there is way more to be done in such system. [Jens' previous work](https://doi.org/10.1093/molbev/msv261) have suggested that asexuality is not causing higher TE loads, which is not conflicting much with theory, that predicts actual decrease in TE load in the absence of sex for sufficiently large populations by [Dolgin and Charlesworth](https://dx.doi.org/10.1534%2Fgenetics.106.060434).
 
-Jens and his colleagues have estimated TE loads of McDonald yeast dataset. They found that levels of TE loads were approximately same in sexual yeast over the experiment, but simnifically decreasing in the asexual populations. Huge advantage is that the yeast experiment was in very much controlled environment therefore it should be straightforward to estimate is decline of TE loads in numerically in agreement with the Doligin and Charlesworth's stochastic model.
+Jens and his colleagues have estimated TE loads of McDonald yeast dataset. They found that levels of TE loads were approximately same in sexual yeast over the experiment, but significantly decreasing in the asexual populations. Huge advantage is that the yeast experiment was in very much controlled environment therefore it should be straightforward to estimate is decline of TE loads in numerically in agreement with the Doligin and Charlesworth's stochastic model.
 
 ## Yeast parameters
 
@@ -29,6 +29,8 @@ The modeled decrease is ~6 copies, which is slightly less that what was expected
 Here is number of TE copies of 10 replicates over 990 simulated generations
 
 ![sim_1](figures/sim_2ch_literature_pars.png)
+
+This is also expected because the equilibrium prediction of infinite population is also 0, given the parameters used in simulations.
 
 #### Selection model
 

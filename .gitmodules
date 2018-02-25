@@ -1,0 +1,3 @@
+[submodule "TEAscus"]
+	path = TEAscus
+	url = https://github.com/KamilSJaron/TEAscus

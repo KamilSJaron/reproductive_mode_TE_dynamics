@@ -10,6 +10,13 @@ Assumptions :
 ## Analytical model
 
 - infinite asexual population
+- (?A)sexual equilibrium solution is
+
+```
+N_eq = sqrt( 2(a^2 + (u - v)^2) ) * 2a / 2b
+```
+
+where `N_eq` is number of TEs in equilibrium, `u` is transposition rate, `v` uis excision rate and `a` and `b` are coefficients of the fitness function defined as `w_n = exp( - an - 1/2 bn^2)`, where `w_n` is a fitness of individual carrying `n` transposons.
 
 ## Stochastic simulation model
 
