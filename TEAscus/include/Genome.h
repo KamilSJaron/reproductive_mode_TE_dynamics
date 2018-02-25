@@ -13,7 +13,6 @@
 #define GENOME_H_EDOLGIN_TE
 
 #include "../include/Chromosome.h"
-// #include "../include/Random.h"
 
 #include <vector>
 #include <random>
@@ -69,7 +68,6 @@ public:
 
 private:
 
-	// static Random rand;
 	static std::random_device rd;
 	static std::mt19937 mt;
 	static std::normal_distribution<double> rnorm;

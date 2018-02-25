@@ -13,7 +13,6 @@
 #define POPULATION_H_EDOLGIN_TE
 
 #include "../include/Genome.h"
-#include "../include/Random.h"
 #include <vector>
 
 
@@ -33,7 +32,7 @@ public:
 	double GetVarU(double mean_u) const;
 
 	void Initialize();
-	int SelectVitalIndividual() const;
+	int SelectVitalIndividual();
 	Genome MakeIndividual();
 	void DeleteIndividual(int);
 	Population * SexualReproduction();
@@ -52,7 +51,12 @@ public:
 private:
 	std::vector<Genome> genoVector;
 	int popSize;
-	static Random rand;
+	std::uniform_int_distribution<int> rind;
+	std::uniform_real_distribution<double> runif;
+
+	static std::random_device rd;
+	static std::mt19937 mt;
+
 
 	int getLocusPosition(Locus *) const;
 	/// sexual offpring - fusion of parents, recombination, creation of two complementary offsprings

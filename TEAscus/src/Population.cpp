@@ -11,19 +11,22 @@
 
 #include "../include/Population.h"
 #include "../include/Genome.h"
-#include "../include/Random.h"
 #include <fstream>
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
 #include <algorithm>
 
-Random Population::rand;
+// Random Population::rand;
+std::random_device Population::rd;
+std::mt19937 Population::mt(Population::rd());
 
 Population::Population(int size)
 {
 	popSize = size;
 	genoVector.resize(popSize);
+	rind = std::uniform_int_distribution<int>(0, popSize - 1);
+	runif = std::uniform_real_distribution<double>(0.0,1.0);
 }
 
 Population::~Population()
@@ -143,15 +146,17 @@ void Population::Initialize() {
 	}
 }
 
-int Population::SelectVitalIndividual() const{
+int Population::SelectVitalIndividual(){
 	bool viable = false;
 	double fitness = 0;
 	int ind = -1;
 
 	while (!viable){
-		ind = (int)((rand.Uniform())*(popSize));
+		// int uniform <0; (number of individuals - 1)>
+		ind = rind(mt);
 		fitness = GetIndividual(ind).GetGenomeFitness();
-		if (rand.Uniform() < fitness)
+		// double Uniform <0; 1)
+		if (runif(mt) < fitness)
 			viable = true;
 	}
 	return ind;
