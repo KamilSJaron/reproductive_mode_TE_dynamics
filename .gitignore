@@ -1,8 +1,3 @@
-*.o
-TEAscus/TEAscus
-TEAscus/TEAscus_test
-TEAscus/detailed.txt
 sims
-TEAscus/include/gitversion.h
 figures
 presentation
