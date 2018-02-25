@@ -30,8 +30,6 @@ Here is number of TE copies of 10 replicates over 990 simulated generations
 
 ![sim_1](figures/sim_2ch_literature_pars.png)
 
-This is also expected because the equilibrium prediction of infinite population is also 0, given the parameters used in simulations.
-
 #### Selection model
 
 I used the same function as Dolgin and Charlesworth 2006 (implemented in [get_fitness.R](scripts/get_fitness.R), the function uses two parameters that correspond to decrease of fitness due to individual TE insertions and multiplicative effect given number of TEs present already in genome (epistasis). These parameters were selected so they show ~2% fitness decrease between 50 and 51 TE copies, a standard yeast TE copy number that was used in the experiment for estimation of fitness effects in yeast. Evaluation is in script [calculate_sa_and_sb.R](scripts/calculate_sa_and_sb.R) and the resulting fitness function is shown in following figure, where expected simulation space is marked with vertical lines.
@@ -57,9 +55,9 @@ Simulations 019 and 020 were supposed to explore what are meaningful `sd` but I 
 
 - Check consistency of D&CH equilibrium prediction with my sims
    - my equilibrium sims are predicted to be converge to 0
-   - I should try to take predicted equilibrium (for instance Neq = 50, u=10^-6, v=10^-5, a = 0.01, b=2.828*10^-6) and sim it, either it will drift around equil (good) or go somewhere (bad). If (bad) -> Try the same with original D&Ch sim.
+   - I should try to take predicted equilibrium (for instance Neq = 50, u=10^-4, v=10^-6, a = 10^-5, b=1.2*10^-6) and sim it, either it will drift around equil (good) or go somewhere (bad). If (bad) -> Try the same with original D&Ch sim.
    - check consistency with reality - D&CH model can not explain lab measured variables. Is it problem of model or measured variables? Could different parameterization of selection model lead to more consistent results?
-- adaptive transposable rates
+- (done) adaptive transposable rates
    - make a switch for adaptive transposable rates (allow this to be turned off)
    - reevaluate what `sd` is reasonable.
    - simulate everything needed

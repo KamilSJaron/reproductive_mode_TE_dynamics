@@ -10,13 +10,13 @@ Assumptions :
 ## Analytical model
 
 - infinite asexual population
-- (?A)sexual equilibrium solution is
+- Sexual equilibrium solution is
 
 ```
-N_eq = sqrt( 2(a^2 + (u - v)^2) ) * 2a / 2b
+n_eq = (sqrt(2*(a^2) + (u - v)^2) - 2*a) / 2b
 ```
 
-where `N_eq` is number of TEs in equilibrium, `u` is transposition rate, `v` uis excision rate and `a` and `b` are coefficients of the fitness function defined as `w_n = exp( - an - 1/2 bn^2)`, where `w_n` is a fitness of individual carrying `n` transposons.
+where `n_eq` is number of TEs in equilibrium, `u` is transposition rate, `v` uis excision rate and `a` and `b` are coefficients of the fitness function defined as `w_n = exp( - an - 1/2 bn^2)`, where `w_n` is a fitness of individual carrying `n` transposons.
 
 ## Stochastic simulation model
 
@@ -24,6 +24,8 @@ where `N_eq` is number of TEs in equilibrium, `u` is transposition rate, `v` uis
 - genome is made of 2 chromosomes and each of them is able to carry 200 TEs.
 - new TEs insert is placed to random unoccupied place in genome
 - fitness `w` of individual with `n` elements is : `w_n = exp( - an - 1/2 bn^2)` where `a` and `b` are constant selection coefficient
+
+-> approximate consistency is tested in simulation 019 (TODO verify the sim)
 
 ### parameters
 
@@ -41,3 +43,5 @@ equals to initial number of transposons.
 #### scaled down
 
 for computational reasons. Demonstrated that does not matter (maybe we should re-do the demonstration).
+
+-> consistency with scaling is tested in sims (TODO add sims)
