@@ -1,4 +1,4 @@
-CXXFLAGS = -std=c++11 -O3 
+CXXFLAGS = -std=c++11 -O3 -g -Wall -pedantic
 #-g -Wall -pedantic
 
 PRG = TEAscus

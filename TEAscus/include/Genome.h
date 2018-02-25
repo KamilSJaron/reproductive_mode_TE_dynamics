@@ -28,7 +28,7 @@ public:
 	static int GenerateNumberOfChiasmas(int chromosome);
 	static int GenerateGapPositionOnChromosome();
 	static void GenerateChromosomeAndPosition(int * ch, int * p);
-	static bool GenerateTossACoin();
+	static int GenerateTossACoin();
 
 	unsigned int GetGenomeTECount() const;
 	unsigned int GetGenomeTECountAffectingFitness() const;
@@ -73,7 +73,7 @@ private:
 	static std::normal_distribution<double> rnorm;
 	static std::uniform_int_distribution<int> rgap;
 	static std::uniform_int_distribution<int> rpos;
-	static std::uniform_int_distribution<bool> toss;
+	static std::uniform_int_distribution<int> toss;
 	static std::uniform_int_distribution<int> rch;
 
 	std::vector<Chromosome> chromoVector;

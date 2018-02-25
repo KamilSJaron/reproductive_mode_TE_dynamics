@@ -113,7 +113,7 @@ double Population::GetVarU(double mean_u) const {
 }
 
 void Population::Initialize() {
-	int rolled_position = 0, rolled_chromosome = 0, rolled_position_on_ch = 0;
+	int rolled_chromosome = 0, rolled_position_on_ch = 0;
 	int totalLength = Genome::chromLength * Genome::numberOfChromosomes;
 
 	if (Genome::initialTE > totalLength) {
@@ -640,7 +640,7 @@ void Population::generateTwoOspring(int ind,
 	std::vector<int> chiasmas;
 	int chiasma = 0, num_of_chiasmas = 0;
 	int last_roll = -1;
-	bool crossing = Genome::GenerateTossACoin();
+	int crossing = Genome::GenerateTossACoin();
 	/// crossing == true --> 	offspring1 -\/- parent2 &
 	///							offspring2 -/\- parent1
 	/// crossing == false --> 	offspring1 ---- parent1 &
@@ -681,7 +681,7 @@ void Population::generateTwoOspring(int ind,
 
 			/// TODO resolve how to make 4, not 2 gametes
 			/// (perhaps a function that will take a reference to new population and basal index to fill)
-			if (crossing) {
+			if (crossing == 1) {
 				/// write parent1 to offspring ind
 				while(pos1 < chiasma and pos1 != 0){
 					newPopulation->GetIndividual(ind).GetChromosome(ch).Insert(loc_par1->GetTransposon());
@@ -709,7 +709,7 @@ void Population::generateTwoOspring(int ind,
 				}
 			}
 
-			crossing = !crossing;
+			crossing = 1 - crossing;
 		}
 
 		if (crossing) {

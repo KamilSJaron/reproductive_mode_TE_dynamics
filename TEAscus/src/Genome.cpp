@@ -34,7 +34,7 @@ std::normal_distribution<double> Genome::rnorm(1, TE_MUTATION_SD);
 std::uniform_int_distribution<int> Genome::rgap(0, CHROM_LENGTH);
 std::uniform_int_distribution<int> Genome::rpos(1, CHROM_LENGTH);
 std::uniform_int_distribution<int> Genome::rch(1, CHROMOSOMES);
-std::uniform_int_distribution<bool> Genome::toss(0,1);
+std::uniform_int_distribution<int> Genome::toss(0,1);
 
 const int Genome::numberOfChromosomes = CHROMOSOMES;
 const int Genome::chromLength = CHROM_LENGTH;
@@ -127,7 +127,7 @@ void Genome::GenerateChromosomeAndPosition(int * ch, int * p){
 	*p = rpos(mt);
 }
 
-bool Genome::GenerateTossACoin(){
+int Genome::GenerateTossACoin(){
 	return(toss(mt));
 	// if (rand.Uniform() < 0.5)
 	// 	return(true);
