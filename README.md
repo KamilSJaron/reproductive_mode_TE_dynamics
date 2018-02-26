@@ -20,7 +20,7 @@ In the empirical data, the asexuals reduce TEs by ca 17.5 (for all) - 23.5% (ca 
 
 ### Simulations
 
-The first draft simulation took naively all the parameters as mentioned above. Selection model is slightly less trivial than the other parameters, therefore it's described in section bellow.
+The first draft simulation took naively all the parameters as mentioned above ([simulation 004](sims/004_basic_asex). Selection model is slightly less trivial than the other parameters, therefore it's described in section bellow.
 
 The only obvious discrepancy to real asexual yeast genome is number of chromosomes, I used 2 instead of 16. I left 200 Te slots per chromosome and modeled diploid genome, therefore there is very big margin in terms of genome space.
 
@@ -28,7 +28,23 @@ The modeled decrease is ~6 copies, which is slightly less that what was expected
 
 Here is number of TE copies of 10 replicates over 990 simulated generations
 
-![sim_1](figures/sim_2ch_literature_pars.png)
+![sim_1](figures/004_basic_asex.png)
+
+However, such model is dependent only wish selection since the transposition rate is the same as excision rate. That is confirmed also by a simulation with sex every 90 generations ([simulation 003](sims/003_basic_asex), because in that simulation loss of transposable elements is much faster
+
+![sim_2](figures/003_basic_sex.png)
+
+Either the model is too simple to capture reality, or the parameters derived from the lab are unrealistic. We expect to find out conditions for which sexual won't lose any TEs over the 990 generations (equilibrium simulation). We were performed a set of simulation where we were incrementally increasing transposition rate (simulations sims/005 - 012). Eventually we found a transposition rate (`u = 0.004`) that generates a simulation where number of TEs oscillates around equilibria ([simulation 013](sims/013_sex_equil)). We use the same parameters for a simulation without sexual reproduction every 90 generations ([simulation 015](sims/015_seq_equil_asex_sim)). Unlike sexual simulation, asexuals were accumulating TEs
+
+![sim_3](figures/asex_sim_sex_equllibrum.png)
+
+, suggesting that the model is unlikely sufficiently complex to capture reality of transposable elements.
+
+There are two things to try further :
+- a model of adaptive transposition rates, if there will be a variation in transposition rates, are they going to evolve differently in different reproduction modes? This is implemented, but not tested. It will require a bit of thinking.
+- capture bias of TE assessment. We are way better in presence absence calls of known reference sites of TEs. Maybe the main difference between sexuals and asexuals is not abundance of TEs but their turnover. For this we need to implement change reported summary.
+
+## Details and thoughts
 
 #### Selection model
 

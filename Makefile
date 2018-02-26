@@ -1,5 +1,5 @@
 # FIGURES = figures/sim_asex_dipl_2ch.png figures/sim_asex_dipl.png figures/sim_sex.png figures/sim_asex.png
-FIGURES := $(patsubst sims/%, figures/%.png,$(wildcard sims/0*))
+FIGURES := $(patsubst sims/%, figures/%.png,$(wildcard sims/0*)) figures/asex_sim_sex_equllibrum.png
 
 .PHONY : all
 all : presentation/asex_TE_accumulation.pdf
@@ -17,6 +17,9 @@ presentation/asex_TE_accumulation.pdf : $(FIGURES) presentation/asex_TE_accumula
 
 figures/%.png : scripts/plot_simulation.R sims/%/detailed.txt
 	Rscript $^ $@
+
+figures/asex_sim_sex_equllibrum.png : scripts/plot_asex_sim_sex_equllibrium.R
+	Rscript $<
 
 .PRECIOUS : sims/%/detailed.txt
 sims/%/detailed.txt : TEAscus/TEAscus sims/%/input.txt
