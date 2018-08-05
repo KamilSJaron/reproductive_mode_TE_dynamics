@@ -19,7 +19,7 @@ png( "figures/asex_sim_sex_equllibrum.png" )
 
 plot(NULL,
     xlim = c(1, max(unlist(sapply(sex_sim, function(x){ x$GEN })))),
-	ylim = c(min(TEs), max(TEs) + 1),
+	ylim = c(0, max(TEs) + 1),
     xlab = 'Generation', ylab = 'mean number of TEs',
     main = 'Asexual simulation using parameters of sexual equilibrium', bty = 'n')
 
