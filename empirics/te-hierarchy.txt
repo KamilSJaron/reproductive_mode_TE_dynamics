@@ -1,0 +1,7 @@
+id	family	order
+TY3_1p	gypsy	LTR
+TY1	copia	LTR
+TY4	copia	LTR
+TY5	copia	LTR
+TY3	gypsy	LTR
+TY2	copia	LTR
