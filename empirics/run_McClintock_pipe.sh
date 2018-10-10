@@ -20,6 +20,6 @@ while read line; do
 #one could add the -i parameter for discarding intermediate files
 
  
-done < samplenames_2
+done < samplenames
 
 printf "****DONE****\n"
