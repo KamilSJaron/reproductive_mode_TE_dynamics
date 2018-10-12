@@ -1,5 +1,7 @@
 from sys import argv
 
+# this script was written by Dan Rice
+
 # Check each read in a fastq file for the presence of a known adaptor sequence and remove the
 # right end of the read and Q-score line from the start of the adaptor seq.
 # Outputs a fastq file with the trimmed reads and a text file with the discarded sequence.
@@ -23,7 +25,7 @@ discardfile = open(discard_fn, 'w')
 line_n = 0
 for line in infile:
     # Sequence line
-    if line_n % 4 == 1:       
+    if line_n % 4 == 1:
         # Look for the adaptor sequence
         search_loc = line.find(search_seq)
         if search_loc > 0:
@@ -35,7 +37,7 @@ for line in infile:
             newline = line
             flag = False
 
-    # Quality score line    
+    # Quality score line
     elif line_n % 4 == 3:
         # If the previous sequence line had the adaptor seq, trim the quality scores
         if flag:

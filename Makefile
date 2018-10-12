@@ -14,12 +14,26 @@ REP := 10
 endif
 
 
+## make help	: print this help
+.PHONY : help
+help : Makefile
+	@sed -n 's/^##//p' $<
+
+## make empirical	: print how empirical data were analyzed (in markdown)
+.PHONY : empirical
+empirical :
+	@echo "All the scripts are in the directory empirics\n"
+	@cat empirics/README.md
+
+
 # .PHONY : all
 # all : presentation/asex_TE_accumulation.pdf
 
+## make sims	: run all the simulations (~50 simulations)
 .PHONY : sims
 sims : $(DOLGIN_SIMS) $(MEIOTIC_TRANSP_SIMS) $(MODIFIER_SIMS)
 
+## make rebuild	: rebuild the simulator
 .PHONY : rebuild
 rebuild :
 	cd TEAscus && $(MAKE)
@@ -52,5 +66,3 @@ sims/%/asex_detailed.txt : TEAscus/TEAscus sims/%/input.txt
 # build only if it does not exist, otherwise use what is there
 TEAscus/TEAscus :
 	cd TEAscus && $(MAKE)
-
-print-%  : ; @echo $* = $($*)
