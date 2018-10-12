@@ -3,7 +3,8 @@ read_input <- function(filename){
     file <- file[file != ""] # erase empty lines
 
     values <- as.numeric(file)
-    dirname <- strsplit(filename, '/')[[1]][2]
+    path <- strsplit(filename, '/')[[1]]
+    dirname <- path[length(path) - 1]
 
 # to have backward compatibility for simulaiton wo general modifier
     if(length(file) == 7){
@@ -18,13 +19,13 @@ read_input <- function(filename){
     } else {
         data.frame(dir = dirname,
                    popSize = values[1],
-                   transp_mitosis = values[2],
-                   transp_meiosis = values[3],
-                   exision_base = values[4],
-                   exision_modified = values[5],
-                   selection_a = values[6],
-                   selection_b = values[7],
-                   initial_TEs = values[8],
-                   initial_freq_of_modifier = values[9])
+                   initial_freq_of_modifier = values[2],
+                   transp_mitosis = values[3],
+                   transp_meiosis = values[4],
+                   exision_base = values[5],
+                   exision_modified = values[6],
+                   selection_a = values[7],
+                   selection_b = values[8],
+                   initial_TEs = values[9])
     }
 }
