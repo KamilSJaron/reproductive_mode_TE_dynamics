@@ -255,7 +255,7 @@ empiriplot2 <- ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$gen
   geom_smooth(method=lm, se=T, fill="lightgrey") + 
   scale_color_manual(values=c('skyblue4', 'orangered2')) +
   labs(x="generation", y="corrected full-length TE insertions") +
-  coord_cartesian(ylim=c(-25,10)) +
+  coord_cartesian(ylim=c(-60,10)) +
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none")+
