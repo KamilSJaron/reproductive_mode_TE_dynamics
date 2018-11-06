@@ -254,8 +254,8 @@ empiriplot2 <- ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$gen
   #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
   geom_smooth(method=lm, se=T, fill="lightgrey") + 
   scale_color_manual(values=c('skyblue4', 'orangered2')) +
-  labs(x="generation", y="corrected full-length TE insertions") +
-  coord_cartesian(ylim=c(-60,10)) +
+  labs(x="generation", y="empirical full-length TE count (residuals)") +
+  coord_cartesian(ylim=c(-40,12)) +
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none")+
@@ -264,11 +264,21 @@ empiriplot2 <- ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$gen
 #effect size
 #get slope for effect size
 m2 <- lm(counts~cov, data=TEevidence_fullTE_counts[TEevidence_fullTE_counts$mode=="asex", ])
-summary(lm(resid(m2)~generation, data=TEevidence_fullTE_counts[TEevidence_fullTE_counts$mode=="asex", ]))
+m3 <- (lm(resid(m2)~generation, data=TEevidence_fullTE_counts[TEevidence_fullTE_counts$mode=="asex", ]))
+summary(m3)
 #slope: -0.008873 // *1000 generations = -8.87
 
 #sex not necessary, because we know it must be zero because of stats
 
+#this is to get the CI values for the TE losses
+#confint(m3, level=0.95)
+#CI: -0.002883387 * 1000 = 2.88 -> -3 copies
+#CI: -0.0148634 = 14.8 -> -15 copies
+
+#this is specifically for object inheriting form "lm"
+predict.lm(m3, interval = 'confidence')
+
+?predict.lm
 
 
 #################################################
@@ -327,7 +337,7 @@ grid.arrange(covinsplot, covplot, nrow = 1, widths=2:1)
 #plotting simulations#
 ######################
 
-TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims.csv", sep="\t", header=T)
+TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims2.csv", sep="\t", header=T)
 
 
 simplot <- ggplot(TEsims, aes(TEsims$generation, TEsims$tebeforesex, color=TEsims$reprmode, group=interaction(reprmode,replicate))) +
@@ -352,7 +362,7 @@ simplot2 <- ggplot(TEsims, aes(TEsims$generation, TEsims$tebeforesex, color=TEsi
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none") +
   theme(plot.margin=unit(c(40,20,10,10), "pt"))
-
+?geom_line
 ggplot(TEsims, aes(TEsims$generation, TEsims$modfreq, color=TEsims$reprmode, group=interaction(reprmode,replicate))) +
   #geom_point(size=0.5, alpha=0.8) +
   geom_line(size=0.5, alpha=0.8) +
