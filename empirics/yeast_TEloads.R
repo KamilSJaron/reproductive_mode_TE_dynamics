@@ -270,16 +270,6 @@ summary(m3)
 
 #sex not necessary, because we know it must be zero because of stats
 
-#this is to get the CI values for the TE losses
-#confint(m3, level=0.95)
-#CI: -0.002883387 * 1000 = 2.88 -> -3 copies
-#CI: -0.0148634 = 14.8 -> -15 copies
-
-#this is specifically for object inheriting form "lm"
-predict.lm(m3, interval = 'confidence')
-
-?predict.lm
-
 
 #################################################
 # sample cov from bam files used for TEs bergman#
