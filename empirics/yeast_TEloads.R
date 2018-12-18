@@ -144,6 +144,31 @@ TEevidence_fullTE <- subset(TEevidence, type=="full")
 
 
 
+#################################################
+# sample cov from bam files used for TEs bergman#
+#################################################
+
+SampleCovMedian = read.table(file="~/Dropbox/UNIL/yeast/mcclintock/PAIRED/cov.all.median", sep=" ", header=T)
+
+#add repr mode info in new column
+SampleCovMedian$mode <- ifelse(grepl(match_asex,SampleCovMedian$strain), "asex",
+                               ifelse(grepl(match_sex,SampleCovMedian$strain), "sex","Other"))
+SampleCovMedian$mode <- as.factor(SampleCovMedian$mode)
+str(SampleCovMedian)
+
+covplot <- ggplot(SampleCovMedian, aes(SampleCovMedian$mode, SampleCovMedian$cov, fill=SampleCovMedian$mode)) + 
+  geom_boxplot(alpha=0.8) +
+  scale_fill_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="median read coverage per sample") +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none") +
+  theme(plot.margin=unit(c(10,20,10,10), "pt"))
+
+#remove coverage 0 sample
+SampleCovMedian <-subset(SampleCovMedian, subset=!(strain=="3D"&generation=="90"))
+
+
 
 ###########
 #TE counts#
@@ -207,6 +232,15 @@ ggplot(TEevidence_counts, aes(TEevidence_counts$generation, TEevidence_counts$co
 #anovsF3(TEevidence_counts$counts, TEevidence_counts$cov, TEevidence_counts$generation, TEevidence_counts$mode)
 #[1] 0.0002 0.0034 0.0040 0.0008
 
+#how many TE could be detected at the starting point (and min max)?
+summary(TEevidence_counts$counts)
+summary(TEevidence_counts$counts[TEevidence_counts$mode=="asex"])
+summary(TEevidence_counts$counts[TEevidence_counts$mode=="sex"])
+summary(TEevidence_counts$counts[TEevidence_counts$mode=="asex" & TEevidence_counts$generation=="990"])
+summary(TEevidence_counts$counts[TEevidence_counts$mode=="sex" & TEevidence_counts$generation=="990"])
+summary(TEevidence_counts$counts[TEevidence_counts$generation=="0"])
+
+
 #we know coverage has an effect, so we only plot residuals (stats ok though)
 TEevidence_counts$resid <- resid(lm(counts~cov, data=TEevidence_counts))
 
@@ -246,6 +280,16 @@ ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$generation, TEevid
 #[1] 0.0002 0.0064 0.0334 0.0008 (with +-500bp per TE)
 #dev.off()
 
+
+#how many TE could be detected at the starting point (and min max)?
+summary(TEevidence_fullTE_counts$counts)
+summary(TEevidence_fullTE_counts$counts[TEevidence_fullTE_counts$mode=="asex"])
+summary(TEevidence_fullTE_counts$counts[TEevidence_fullTE_counts$mode=="sex"])
+summary(TEevidence_fullTE_counts$counts[TEevidence_fullTE_counts$mode=="asex" & TEevidence_fullTE_counts$generation=="990"])
+summary(TEevidence_fullTE_counts$counts[TEevidence_fullTE_counts$mode=="sex" & TEevidence_fullTE_counts$generation=="990"])
+summary(TEevidence_fullTE_counts$counts[TEevidence_fullTE_counts$generation=="0"])
+
+
 #we know coverage has an effect, so we only plot residuals (stats ok though)
 TEevidence_fullTE_counts$resid <- resid(lm(counts~cov, data=TEevidence_fullTE_counts))
 
@@ -268,32 +312,7 @@ m3 <- (lm(resid(m2)~generation, data=TEevidence_fullTE_counts[TEevidence_fullTE_
 summary(m3)
 #slope: -0.008873 // *1000 generations = -8.87
 
-#sex not necessary, because we know it must be zero because of stats
 
-
-#################################################
-# sample cov from bam files used for TEs bergman#
-#################################################
-
-SampleCovMedian = read.table(file="~/Dropbox/UNIL/yeast/mcclintock/PAIRED/cov.all.median", sep=" ", header=T)
-
-#add repr mode info in new column
-SampleCovMedian$mode <- ifelse(grepl(match_asex,SampleCovMedian$strain), "asex",
-                               ifelse(grepl(match_sex,SampleCovMedian$strain), "sex","Other"))
-SampleCovMedian$mode <- as.factor(SampleCovMedian$mode)
-str(SampleCovMedian)
-
-covplot <- ggplot(SampleCovMedian, aes(SampleCovMedian$mode, SampleCovMedian$cov, fill=SampleCovMedian$mode)) + 
-  geom_boxplot(alpha=0.8) +
-  scale_fill_manual(values=c('skyblue4', 'orangered2')) +
-  labs(x="generation", y="median read coverage per sample") +
-  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
-  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
-  theme(legend.position="none") +
-  theme(plot.margin=unit(c(10,20,10,10), "pt"))
-
-#remove coverage 0 sample
-SampleCovMedian <-subset(SampleCovMedian, subset=!(strain=="3D"&generation=="90"))
 
 
 ###########################
@@ -314,20 +333,35 @@ covinsplot <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$co
   #scale_x_continuous(trans=log10_trans()) +
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
-  theme(legend.position="none") +
-  theme(plot.margin=unit(c(10,20,10,10), "pt"))
+  theme(legend.position="none") #+
+#theme(plot.margin=unit(c(10,20,10,10), "pt"))
 
-ggarrange(covinsplot, covplot, 
+
+#through generations
+
+covplot2 <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$generation, SampleCovTEevidencecounts$cov, color=SampleCovTEevidencecounts$mode, group=SampleCovTEevidencecounts$mode)) + geom_point(size=3, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="median read coverage per sample") +
+  #coord_cartesian(ylim=c(-40,12)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none") #+
+#theme(plot.margin=unit(c(40,20,10,10), "pt"))
+
+
+ggarrange(covinsplot, covplot2, 
           labels = c("A", "B"),
-          ncol = 2, nrow = 1, widths = c(2, 1))
+          ncol = 1, nrow = 2, widths = c(2, 1))
 
-grid.arrange(covinsplot, covplot, nrow = 1, widths=2:1)
 
 ######################
 #plotting simulations#
 ######################
 
-TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims2.csv", sep="\t", header=T)
+#TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims2.csv", sep="\t", header=T)
+TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims.csv", sep="\t", header=T)
 
 
 simplot <- ggplot(TEsims, aes(TEsims$generation, TEsims$tebeforesex, color=TEsims$reprmode, group=interaction(reprmode,replicate))) +
@@ -352,7 +386,9 @@ simplot2 <- ggplot(TEsims, aes(TEsims$generation, TEsims$tebeforesex, color=TEsi
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none") +
   theme(plot.margin=unit(c(40,20,10,10), "pt"))
-?geom_line
+
+
+#freq of modifier in populations
 ggplot(TEsims, aes(TEsims$generation, TEsims$modfreq, color=TEsims$reprmode, group=interaction(reprmode,replicate))) +
   #geom_point(size=0.5, alpha=0.8) +
   geom_line(size=0.5, alpha=0.8) +
@@ -377,6 +413,10 @@ ggarrange(empiriplot1, simplot2,
           labels = c("A", "B"),
           ncol = 2, nrow = 1)
 ggarrange(empiriplot2, simplot2, 
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
+ggarrange(covinsplot, covplot2, 
           labels = c("A", "B"),
           ncol = 2, nrow = 1)
 
