@@ -4,7 +4,7 @@ source('scripts/read_TEs_per_decade.R')
 tab_file <- 'sims/01_Dolgin_and_Charlesworth_model_table.tsv'
 
 common_sim_dir <- 'sims/01_Dolgin_and_Charlesworth_model'
-sims_dirs <- dir(common_sim_dir)
+sims_dirs <- dir(common_sim_dir)[1:37]
 sims_files <- paste(common_sim_dir, sims_dirs, rep(c('sex_TEs_per_decade_2.tsv','asex_TEs_per_decade_2.tsv'), each = length(sims_dirs)), sep = '/')
 input_files <- paste(common_sim_dir, sims_dirs, 'input.txt', sep = '/')
 
@@ -55,5 +55,8 @@ for (i in 1:nrow(sim_table)){
 
 sim_table[,c('sex_lost_TEs', 'asex_lost_TEs')] <- round(sim_table[,c('sex_lost_TEs', 'asex_lost_TEs')], 1)
 sim_table[,c('sex_lost_TEs_se', 'asex_lost_TEs_se')] <- round(sim_table[,c('sex_lost_TEs_se', 'asex_lost_TEs_se')], 2)
+
+sim_table <- sim_table[with(sim_table, order(selection_b, selection_a, exision_rate, transposition_rate)),]
+sim_table <- sim_table[c(31, 1:30, 32:36),]
 
 write.table(sim_table, tab_file, quote = F, sep = '\t', row.names = F)

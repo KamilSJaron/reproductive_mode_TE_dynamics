@@ -6,6 +6,7 @@ source('scripts/read_input.R')
 source('scripts/read_TEs_per_decade.R')
 
 common_sim_dir <- 'sims/03_general_modifier_of_exision_rates'
+tab_file <- c('sims/03_general_modifier_of_exision_rates_table.tsv')
 sims_dirs <- dir(common_sim_dir)
 sims_files <- paste(common_sim_dir, sims_dirs, rep(c('sex_TEs_per_decade_2.tsv','asex_TEs_per_decade_2.tsv'), each = length(sims_dirs)), sep = '/')
 input_files <- paste(common_sim_dir, sims_dirs, 'input.txt', sep = '/')
@@ -66,19 +67,40 @@ for (input_index in 1:number_of_sims){
      dev.off()
 }
 
-input_table$sex_slope <- NA
-input_table$sex_lost_TEs <- NA
-input_table$asex_slope <- NA
-input_table$asex_lost_TEs <- NA
+sim_table <- unique(input_table[,c(2,3,4)])
+# sim_table$sex_slope <- NA
+sim_table$sex_lost_TEs <- NA
+sim_table$sex_lost_TEs_se <- NA
+# sim_table$asex_slope <- NA
+sim_table$asex_lost_TEs <- NA
+sim_table$asex_lost_TEs_se <- NA
+
+extract_col <- function(sublist, column){
+  unlist(lapply(sublist, function(y){ as.vector(sapply(y, function(x){ x[,column] })) } ))
+}
 
 get_te_loss <- function(index){
-     generations <- as.vector(sapply(sims[[index]], function(x){ x[,1] }))
-     TEs <- as.vector(sapply(sims[[index]], function(x){ x[,3] }))
-     TE_mod <- lm(TEs ~ generations)
-     return(c(TE_mod$coefficients[2], 50 - predict(TE_mod, data.frame(generations = 990))))
+     generations <- extract_col(sims[index], 1)
+     lost_TEs <- 50 - extract_col(sims[index], 3)
+     TE_mod <- lm(lost_TEs ~ generations)
+     prediction <- predict(TE_mod, data.frame(generations = 990), se.fit = T)
+     # TE_mod$coefficients[2] - slope
+     return(c(prediction$fit, prediction$se.fit))
 }
 
-for (i in 1:nrow(input_table)){
-     input_table[i, c('sex_slope', 'sex_lost_TEs')] <- get_te_loss(i)
-     input_table[i, c('asex_slope', 'asex_lost_TEs')] <- get_te_loss(i + number_of_sims)
+for (i in 1:nrow(sim_table)){
+
+     indexes <- which(apply(input_table[,2:4], 1, function(x){ all(x == sim_table[i,1:3])}))
+
+     sim_table[i, c('sex_lost_TEs', 'sex_lost_TEs_se')] <- get_te_loss(indexes)
+     sim_table[i, c('asex_lost_TEs', 'asex_lost_TEs_se')] <- get_te_loss(indexes + number_of_sims)
 }
+
+sim_table[,c('sex_lost_TEs', 'asex_lost_TEs')] <- round(sim_table[,c('sex_lost_TEs', 'asex_lost_TEs')], 1)
+sim_table[,c('sex_lost_TEs_se', 'asex_lost_TEs_se')] <- round(sim_table[,c('sex_lost_TEs_se', 'asex_lost_TEs_se')], 2)
+
+table_to_save <- sim_table[
+  with(sim_table, order(init_f, selection_b, selection_a)),
+]
+
+write.table(table_to_save, tab_file, quote = F, sep = '\t', row.names = F)
