@@ -326,7 +326,7 @@ SampleCovFullTEcounts <- merge(SampleCovMedian,TEevidence_fullTE_counts,by=c("st
 #[1] 2e-04 5e-03 2e-04
 
 shapiro.test(SampleCovTEevidencecounts$counts)
-wilcox.test(SampleCovTEevidencecounts$counts,SampleCovFullTEcounts$cov)
+wilcox.test(SampleCovTEevidencecounts$counts,SampleCovFullTEcounts$cov, paired = T)
 
 dev.off()
 
