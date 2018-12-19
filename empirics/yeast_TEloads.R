@@ -325,6 +325,10 @@ SampleCovFullTEcounts <- merge(SampleCovMedian,TEevidence_fullTE_counts,by=c("st
 #anovsF2(SampleCovTEevidencecounts$counts, SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$mode)
 #[1] 2e-04 5e-03 2e-04
 
+shapiro.test(SampleCovTEevidencecounts$counts)
+wilcox.test(SampleCovTEevidencecounts$counts,SampleCovFullTEcounts$cov)
+
+dev.off()
 
 covinsplot <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$counts)) + geom_point(size=3, alpha=0.8, colour="grey30") +
   geom_smooth(method="nls",formula=y~1+Vmax*(1-exp(-x/tau)),method.args = list(start=c(tau=1,Vmax=2)), se=F, colour="grey30") +
@@ -349,6 +353,10 @@ covplot2 <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$gene
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none") #+
 #theme(plot.margin=unit(c(40,20,10,10), "pt"))
+
+
+#anovsF2(SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$generation, SampleCovTEevidencecounts$mode)
+#[1] 0.1020 0.0012 0.5776
 
 
 ggarrange(covinsplot, covplot2, 
