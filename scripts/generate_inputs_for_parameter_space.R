@@ -8,6 +8,7 @@ sim_tab <- merge(merge(merge(data.frame(transposition_rates = transposition_rate
                              data.frame(selection_a = selection_a)),
                              data.frame(selection_b = selection_b))
 
+# Stupid me, I duplicated one sim
 sim_tab <- sim_tab[c(12, 1:11, 12:36),]
 common_dir <- 'sims/01_Dolgin_and_Charlesworth_model'
 
