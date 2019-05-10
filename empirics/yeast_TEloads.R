@@ -108,6 +108,9 @@ round((1-(mean(TECov$cov[TECov$mode=="asex" & TECov$generation=="990"]) / mean(T
 #here, only direct evidence for presence // and with the artificial merged and split 20bases removed from each read "paired" reads:
 TEevidence = read.table(file="~/Dropbox/UNIL/yeast/mcclintock/PAIRED/collected_nonredundant_results_no_nonab_merged.tbl3", sep="\t", header=T)
 
+#for subsampled mean asex every generation
+#TEevidence = read.table(file="~/Dropbox/UNIL/yeast/mcclintock/subsample/collected_results/collected_nonredundant_results_no_nonab_merged.tbl3", sep="\t", header=T)
+
 #remove 3D-90 because of low coverage
 TEevidence <-subset(TEevidence, subset=!(strain=="3D"&generation=="90"))
 
@@ -128,21 +131,26 @@ TEevidence$size <- TEevidence$endsite-TEevidence$startsite
 #FILTER#
 ########
 #remove everything with lower size then XXX
-TEevidence <- subset(TEevidence, size>=20)
+#TEevidence <- subset(TEevidence, size>=20)
 
 #Assign labels
-TEevidence$type <- ifelse((TEevidence$size>220 & TEevidence$size<420), "soloLTR",
+TEevidence$type <- ifelse((grepl("non-reference", TEevidence$insertion)), "non-ref",
                           ifelse((grepl("TY1", TEevidence$Family) & TEevidence$size>=5425 & TEevidence$size<=6425), "full",
                                  ifelse((grepl("TY2", TEevidence$Family) & TEevidence$size>=5458 & TEevidence$size<=6458), "full",
                                         ifelse((grepl("TY3", TEevidence$Family) & TEevidence$size>=4851 & TEevidence$size<=5851), "full",
                                                ifelse((grepl("TY3_1p", TEevidence$Family) & TEevidence$size>=4905 & TEevidence$size<=5905), "full",
                                                       ifelse((grepl("TY4", TEevidence$Family) & TEevidence$size>=5726 & TEevidence$size<=6726), "full",
-                                                             ifelse((grepl("TY5", TEevidence$Family) & TEevidence$size>=4876 & TEevidence$size<=5876), "full", "other")))))))
+                                                             ifelse((grepl("TY5", TEevidence$Family) & TEevidence$size>=4876 & TEevidence$size<=5876), "full",
+                                                                    ifelse((TEevidence$size>220 & TEevidence$size<420), "soloLTR","other"))))))))
+
+#TEevidence$type2 <- ifelse((grepl("non-reference", TEevidence$insertion)), "non-ref",
+#                           ifelse((grepl("reference", TEevidence$insertion)), "ref","other"))
 
 
 TEevidence_fullTE <- subset(TEevidence, type=="full")
-
-
+TEevidence_fullTE_nonref <- subset(TEevidence, type=="full" |  type=="non-ref")
+TEevidence_nonref <- subset(TEevidence, type=="non-ref")
+TEevidence_ref <- subset(TEevidence, insertion=="reference")
 
 #################################################
 # sample cov from bam files used for TEs bergman#
@@ -155,6 +163,9 @@ SampleCovMedian$mode <- ifelse(grepl(match_asex,SampleCovMedian$strain), "asex",
                                ifelse(grepl(match_sex,SampleCovMedian$strain), "sex","Other"))
 SampleCovMedian$mode <- as.factor(SampleCovMedian$mode)
 str(SampleCovMedian)
+
+summary(SampleCovMedian$cov[SampleCovMedian$mode=="asex"])
+summary(SampleCovMedian$cov[SampleCovMedian$mode=="sex"])
 
 covplot <- ggplot(SampleCovMedian, aes(SampleCovMedian$mode, SampleCovMedian$cov, fill=SampleCovMedian$mode)) + 
   geom_boxplot(alpha=0.8) +
@@ -174,17 +185,23 @@ SampleCovMedian <-subset(SampleCovMedian, subset=!(strain=="3D"&generation=="90"
 #TE counts#
 ###########
 
-#ref-insertions
-
 #sum the TE insertions by strain and generation
 #aggregate(x$Frequency, by=list(Category=x$Category), FUN=sum)
 
 #for all with >=1 program support
 TEevidence_counts <- as.data.frame(aggregate(TEevidence$count, by=list(strain=TEevidence$strain, generation=TEevidence$generation), FUN=sum))
 
+#for all reference TEs
+TEevidence_ref_counts <- as.data.frame(aggregate(TEevidence_ref$count, by=list(strain=TEevidence_ref$strain, generation=TEevidence_ref$generation), FUN=sum))
+
 #solo and full length
 TEevidence_fullTE_counts <- as.data.frame(aggregate(TEevidence_fullTE$count, by=list(strain=TEevidence_fullTE$strain, generation=TEevidence_fullTE$generation), FUN=sum))
-TEevidence_fullTE_Familycounts <- as.data.frame(aggregate(TEevidence_fullTE$count, by=list(family=TEevidence_fullTE$Family), FUN=sum))
+#TEevidence_fullTE_Familycounts <- as.data.frame(aggregate(TEevidence_fullTE$count, by=list(family=TEevidence_fullTE$Family), FUN=sum))
+
+TEevidence_fullTE_nonref_counts <- as.data.frame(aggregate(TEevidence_fullTE_nonref$count, by=list(strain=TEevidence_fullTE_nonref$strain, generation=TEevidence_fullTE_nonref$generation), FUN=sum))
+
+#nonref
+TEevidence_nonref_counts <- as.data.frame(aggregate(TEevidence_nonref$count, by=list(strain=TEevidence_nonref$strain, generation=TEevidence_nonref$generation), FUN=sum))
 
 
 #add repr mode info in new column
@@ -194,22 +211,35 @@ TEevidence_counts$mode <- ifelse(grepl(match_asex,TEevidence_counts$strain), "as
 TEevidence_fullTE_counts$mode <- ifelse(grepl(match_asex,TEevidence_fullTE_counts$strain), "asex",
                                         ifelse(grepl(match_sex,TEevidence_fullTE_counts$strain), "sex","Other"))
 
+TEevidence_fullTE_nonref_counts$mode <- ifelse(grepl(match_asex,TEevidence_fullTE_nonref_counts$strain), "asex",
+                                        ifelse(grepl(match_sex,TEevidence_fullTE_nonref_counts$strain), "sex","Other"))
 
+TEevidence_nonref_counts$mode <- ifelse(grepl(match_asex,TEevidence_nonref_counts$strain), "asex",
+                                               ifelse(grepl(match_sex,TEevidence_nonref_counts$strain), "sex","Other"))
 
+TEevidence_ref_counts$mode <- ifelse(grepl(match_asex,TEevidence_ref_counts$strain), "asex",
+                                        ifelse(grepl(match_sex,TEevidence_ref_counts$strain), "sex","Other"))
 
 #rename header counts
 TEevidence_counts <- rename(TEevidence_counts, c("x"="counts"))
 TEevidence_fullTE_counts <- rename(TEevidence_fullTE_counts, c("x"="counts"))
-
+TEevidence_fullTE_nonref_counts <- rename(TEevidence_fullTE_nonref_counts, c("x"="counts"))
+TEevidence_nonref_counts <- rename(TEevidence_nonref_counts, c("x"="counts"))
+TEevidence_ref_counts <- rename(TEevidence_ref_counts, c("x"="counts"))
 
 #add coverage info
 TEevidence_counts <- merge(SampleCovMedian,TEevidence_counts,by=c("strain","generation","mode" ))
 TEevidence_fullTE_counts <- merge(SampleCovMedian,TEevidence_fullTE_counts,by=c("strain","generation","mode" ))
+TEevidence_fullTE_nonref_counts <- merge(SampleCovMedian,TEevidence_fullTE_nonref_counts,by=c("strain","generation","mode" ))
+TEevidence_nonref_counts <- merge(SampleCovMedian,TEevidence_nonref_counts,by=c("strain","generation","mode" ))
+TEevidence_ref_counts <- merge(SampleCovMedian,TEevidence_ref_counts,by=c("strain","generation","mode" ))
 
 #convert as factor
 TEevidence_counts$mode <- as.factor(TEevidence_counts$mode)
 TEevidence_fullTE_counts$mode <- as.factor(TEevidence_fullTE_counts$mode)
-
+TEevidence_fullTE_nonref_counts$mode <- as.factor(TEevidence_fullTE_nonref_counts$mode)
+TEevidence_nonref_counts$mode <- as.factor(TEevidence_nonref_counts$mode)
+TEevidence_ref_counts$mode <- as.factor(TEevidence_ref_counts$mode)
 
 
 ###############
@@ -222,7 +252,7 @@ ggplot(TEevidence_counts, aes(TEevidence_counts$generation, TEevidence_counts$co
   #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 6), size = 1) +
   geom_smooth(method=lm, se=T, fill="lightgrey") + 
   scale_color_manual(values=c('skyblue4', 'orangered2')) +
-  labs(x="generation", y="count ref and nonref insertions") +
+  labs(x="generation", y="count of all reference and non-reference insertions") +
   #coord_cartesian(ylim=c(0,500)) +
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
@@ -230,7 +260,8 @@ ggplot(TEevidence_counts, aes(TEevidence_counts$generation, TEevidence_counts$co
 
 #stats
 #anovsF3(TEevidence_counts$counts, TEevidence_counts$cov, TEevidence_counts$generation, TEevidence_counts$mode)
-#[1] 0.0002 0.0034 0.0040 0.0008
+#including all TEs
+#0.0002 0.0086 0.0402 0.0064
 
 #how many TE could be detected at the starting point (and min max)?
 summary(TEevidence_counts$counts)
@@ -248,7 +279,7 @@ ggplot(TEevidence_counts, aes(TEevidence_counts$generation, TEevidence_counts$re
   #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 6), size = 1) +
   geom_smooth(method=lm, se=T, fill="lightgrey") + 
   scale_color_manual(values=c('skyblue4', 'orangered2')) +
-  labs(x="generation", y="resid counts~cov ref and nonref insertions") +
+  labs(x="generation", y="count of all ref and non-ref insertions (residuals)") +
   #coord_cartesian(ylim=c(0,500)) +
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
@@ -259,6 +290,7 @@ ggplot(TEevidence_counts, aes(TEevidence_counts$generation, TEevidence_counts$re
 m2 <- lm(counts~cov, data=TEevidence_counts[TEevidence_counts$mode=="asex", ])
 summary(lm(resid(m2)~generation, data=TEevidence_counts[TEevidence_counts$mode=="asex", ]))
 #slope: -0.11462 // *1000 generations = -114.6
+#slope: -0.12099 // *1000 generations = -120.9
 
 
 ###########################################
@@ -274,11 +306,37 @@ ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$generation, TEevid
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none")
 
+subsampleFULL <- ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$generation, TEevidence_fullTE_counts$counts, color=TEevidence_fullTE_counts$mode, group=TEevidence_fullTE_counts$mode)) + geom_point(size=4, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="empirical full-length TE count") +
+  coord_cartesian(ylim=c(0,50)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")
+#slopes for subsampling
+#mSUB <- (lm(counts~generation, data=TEevidence_fullTE_counts[TEevidence_fullTE_counts$mode=="asex", ]))
+#summary(m3)
+#-0.01239 * 1000 generations = -12.4
 
 #stats
 #anovsF3(TEevidence_fullTE_counts$counts, TEevidence_fullTE_counts$cov, TEevidence_fullTE_counts$generation, TEevidence_fullTE_counts$mode)
-#[1] 0.0002 0.0064 0.0334 0.0008 (with +-500bp per TE)
-#dev.off()
+#[1] 0.0002 0.0064 0.0334 0.0008 (with +-200bp per TE)
+#for subsampling
+#anovsF2(TEevidence_fullTE_counts$counts, TEevidence_fullTE_counts$generation, TEevidence_fullTE_counts$mode)
+#[1] 0.0124 0.3020 0.0040 (for +-200 bp per TE)
+
+#Full and non-ref TE counts both
+ggplot(TEevidence_fullTE_nonref_counts, aes(TEevidence_fullTE_nonref_counts$generation, TEevidence_fullTE_nonref_counts$counts, color=TEevidence_fullTE_nonref_counts$mode, group=TEevidence_fullTE_nonref_counts$mode)) + geom_point(size=4, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="full TE count ref and non-ref insertions") +
+  #coord_cartesian(ylim=c(0,50)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")
 
 
 #how many TE could be detected at the starting point (and min max)?
@@ -292,6 +350,8 @@ summary(TEevidence_fullTE_counts$counts[TEevidence_fullTE_counts$generation=="0"
 
 #we know coverage has an effect, so we only plot residuals (stats ok though)
 TEevidence_fullTE_counts$resid <- resid(lm(counts~cov, data=TEevidence_fullTE_counts))
+TEevidence_fullTE_nonref_counts$resid <- resid(lm(counts~cov, data=TEevidence_fullTE_nonref_counts))
+
 
 #full TE all insertions resid (refins+nonrefins)
 empiriplot2 <- ggplot(TEevidence_fullTE_counts, aes(TEevidence_fullTE_counts$generation, TEevidence_fullTE_counts$resid, color=TEevidence_fullTE_counts$mode, group=TEevidence_fullTE_counts$mode)) + geom_point(size=3, alpha=0.8) +
@@ -313,6 +373,121 @@ summary(m3)
 #slope: -0.008873 // *1000 generations = -8.87
 
 
+#sex not necessary, because we know it must be zero because of stats
+
+#this is to get the CI values for the TE losses
+#confint(m3, level=0.95)
+#CI: -0.002883387 * 1000 = 2.88 -> -3 copies
+#CI: -0.0148634 = 14.8 -> -15 copies
+
+#this is specifically for object inheriting form "lm"
+predict.lm(m3, interval = 'confidence')
+predict.lm(m3, interval = 'confidence', se.fit = T)
+?predict.lm
+
+#Full and non-ref TE counts both residuals
+ggplot(TEevidence_fullTE_nonref_counts, aes(TEevidence_fullTE_nonref_counts$generation, TEevidence_fullTE_nonref_counts$resid, color=TEevidence_fullTE_nonref_counts$mode, group=TEevidence_fullTE_nonref_counts$mode)) + geom_point(size=3, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="empirical full-length TE count (residuals)") +
+  #coord_cartesian(ylim=c(-40,12)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")+
+  theme(plot.margin=unit(c(40,20,10,10), "pt"))
+
+#effect size
+#get slope for effect size
+m2 <- lm(counts~cov, data=TEevidence_fullTE_nonref_counts[TEevidence_fullTE_nonref_counts$mode=="asex", ])
+m3 <- (lm(resid(m2)~generation, data=TEevidence_fullTE_nonref_counts[TEevidence_fullTE_nonref_counts$mode=="asex", ]))
+summary(m3)
+#slope: -0.02253 // *1000 generations = -22.53
+
+
+#######################
+#TE non-ref insertions#
+#######################
+#exclusively non-ref insertions
+
+ggplot(TEevidence_nonref_counts, aes(TEevidence_nonref_counts$generation, TEevidence_nonref_counts$counts, color=TEevidence_nonref_counts$mode, group=TEevidence_nonref_counts$mode)) + geom_point(size=4, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="count of non-reference insertions") +
+  #coord_cartesian(ylim=c(0,50)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")
+
+#stats
+#anovsF3(TEevidence_nonref_counts$counts, TEevidence_nonref_counts$cov, TEevidence_nonref_counts$generation, TEevidence_nonref_counts$mode)
+#[1] 0.0002 0.3380 0.2714 0.5992 #no difference
+#dev.off()
+
+#we know coverage has an effect, so we only plot residuals (stats ok though)
+TEevidence_nonref_counts$resid <- resid(lm(counts~cov, data=TEevidence_nonref_counts))
+
+
+plot_nonref <- ggplot(TEevidence_nonref_counts, aes(TEevidence_nonref_counts$generation, TEevidence_nonref_counts$resid, color=TEevidence_nonref_counts$mode, group=TEevidence_nonref_counts$mode)) + geom_point(size=3, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="empirical non-reference TE count (residuals)") +
+  coord_cartesian(ylim=c(-100,100)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")+
+  theme(plot.margin=unit(c(40,20,10,10), "pt"))
+
+#effect size
+#get slope for effect size
+m2 <- lm(counts~cov, data=TEevidence_nonref_counts[TEevidence_nonref_counts$mode=="asex", ])
+m3 <- (lm(resid(m2)~generation, data=TEevidence_nonref_counts[TEevidence_nonref_counts$mode=="asex", ]))
+summary(m3)
+#slope: -0.01239 // *1000 generations = -12.39
+
+#######################
+#TE ref insertions#
+#######################
+#exclusively ref insertions
+
+ggplot(TEevidence_ref_counts, aes(TEevidence_ref_counts$generation, TEevidence_ref_counts$counts, color=TEevidence_ref_counts$mode, group=TEevidence_ref_counts$mode)) + geom_point(size=4, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="reference insertions count") +
+  #coord_cartesian(ylim=c(0,50)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")
+
+#stats
+#anovsF3(TEevidence_ref_counts$counts, TEevidence_ref_counts$cov, TEevidence_ref_counts$generation, TEevidence_ref_counts$mode)
+#[1] 0.0002 0.0022 0.0272 0.0002
+#dev.off()
+
+#we know coverage has an effect, so we only plot residuals (stats ok though)
+TEevidence_ref_counts$resid <- resid(lm(counts~cov, data=TEevidence_ref_counts))
+
+
+plot_ref <- ggplot(TEevidence_ref_counts, aes(TEevidence_ref_counts$generation, TEevidence_ref_counts$resid, color=TEevidence_ref_counts$mode, group=TEevidence_ref_counts$mode)) + geom_point(size=3, alpha=0.8) +
+  #geom_smooth(method=lm, se=T, formula = y ~ poly(x, 4), size = 1) +
+  geom_smooth(method=lm, se=T, fill="lightgrey") + 
+  scale_color_manual(values=c('skyblue4', 'orangered2')) +
+  labs(x="generation", y="empirical reference TE count (residuals)") +
+  coord_cartesian(ylim=c(-100,100)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position="none")+
+  theme(plot.margin=unit(c(40,20,10,10), "pt"))
+
+#effect size
+#get slope for effect size
+m2 <- lm(counts~cov, data=TEevidence_ref_counts[TEevidence_ref_counts$mode=="asex", ])
+m3 <- (lm(resid(m2)~generation, data=TEevidence_ref_counts[TEevidence_ref_counts$mode=="asex", ]))
+summary(m3)
+#slope: -0.10729 // *1000 generations = -107.2
 
 
 ###########################
@@ -322,13 +497,13 @@ summary(m3)
 SampleCovTEevidencecounts <- merge(SampleCovMedian,TEevidence_counts,by=c("strain","generation","mode", "cov" ))
 SampleCovFullTEcounts <- merge(SampleCovMedian,TEevidence_fullTE_counts,by=c("strain","generation","mode", "cov" ))
 
+#anovsF2(SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$generation, SampleCovTEevidencecounts$mode)
+#[1] 0.0960 0.0016 0.5880
+
 #anovsF2(SampleCovTEevidencecounts$counts, SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$mode)
 #[1] 2e-04 5e-03 2e-04
-
-shapiro.test(SampleCovTEevidencecounts$counts)
-wilcox.test(SampleCovTEevidencecounts$counts,SampleCovFullTEcounts$cov, paired = T)
-
-dev.off()
+#[1] 0.0002 0.0268 0.0002
+#dev.off()
 
 covinsplot <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$counts)) + geom_point(size=3, alpha=0.8, colour="grey30") +
   geom_smooth(method="nls",formula=y~1+Vmax*(1-exp(-x/tau)),method.args = list(start=c(tau=1,Vmax=2)), se=F, colour="grey30") +
@@ -338,7 +513,8 @@ covinsplot <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$co
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none") #+
-#theme(plot.margin=unit(c(10,20,10,10), "pt"))
+  #theme(plot.margin=unit(c(10,20,10,10), "pt"))
+
 
 
 #through generations
@@ -352,16 +528,7 @@ covplot2 <- ggplot(SampleCovTEevidencecounts, aes(SampleCovTEevidencecounts$gene
   theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none") #+
-#theme(plot.margin=unit(c(40,20,10,10), "pt"))
-
-
-#anovsF2(SampleCovTEevidencecounts$cov, SampleCovTEevidencecounts$generation, SampleCovTEevidencecounts$mode)
-#[1] 0.1020 0.0012 0.5776
-
-
-ggarrange(covinsplot, covplot2, 
-          labels = c("A", "B"),
-          ncol = 1, nrow = 2, widths = c(2, 1))
+  #theme(plot.margin=unit(c(40,20,10,10), "pt"))
 
 
 ######################
@@ -370,6 +537,13 @@ ggarrange(covinsplot, covplot2,
 
 #TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims2.csv", sep="\t", header=T)
 TEsims = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims.csv", sep="\t", header=T)
+TEsimsmei = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims_meiosis.csv", sep="\t", header=T)
+TEsimsmeisex = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims_meiosis_sex.csv", sep="\t", header=T)
+TEsimsmeiasex = read.table(file="~/Dropbox/UNIL/yeast/simulations/overall_sims_meiosis_asex.csv", sep="\t", header=T)
+
+TEsimsmei$meioticrate <- as.factor(TEsimsmei$meioticrate)
+TEsimsmeisex$meioticrate <- as.factor(TEsimsmeisex$meioticrate)
+TEsimsmeiasex$meioticrate <- as.factor(TEsimsmeiasex$meioticrate)
 
 
 simplot <- ggplot(TEsims, aes(TEsims$generation, TEsims$tebeforesex, color=TEsims$reprmode, group=interaction(reprmode,replicate))) +
@@ -395,8 +569,6 @@ simplot2 <- ggplot(TEsims, aes(TEsims$generation, TEsims$tebeforesex, color=TEsi
   theme(legend.position="none") +
   theme(plot.margin=unit(c(40,20,10,10), "pt"))
 
-
-#freq of modifier in populations
 ggplot(TEsims, aes(TEsims$generation, TEsims$modfreq, color=TEsims$reprmode, group=interaction(reprmode,replicate))) +
   #geom_point(size=0.5, alpha=0.8) +
   geom_line(size=0.5, alpha=0.8) +
@@ -407,6 +579,24 @@ ggplot(TEsims, aes(TEsims$generation, TEsims$modfreq, color=TEsims$reprmode, gro
   theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
   theme(legend.position="none") +
   theme(plot.margin=unit(c(40,20,10,10), "pt"))
+
+
+#Simulations with different meiotic transposition rates
+
+Simsexplot <- ggplot(TEsimsmeisex, aes(TEsimsmeisex$generation, TEsimsmeisex$tebeforesex, color=TEsimsmeisex$meioticrate, group=interaction(replicate,meioticrate))) +
+  geom_line(size=0.5, alpha=0.8) +
+  #geom_line(size=0.5, alpha=0.8, linetype="dotted") +
+  #geom_smooth(aes( group = meioticrate ), method="lm", se=T, fill="lightgrey") +
+  #scale_color_brewer(name="Meiotic transposition rate", palette="Reds") +
+  scale_color_manual(name="Meiotic transposition rate", values=c('orange1', 'orange3','orangered2','orangered3','orangered4', 'skyblue4')) +
+  labs(x="generation", y="simulated full-length TE count") +
+  coord_cartesian(ylim=c(0,60)) +
+  theme(axis.title = element_text(family = "Arial", color="#666666", face="plain", size=18), axis.text.x = element_text(family = "Arial", color="#666666", face="plain", size=14), axis.text.y = element_text(family = "Arial", color="#666666", face="plain", size=14)) +
+  theme(panel.border = element_rect(linetype = "solid", colour = "grey", fill = NA), panel.grid.major = element_line(color = "grey", linetype = "dotted"), panel.grid.minor = element_line(colour = "grey", linetype = "dotted"), panel.background = element_blank(), axis.line = element_line(colour = "grey40")) +
+  theme(legend.position=c(0.2,0.25), legend.text = element_text(family = "Arial", color="#666666", face="plain", size=12), legend.title = element_text(family = "Arial", color="#666666", face="plain", size=12)) +
+  theme(plot.margin=unit(c(40,20,10,10), "pt"))
+Simsexplot + geom_line(data=TEsimsmeiasex, aes(TEsimsmeiasex$generation, TEsimsmeiasex$tebeforesex, color=TEsimsmeiasex$reprmode, group=interaction(reprmode, replicate))) 
+  
 
 
 grid.arrange(empiriplot2, simplot, nrow = 1)
@@ -424,8 +614,16 @@ ggarrange(empiriplot2, simplot2,
           labels = c("A", "B"),
           ncol = 2, nrow = 1)
 
+ggarrange(plot_ref, plot_nonref, 
+          labels = c("A", "B"),
+          ncol = 2, nrow = 1)
+
 ggarrange(covinsplot, covplot2, 
           labels = c("A", "B"),
           ncol = 2, nrow = 1)
+
+ggarrange(covinsplot, covplot2, subsampleFULL, 
+          labels = c("A", "B", "C"),
+          ncol = 2, nrow = 2)
 
 dev.off()
